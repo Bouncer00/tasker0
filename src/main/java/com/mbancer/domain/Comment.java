@@ -107,4 +107,58 @@ public class Comment implements Serializable {
             ", text='" + text + "'" +
             '}';
     }
+
+    public static Builder builder(){
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private Long id;
+        private LocalDate date;
+        private String text;
+        private User author;
+        private Task task;
+
+        private Builder() {
+        }
+
+        public static Builder aComment() {
+            return new Builder();
+        }
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder date(LocalDate date) {
+            this.date = date;
+            return this;
+        }
+
+        public Builder text(String text) {
+            this.text = text;
+            return this;
+        }
+
+        public Builder author(User author) {
+            this.author = author;
+            return this;
+        }
+
+        public Builder task(Task task) {
+            this.task = task;
+            return this;
+        }
+
+        public Comment build() {
+            Comment comment = new Comment();
+            comment.setId(id);
+            comment.setDate(date);
+            comment.setText(text);
+            comment.setAuthor(author);
+            comment.setTask(task);
+            return comment;
+        }
+    }
 }
