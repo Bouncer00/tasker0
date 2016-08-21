@@ -1,15 +1,16 @@
 package com.mbancer.service;
 
 import com.mbancer.domain.Authority;
+import com.mbancer.domain.Project;
+import com.mbancer.domain.Task;
 import com.mbancer.domain.User;
-import com.mbancer.repository.AuthorityRepository;
-import com.mbancer.repository.PersistentTokenRepository;
-import com.mbancer.repository.UserRepository;
+import com.mbancer.repository.*;
 import com.mbancer.repository.search.UserSearchRepository;
 import com.mbancer.security.AuthoritiesConstants;
 import com.mbancer.security.SecurityUtils;
 import com.mbancer.service.util.RandomUtil;
 import com.mbancer.web.rest.dto.ManagedUserDTO;
+import com.mbancer.web.rest.dto.TaskDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -37,9 +38,11 @@ public class UserService {
     @Inject
     private PasswordEncoder passwordEncoder;
 
-
     @Inject
     private UserRepository userRepository;
+
+    @Inject
+    private TaskRepository taskRepository;
 
     @Inject
     private UserSearchRepository userSearchRepository;
@@ -197,6 +200,15 @@ public class UserService {
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
         user.getAuthorities().size(); // eagerly load the association
         return user;
+    }
+
+    @Transactional
+    public void addTaskToUser(final String login, final Long taskId){
+        userRepository.findOneByLogin(login).map(user -> {
+            final Task task = taskRepository.findOne(taskId);
+            user.getTasks().add(task);
+            return user;
+        }).orElseThrow(() -> new NoSuchElementException("User with login: " + login + " does not exist"));
     }
 
     /**

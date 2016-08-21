@@ -175,7 +175,7 @@ public class UserResource {
 
     /**
      * GET  /users : get all users.
-     * 
+     *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and with body all users
      * @throws URISyntaxException if the pagination headers couldn't be generated
@@ -244,5 +244,19 @@ public class UserResource {
         return StreamSupport
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
+    }
+
+    @RequestMapping(value = "/users/{login}/addTask/{taskId}",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> addTaskToUser(@PathVariable final String login, @PathVariable final long taskId){
+        try {
+            userService.addTaskToUser(login, taskId);
+            return ResponseEntity.ok().build();
+        }
+        catch (NoSuchElementException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -37,13 +37,13 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class ProjectResource {
 
     private final Logger log = LoggerFactory.getLogger(ProjectResource.class);
-        
+
     @Inject
     private ProjectService projectService;
-    
+
     @Inject
     private ProjectMapper projectMapper;
-    
+
     /**
      * POST  /projects : Create a new project.
      *
@@ -104,7 +104,7 @@ public class ProjectResource {
     public ResponseEntity<List<ProjectDTO>> getAllProjects(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Projects");
-        Page<Project> page = projectService.findAll(pageable); 
+        Page<Project> page = projectService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/projects");
         return new ResponseEntity<>(projectMapper.projectsToProjectDTOs(page.getContent()), headers, HttpStatus.OK);
     }
@@ -162,6 +162,14 @@ public class ProjectResource {
         Page<Project> page = projectService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/projects");
         return new ResponseEntity<>(projectMapper.projectsToProjectDTOs(page.getContent()), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/projects/{projectId}/addTask/{taskId}",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> addTaskToProject(@PathVariable long projectId, @PathVariable long taskId){
+        projectService.addTaskToProject(projectId, taskId);
+        return ResponseEntity.ok().build();
     }
 
 

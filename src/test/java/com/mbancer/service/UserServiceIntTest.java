@@ -10,6 +10,8 @@ import com.mbancer.repository.ProjectRepository;
 import com.mbancer.repository.TaskRepository;
 import com.mbancer.repository.UserRepository;
 import java.time.ZonedDateTime;
+
+import com.mbancer.service.util.EntityGenerators;
 import com.mbancer.service.util.RandomUtil;
 import java.time.LocalDate;
 
@@ -162,7 +164,7 @@ public class UserServiceIntTest {
             .build()
         );
         admin.getProjects().add(project);
-        final Set<Task> tasks = generateTasks(10, admin, project);
+        final Set<Task> tasks = EntityGenerators.generateTasks(10, admin, project);
         taskRepository.save(tasks);
         project.getTasks().addAll(tasks);
 
@@ -176,6 +178,20 @@ public class UserServiceIntTest {
 
     }
 
+    @Test
+    public void shouldAddTaskToUser(){
+        //given
+        final User user = userRepository.findOneByLogin("admin").get();
+        final Project project = projectRepository.save(EntityGenerators.generateProject(Collections.singleton(user), null));
+        final Task task = taskRepository.save(EntityGenerators.generateTask(user, project));
+
+        //when
+        userService.addTaskToUser(user.getLogin(), task.getId());
+
+        //then
+        assertTrue(user.getTasks().contains(task));
+    }
+
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();
         token.setSeries(tokenSeries);
@@ -185,21 +201,5 @@ public class UserServiceIntTest {
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
         persistentTokenRepository.saveAndFlush(token);
-    }
-
-    private Set<Task> generateTasks(final int number, final User user, final Project project){
-        final Set<Task> tasks = new HashSet<>();
-        for(int i = 0 ; i < number ; i++){
-            tasks.add(
-                Task.builder()
-                .user(user)
-                .created(LocalDate.now())
-                .description(RandomStringUtils.randomAlphabetic(10))
-                .project(project)
-                .title(RandomStringUtils.randomAlphabetic(10))
-                .build()
-            );
-        }
-        return tasks;
     }
 }

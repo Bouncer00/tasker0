@@ -37,13 +37,13 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class TaskResource {
 
     private final Logger log = LoggerFactory.getLogger(TaskResource.class);
-        
+
     @Inject
     private TaskService taskService;
-    
+
     @Inject
     private TaskMapper taskMapper;
-    
+
     /**
      * POST  /tasks : Create a new task.
      *
@@ -104,7 +104,7 @@ public class TaskResource {
     public ResponseEntity<List<TaskDTO>> getAllTasks(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Tasks");
-        Page<Task> page = taskService.findAll(pageable); 
+        Page<Task> page = taskService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/tasks");
         return new ResponseEntity<>(taskMapper.tasksToTaskDTOs(page.getContent()), headers, HttpStatus.OK);
     }
@@ -162,6 +162,15 @@ public class TaskResource {
         Page<Task> page = taskService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/tasks");
         return new ResponseEntity<>(taskMapper.tasksToTaskDTOs(page.getContent()), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/tasks/{taskId}/addComment/{commentId}",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Void> addCommentToTask(@PathVariable long taskId, @PathVariable long commentId){
+        taskService.addCommentToTask(taskId, commentId);
+        return ResponseEntity.ok().build();
     }
 
 

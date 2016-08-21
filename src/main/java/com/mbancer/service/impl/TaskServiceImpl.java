@@ -1,9 +1,12 @@
 package com.mbancer.service.impl;
 
+import com.mbancer.domain.Comment;
+import com.mbancer.repository.CommentRepository;
 import com.mbancer.service.TaskService;
 import com.mbancer.domain.Task;
 import com.mbancer.repository.TaskRepository;
 import com.mbancer.repository.search.TaskSearchRepository;
+import com.mbancer.web.rest.CommentResource;
 import com.mbancer.web.rest.dto.TaskDTO;
 import com.mbancer.web.rest.mapper.TaskMapper;
 import org.slf4j.Logger;
@@ -29,19 +32,22 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class TaskServiceImpl implements TaskService{
 
     private final Logger log = LoggerFactory.getLogger(TaskServiceImpl.class);
-    
+
     @Inject
     private TaskRepository taskRepository;
-    
+
+    @Inject
+    private CommentRepository commentRepository;
+
     @Inject
     private TaskMapper taskMapper;
-    
+
     @Inject
     private TaskSearchRepository taskSearchRepository;
-    
+
     /**
      * Save a task.
-     * 
+     *
      * @param taskDTO the entity to save
      * @return the persisted entity
      */
@@ -56,14 +62,14 @@ public class TaskServiceImpl implements TaskService{
 
     /**
      *  Get all the tasks.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Page<Task> findAll(Pageable pageable) {
         log.debug("Request to get all Tasks");
-        Page<Task> result = taskRepository.findAll(pageable); 
+        Page<Task> result = taskRepository.findAll(pageable);
         return result;
     }
 
@@ -73,7 +79,7 @@ public class TaskServiceImpl implements TaskService{
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public TaskDTO findOne(Long id) {
         log.debug("Request to get Task : {}", id);
         Task task = taskRepository.findOne(id);
@@ -83,7 +89,7 @@ public class TaskServiceImpl implements TaskService{
 
     /**
      *  Delete the  task by id.
-     *  
+     *
      *  @param id the id of the entity
      */
     public void delete(Long id) {
@@ -102,5 +108,13 @@ public class TaskServiceImpl implements TaskService{
     public Page<Task> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Tasks for query {}", query);
         return taskSearchRepository.search(queryStringQuery(query), pageable);
+    }
+
+    @Override
+    @Transactional
+    public void addCommentToTask(long taskId, long commentId) {
+        final Task task = taskRepository.findOne(taskId);
+        final Comment comment = commentRepository.findOne(commentId);
+        task.getComments().add(comment);
     }
 }
