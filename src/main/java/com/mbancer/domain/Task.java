@@ -1,0 +1,220 @@
+package com.mbancer.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
+/**
+ * A Task.
+ */
+@Entity
+@Table(name = "task")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "task")
+public class Task implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @NotNull
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "created")
+    private LocalDate created;
+
+    @Column(name = "updated")
+    private LocalDate updated;
+
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private Project project;
+
+    @OneToMany(mappedBy = "task")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Comment> comments = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDate getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDate created) {
+        this.created = created;
+    }
+
+    public LocalDate getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(LocalDate updated) {
+        this.updated = updated;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(title, task.title) &&
+            Objects.equals(description, task.description) &&
+            Objects.equals(created, task.created) &&
+            Objects.equals(updated, task.updated);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, created, updated);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+            "id=" + id +
+            ", title='" + title + "'" +
+            ", description='" + description + "'" +
+            ", created='" + created + "'" +
+            ", updated='" + updated + "'" +
+            '}';
+    }
+
+    public static Builder builder(){
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private Long id;
+        private String title;
+        private String description;
+        private LocalDate created;
+        private LocalDate updated;
+        private User user;
+        private Project project;
+        private Set<Comment> comments = new HashSet<>();
+
+        private Builder() {
+        }
+
+        public static Builder aTask() {
+            return new Builder();
+        }
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder created(LocalDate created) {
+            this.created = created;
+            return this;
+        }
+
+        public Builder updated(LocalDate updated) {
+            this.updated = updated;
+            return this;
+        }
+
+        public Builder user(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public Builder project(Project project) {
+            this.project = project;
+            return this;
+        }
+
+        public Builder comments(Set<Comment> comments) {
+            this.comments = comments;
+            return this;
+        }
+
+        public Task build() {
+            Task task = new Task();
+            task.setId(id);
+            task.setTitle(title);
+            task.setDescription(description);
+            task.setCreated(created);
+            task.setUpdated(updated);
+            task.setUser(user);
+            task.setProject(project);
+            task.setComments(comments);
+            return task;
+        }
+    }
+}

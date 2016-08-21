@@ -1,0 +1,10 @@
+version: '2'
+services:
+    tasker0-elasticsearch:
+        container_name: tasker0-elasticsearch
+        image: elasticsearch:1.7.5
+        # volumes:
+        #     - ~/volumes/jhipster/tasker0/elasticsearch/:/usr/share/elasticsearch/data/
+        ports:
+            - 9200:9200
+            - 9300:9300
