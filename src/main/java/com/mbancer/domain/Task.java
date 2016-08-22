@@ -1,6 +1,7 @@
 package com.mbancer.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mbancer.config.Constants;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -28,6 +29,9 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "priority")
+    private Long priority = Constants.Task.MAX_PRIORITY;
+
     @NotNull
     @Column(name = "title", nullable = false)
     private String title;
@@ -46,6 +50,9 @@ public class Task implements Serializable {
 
     @ManyToOne
     private Project project;
+
+    @ManyToOne
+    private Board board;
 
     @OneToMany(mappedBy = "task")
     @JsonIgnore
@@ -116,6 +123,22 @@ public class Task implements Serializable {
         this.comments = comments;
     }
 
+    public Long getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Long priority) {
+        this.priority = priority;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -156,6 +179,7 @@ public class Task implements Serializable {
         private User user;
         private Project project;
         private Set<Comment> comments = new HashSet<>();
+        private Board board;
 
         private Builder() {
         }
@@ -204,6 +228,11 @@ public class Task implements Serializable {
             return this;
         }
 
+        public Builder board(Board board){
+            this.board = board;
+            return this;
+        }
+
         public Task build() {
             Task task = new Task();
             task.setId(id);
@@ -214,6 +243,7 @@ public class Task implements Serializable {
             task.setUser(user);
             task.setProject(project);
             task.setComments(comments);
+            task.setBoard(board);
             return task;
         }
     }

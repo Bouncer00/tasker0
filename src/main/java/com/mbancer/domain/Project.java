@@ -51,6 +51,18 @@ public class Project implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Task> tasks = new HashSet<>();
 
+    @OneToMany(mappedBy = "project", orphanRemoval = true)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Board> boards = new HashSet<>();
+
+    public Set<Board> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(Set<Board> boards) {
+        this.boards = boards;
+    }
+
     public Long getId() {
         return id;
     }
@@ -146,6 +158,7 @@ public class Project implements Serializable {
         private LocalDate deadLine;
         private Set<User> users = new HashSet<>();
         private Set<Task> tasks = new HashSet<>();
+        private Set<Board> boards = new HashSet<>();
 
         private Builder() {
         }
@@ -189,6 +202,11 @@ public class Project implements Serializable {
             return this;
         }
 
+        public Builder boards(Set<Board> boards){
+            this.boards = boards;
+            return this;
+        }
+
         public Project build() {
             Project project = new Project();
             project.setId(id);
@@ -198,6 +216,7 @@ public class Project implements Serializable {
             project.setDeadLine(deadLine);
             project.setUsers(users);
             project.setTasks(tasks);
+            project.setBoards(boards);
             return project;
         }
     }
