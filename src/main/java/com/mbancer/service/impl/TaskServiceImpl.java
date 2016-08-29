@@ -1,12 +1,13 @@
 package com.mbancer.service.impl;
 
 import com.mbancer.domain.Comment;
+import com.mbancer.domain.Project;
 import com.mbancer.repository.CommentRepository;
+import com.mbancer.repository.ProjectRepository;
 import com.mbancer.service.TaskService;
 import com.mbancer.domain.Task;
 import com.mbancer.repository.TaskRepository;
 import com.mbancer.repository.search.TaskSearchRepository;
-import com.mbancer.web.rest.CommentResource;
 import com.mbancer.web.rest.dto.TaskDTO;
 import com.mbancer.web.rest.mapper.TaskMapper;
 import org.slf4j.Logger;
@@ -17,10 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -40,6 +37,9 @@ public class TaskServiceImpl implements TaskService{
     private CommentRepository commentRepository;
 
     @Inject
+    private ProjectRepository projectRepository;
+
+    @Inject
     private TaskMapper taskMapper;
 
     @Inject
@@ -54,6 +54,7 @@ public class TaskServiceImpl implements TaskService{
     public TaskDTO save(TaskDTO taskDTO) {
         log.debug("Request to save Task : {}", taskDTO);
         Task task = taskMapper.taskDTOToTask(taskDTO);
+        task.setNumber(getNextTaskNumber(taskDTO.getProjectId()));
         task = taskRepository.save(task);
         TaskDTO result = taskMapper.taskToTaskDTO(task);
         taskSearchRepository.save(task);
@@ -116,5 +117,10 @@ public class TaskServiceImpl implements TaskService{
         final Task task = taskRepository.findOne(taskId);
         final Comment comment = commentRepository.findOne(commentId);
         task.getComments().add(comment);
+    }
+
+    private Long getNextTaskNumber(Long projectId){
+        final Project project = projectRepository.findOne(projectId);
+        return (long) project.getTasks().size();
     }
 }

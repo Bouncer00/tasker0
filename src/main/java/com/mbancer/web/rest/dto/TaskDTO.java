@@ -24,11 +24,11 @@ public class TaskDTO implements Serializable {
 
     private LocalDate updated;
 
-    private Long priority;
-
     private Long userId;
 
     private Long projectId;
+
+    private Long userStoryId;
 
     public Long getId() {
         return id;
@@ -82,12 +82,12 @@ public class TaskDTO implements Serializable {
         this.projectId = projectId;
     }
 
-    public Long getPriority() {
-        return priority;
+    public Long getUserStoryId() {
+        return userStoryId;
     }
 
-    public void setPriority(Long priority) {
-        this.priority = priority;
+    public void setUserStoryId(Long userStoryId) {
+        this.userStoryId = userStoryId;
     }
 
     @Override

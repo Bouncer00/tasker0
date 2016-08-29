@@ -46,8 +46,8 @@ public class BoardResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("board", "idexists", "A new board cannot already have an id")).body(null);
         }
         BoardDTO result = boardService.save(boardDTO);
-        return ResponseEntity.created(new URI("/api/comments/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("comment", result.getId().toString()))
+        return ResponseEntity.created(new URI("/api/boards/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert("board", result.getId().toString()))
             .body(result);
     }
 
@@ -64,6 +64,18 @@ public class BoardResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("board", boardDTO.getId().toString()))
             .body(result);
+    }
+
+    @RequestMapping(value = "/boards",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<BoardDTO>> getAllBoards(Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to get a page of Boards");
+        Page<Board> page = boardService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/boards");
+        return new ResponseEntity<>(boardMapper.boardsToBoardDTOs(page.getContent()), headers, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/boards/{id}",
@@ -101,4 +113,18 @@ public class BoardResource {
         return new ResponseEntity<>(boardMapper.boardsToBoardDTOs(page.getContent()), headers, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/boards/moveTask/{sourceBoardId}/{targetBoardId}/{taskId}",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<?> moveTaskBetweenBoards(@PathVariable Long sourceBoardId, @PathVariable Long targetBoardId, @PathVariable Long taskId){
+        log.debug("REST request to move task {} from board {} to board {}", taskId, sourceBoardId, targetBoardId);
+        try {
+            boardService.moveTaskFromSourceBoardToTarget(sourceBoardId, targetBoardId, taskId);
+            return ResponseEntity.ok().build();
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

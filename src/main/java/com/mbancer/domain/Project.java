@@ -8,9 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A Project.
@@ -31,6 +29,10 @@ public class Project implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @NotNull
+    @Column(name = "short_name", nullable = false)
+    private String shortName;
+
     @Column(name = "description")
     private String description;
 
@@ -49,19 +51,12 @@ public class Project implements Serializable {
 
     @OneToMany(mappedBy = "project", orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Task> tasks = new HashSet<>();
+    private List<Sprint> sprints;
 
     @OneToMany(mappedBy = "project", orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Board> boards = new HashSet<>();
-
-    public Set<Board> getBoards() {
-        return boards;
-    }
-
-    public void setBoards(Set<Board> boards) {
-        this.boards = boards;
-    }
+    @OrderBy("number DESC")
+    private List<Task> tasks = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -77,6 +72,14 @@ public class Project implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public String getDescription() {
@@ -111,11 +114,19 @@ public class Project implements Serializable {
         this.users = users;
     }
 
-    public Set<Task> getTasks() {
+    public List<Sprint> getSprints() {
+        return sprints;
+    }
+
+    public void setSprints(List<Sprint> sprints) {
+        this.sprints = sprints;
+    }
+
+    public List<Task> getTasks() {
         return tasks;
     }
 
-    public void setTasks(Set<Task> tasks) {
+    public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
 
@@ -125,6 +136,7 @@ public class Project implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Project project = (Project) o;
         return Objects.equals(name, project.name) &&
+            Objects.equals(shortName, project.shortName) &&
             Objects.equals(description, project.description) &&
             Objects.equals(created, project.created) &&
             Objects.equals(deadLine, project.deadLine);
@@ -132,7 +144,7 @@ public class Project implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, created, deadLine);
+        return Objects.hash(name, shortName, description, created, deadLine);
     }
 
     @Override
@@ -153,12 +165,13 @@ public class Project implements Serializable {
     public static final class Builder {
         private Long id;
         private String name;
+        private String shortName;
         private String description;
         private LocalDate created;
         private LocalDate deadLine;
         private Set<User> users = new HashSet<>();
-        private Set<Task> tasks = new HashSet<>();
-        private Set<Board> boards = new HashSet<>();
+        private List<Task> tasks = new ArrayList<>();
+        private List<Sprint> sprints = new ArrayList<>();
 
         private Builder() {
         }
@@ -174,6 +187,11 @@ public class Project implements Serializable {
 
         public Builder name(String name) {
             this.name = name;
+            return this;
+        }
+
+        public Builder shortName(String shortName){
+            this.shortName = shortName;
             return this;
         }
 
@@ -197,13 +215,8 @@ public class Project implements Serializable {
             return this;
         }
 
-        public Builder tasks(Set<Task> tasks){
+        public Builder tasks(List<Task> tasks){
             this.tasks = tasks;
-            return this;
-        }
-
-        public Builder boards(Set<Board> boards){
-            this.boards = boards;
             return this;
         }
 
@@ -211,12 +224,13 @@ public class Project implements Serializable {
             Project project = new Project();
             project.setId(id);
             project.setName(name);
+            project.setShortName(shortName);
             project.setDescription(description);
             project.setCreated(created);
             project.setDeadLine(deadLine);
             project.setUsers(users);
+            project.setSprints(sprints);
             project.setTasks(tasks);
-            project.setBoards(boards);
             return project;
         }
     }

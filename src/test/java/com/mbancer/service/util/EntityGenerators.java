@@ -1,20 +1,17 @@
 package com.mbancer.service.util;
 
-import com.mbancer.domain.Comment;
-import com.mbancer.domain.Project;
-import com.mbancer.domain.Task;
-import com.mbancer.domain.User;
+import com.mbancer.domain.*;
 import org.apache.commons.lang.RandomStringUtils;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class EntityGenerators {
 
-    public static Set<Task> generateTasks(final int number, final User user, final Project project){
+    public static Set<Task> generateTasks(final int number, final User user, final Project project, final UserStory userStory){
         final Set<Task> tasks = new HashSet<>();
+        final Random random = new Random();
         for(int i = 0 ; i < number ; i++){
             tasks.add(
                 Task.builder()
@@ -22,6 +19,8 @@ public class EntityGenerators {
                     .created(LocalDate.now())
                     .description(RandomStringUtils.randomAlphabetic(10))
                     .project(project)
+                    .userStory(userStory)
+                    .number(random.nextLong())
                     .title(RandomStringUtils.randomAlphabetic(10))
                     .build()
             );
@@ -29,7 +28,7 @@ public class EntityGenerators {
         return tasks;
     }
 
-    public static Set<Project> generateProjects(final int number, final Set<User> users, final Set<Task> tasks){
+    public static Set<Project> generateProjects(final int number, final Set<User> users, final List<Sprint> sprints){
         final Set<Project> projects = new HashSet<>();
         final Project.Builder builder = Project.builder();
 
@@ -38,14 +37,15 @@ public class EntityGenerators {
                 .name(RandomStringUtils.randomAlphabetic(10))
                 .description(RandomStringUtils.randomAlphabetic(10))
                 .created(LocalDate.now())
+                .shortName(RandomStringUtils.randomAlphabetic(4))
                 .deadLine(LocalDate.now().plus(2, ChronoUnit.YEARS))
                 .build();
 
             if(users != null){
                 project.setUsers(users);
             }
-            if(tasks != null){
-                project.setTasks(tasks);
+            if(sprints != null){
+                project.setSprints(sprints);
             }
 
             projects.add(project);
@@ -74,15 +74,58 @@ public class EntityGenerators {
         return comments;
     }
 
-    public static Task generateTask(final User user, final Project project){
-        return generateTasks(1, user, project).iterator().next();
+    public static Set<Sprint> generateSprints(final int number, final Project project){
+        final Set<Sprint> sprints = new HashSet<>();
+        final Random random = new Random();
+        for(int i = 0 ; i < number ; i++){
+            final Sprint sprint = Sprint.builder()
+                .project(project)
+                .name(RandomStringUtils.randomAlphabetic(10))
+                .number(random.nextLong())
+                .start(LocalDate.now().minus(10, ChronoUnit.DAYS))
+                .end(LocalDate.now())
+                .userStories(Collections.emptySet())
+                .build();
+            sprints.add(sprint);
+        }
+        return sprints;
     }
 
-    public static Project generateProject(final Set<User> users, final Set<Task> tasks){
-        return generateProjects(1, users, tasks).iterator().next();
+    public static Set<UserStory> generateUserStories(final int number, final Sprint sprint, final List<Task> tasks){
+        final Set<UserStory> userStories = new HashSet<>();
+        final Random random = new Random();
+        for(int i = 0 ; i < number ; i++){
+            final UserStory userStory = UserStory.builder()
+                .created(LocalDate.now().minus(10, ChronoUnit.DAYS))
+                .updated(LocalDate.now())
+                .description(RandomStringUtils.randomAlphabetic(10))
+                .name(RandomStringUtils.randomAlphabetic(5))
+                .priority(random.nextLong())
+                .sprint(sprint)
+                .tasks(tasks)
+                .build();
+            userStories.add(userStory);
+        }
+        return userStories;
+    }
+
+    public static Task generateTask(final User user, final Project project, final UserStory userStory){
+        return generateTasks(1, user, project, userStory).iterator().next();
+    }
+
+    public static Project generateProject(final Set<User> users, final List<Sprint> sprints){
+        return generateProjects(1, users, sprints).iterator().next();
     }
 
     public static Comment generateComment(final User author, final Task task){
         return generateComments(1, author, task).iterator().next();
+    }
+
+    public static Sprint generateSprint(final Project project){
+        return generateSprints(1, project).iterator().next();
+    }
+
+    public static UserStory generateUserStory(final Sprint sprint, final List<Task> tasks){
+        return generateUserStories(1, sprint, tasks).iterator().next();
     }
 }

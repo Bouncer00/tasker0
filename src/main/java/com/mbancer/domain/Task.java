@@ -29,8 +29,8 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "priority")
-    private Long priority = Constants.Task.MAX_PRIORITY;
+    @NotNull
+    private Long number;
 
     @NotNull
     @Column(name = "title", nullable = false)
@@ -53,6 +53,9 @@ public class Task implements Serializable {
 
     @ManyToOne
     private Board board;
+
+    @ManyToOne
+    private UserStory userStory;
 
     @OneToMany(mappedBy = "task")
     @JsonIgnore
@@ -123,12 +126,20 @@ public class Task implements Serializable {
         this.comments = comments;
     }
 
-    public Long getPriority() {
-        return priority;
+    public Long getNumber() {
+        return number;
     }
 
-    public void setPriority(Long priority) {
-        this.priority = priority;
+    public void setNumber(Long number) {
+        this.number = number;
+    }
+
+    public UserStory getUserStory() {
+        return userStory;
+    }
+
+    public void setUserStory(UserStory userStory) {
+        this.userStory = userStory;
     }
 
     public Board getBoard() {
@@ -180,6 +191,8 @@ public class Task implements Serializable {
         private Project project;
         private Set<Comment> comments = new HashSet<>();
         private Board board;
+        private UserStory userStory;
+        private Long number;
 
         private Builder() {
         }
@@ -233,6 +246,16 @@ public class Task implements Serializable {
             return this;
         }
 
+        public Builder number(Long number){
+            this.number = number;
+            return this;
+        }
+
+        public Builder userStory(UserStory userStory){
+            this.userStory = userStory;
+            return this;
+        }
+
         public Task build() {
             Task task = new Task();
             task.setId(id);
@@ -244,6 +267,8 @@ public class Task implements Serializable {
             task.setProject(project);
             task.setComments(comments);
             task.setBoard(board);
+            task.setUserStory(userStory);
+            task.setNumber(number);
             return task;
         }
     }

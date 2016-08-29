@@ -8,6 +8,7 @@ import com.mbancer.repository.search.ProjectSearchRepository;
 import com.mbancer.web.rest.dto.ProjectDTO;
 import com.mbancer.web.rest.mapper.ProjectMapper;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,6 +52,8 @@ public class ProjectResourceIntTest {
     private static final String UPDATED_NAME = "BBBBB";
     private static final String DEFAULT_DESCRIPTION = "AAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBB";
+    private static final String DEFAULT_SHORTNAME = "CCCCC";
+    private static final String UPDATED_SHORTNAME = "DDDDD";
 
     private static final LocalDate DEFAULT_CREATED = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_CREATED = LocalDate.now(ZoneId.systemDefault());
@@ -99,6 +102,7 @@ public class ProjectResourceIntTest {
         project.setDescription(DEFAULT_DESCRIPTION);
         project.setCreated(DEFAULT_CREATED);
         project.setDeadLine(DEFAULT_DEAD_LINE);
+        project.setShortName(DEFAULT_SHORTNAME);
     }
 
     @Test
@@ -204,6 +208,7 @@ public class ProjectResourceIntTest {
         updatedProject.setDescription(UPDATED_DESCRIPTION);
         updatedProject.setCreated(UPDATED_CREATED);
         updatedProject.setDeadLine(UPDATED_DEAD_LINE);
+        updatedProject.setShortName(UPDATED_SHORTNAME);
         ProjectDTO projectDTO = projectMapper.projectToProjectDTO(updatedProject);
 
         restProjectMockMvc.perform(put("/api/projects")
@@ -219,6 +224,7 @@ public class ProjectResourceIntTest {
         assertThat(testProject.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testProject.getCreated()).isEqualTo(UPDATED_CREATED);
         assertThat(testProject.getDeadLine()).isEqualTo(UPDATED_DEAD_LINE);
+        assertThat(testProject.getShortName()).isEqualTo(UPDATED_SHORTNAME);
 
         // Validate the Project in ElasticSearch
         Project projectEs = projectSearchRepository.findOne(testProject.getId());

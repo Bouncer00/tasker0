@@ -46,7 +46,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="task in vm.tasks track by task.id">
+                <tr ng-repeat="task in vm.userStories track by task.id">
                     <td><a ui-sref="task-detail({id:task.id})">{{task.id}}</a></td>
                     <td>{{task.title}}</td>
                     <td>{{task.description}}</td>

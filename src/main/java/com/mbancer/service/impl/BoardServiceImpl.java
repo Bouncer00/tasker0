@@ -1,6 +1,7 @@
 package com.mbancer.service.impl;
 
 import com.mbancer.domain.Board;
+import com.mbancer.domain.Task;
 import com.mbancer.repository.BoardRepository;
 import com.mbancer.repository.search.BoardSearchRepository;
 import com.mbancer.service.BoardService;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+
+import java.util.Optional;
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
@@ -69,5 +72,24 @@ public class BoardServiceImpl implements BoardService {
     public Page<Board> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Boards for query {}", query);
         return boardSearchRepository.search(queryStringQuery(query), pageable);
+    }
+
+    @Override
+    public void moveTaskFromSourceBoardToTarget(Long sourceBoardId, Long targetBoardId, Long taskId) {
+        log.debug("Request to move task {} from board {} to board {}", taskId, sourceBoardId, targetBoardId);
+        final Board sourceBoard = boardRepository.findOne(sourceBoardId);
+        final Board targetBoard = boardRepository.findOne(targetBoardId);
+        if(sourceBoard == null){
+            throw new IllegalArgumentException("Source board " + sourceBoardId + " does not exists");
+        }
+        if(targetBoard == null){
+            throw new IllegalArgumentException("Target board " + sourceBoardId + " does not exists");
+        }
+        final Optional<Task> taskOptional = sourceBoard.getTasks().stream().filter(task -> task.getId().equals(taskId)).findFirst();
+
+        taskOptional.map(task -> {
+            sourceBoard.getTasks().remove(task);
+            return targetBoard.getTasks().add(task);
+        }).orElseThrow(() -> new IllegalArgumentException("Source board " + sourceBoard + " does not have task " + taskId));
     }
 }

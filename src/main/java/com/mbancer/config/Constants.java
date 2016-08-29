@@ -24,7 +24,7 @@ public final class Constants {
     private Constants() {
     }
 
-    public static class Task {
+    public static class UserStory {
         public static final Long MAX_PRIORITY = 0L;
     }
 }

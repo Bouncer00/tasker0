@@ -29,19 +29,19 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class CommentServiceImpl implements CommentService{
 
     private final Logger log = LoggerFactory.getLogger(CommentServiceImpl.class);
-    
+
     @Inject
     private CommentRepository commentRepository;
-    
+
     @Inject
     private CommentMapper commentMapper;
-    
+
     @Inject
     private CommentSearchRepository commentSearchRepository;
-    
+
     /**
      * Save a comment.
-     * 
+     *
      * @param commentDTO the entity to save
      * @return the persisted entity
      */
@@ -56,15 +56,14 @@ public class CommentServiceImpl implements CommentService{
 
     /**
      *  Get all the comments.
-     *  
+     *
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public Page<Comment> findAll(Pageable pageable) {
         log.debug("Request to get all Comments");
-        Page<Comment> result = commentRepository.findAll(pageable); 
-        return result;
+        return commentRepository.findAll(pageable);
     }
 
     /**
@@ -73,17 +72,16 @@ public class CommentServiceImpl implements CommentService{
      *  @param id the id of the entity
      *  @return the entity
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public CommentDTO findOne(Long id) {
         log.debug("Request to get Comment : {}", id);
         Comment comment = commentRepository.findOne(id);
-        CommentDTO commentDTO = commentMapper.commentToCommentDTO(comment);
-        return commentDTO;
+        return commentMapper.commentToCommentDTO(comment);
     }
 
     /**
      *  Delete the  comment by id.
-     *  
+     *
      *  @param id the id of the entity
      */
     public void delete(Long id) {

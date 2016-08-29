@@ -13,35 +13,26 @@
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
     <property name="floatType" value="float" dbms="mysql, oracle"/>
 
-    <changeSet id="20160811201019-2" author="mbancer">
-        <createTable tableName="board">
+    <changeSet id="20160828175000-1" author="mbancer">
+        <createTable tableName="sprint">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(255)">
+            <column name="number" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="project_id" type="bigint">
+            <column name="name" type="varchar(255)">
                 <constraints nullable="true"/>
+            </column>
+            <column name="start" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end" type="date"/>
+            <column name="project_id" type="bigint">
+                <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="board"
-                                 baseColumnNames="project_id"
-                                 constraintName="fk_board_project"
-                                 referencedTableName="project"
-                                 referencedColumnNames="id"/>
-
-        <addColumn tableName="task">
-            <column name="board_id" type="bigint">
-                <constraints nullable="true"/>
-            </column>
-        </addColumn>
-
-        <addForeignKeyConstraint baseTableName="task"
-                                 baseColumnNames="board_id"
-                                 constraintName="fk_task_board"
-                                 referencedTableName="board"
-                                 referencedColumnNames="id"/>
     </changeSet>
+
 </databaseChangeLog>

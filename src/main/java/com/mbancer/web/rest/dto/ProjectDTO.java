@@ -3,9 +3,7 @@ package com.mbancer.web.rest.dto;
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Objects;
+import java.util.*;
 
 
 /**
@@ -24,8 +22,11 @@ public class ProjectDTO implements Serializable {
 
     private LocalDate deadLine;
 
+    private String shortName;
 
     private Set<UserDTO> users = new HashSet<>();
+
+    private List<SprintDTO> sprints = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -69,6 +70,22 @@ public class ProjectDTO implements Serializable {
 
     public void setUsers(Set<UserDTO> users) {
         this.users = users;
+    }
+
+    public List<SprintDTO> getSprints() {
+        return sprints;
+    }
+
+    public void setSprints(List<SprintDTO> sprints) {
+        this.sprints = sprints;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     @Override

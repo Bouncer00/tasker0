@@ -1,10 +1,11 @@
 package com.mbancer.web.rest;
 
 import com.mbancer.Tasker0App;
-import com.mbancer.domain.Task;
-import com.mbancer.repository.TaskRepository;
+import com.mbancer.domain.*;
+import com.mbancer.repository.*;
 import com.mbancer.service.TaskService;
 import com.mbancer.repository.search.TaskSearchRepository;
+import com.mbancer.service.util.EntityGenerators;
 import com.mbancer.web.rest.dto.TaskDTO;
 import com.mbancer.web.rest.mapper.TaskMapper;
 
@@ -29,6 +30,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,6 +73,18 @@ public class TaskResourceIntTest {
     private TaskSearchRepository taskSearchRepository;
 
     @Inject
+    private SprintRepository sprintRepository;
+
+    @Inject
+    private UserStoryRepository userStoryRepository;
+
+    @Inject
+    private UserRepository userRepository;
+
+    @Inject
+    private ProjectRepository projectRepository;
+
+    @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Inject
@@ -79,6 +93,11 @@ public class TaskResourceIntTest {
     private MockMvc restTaskMockMvc;
 
     private Task task;
+
+    private Project project;
+
+    private UserStory updatedUserStory;
+
 
     @PostConstruct
     public void setup() {
@@ -94,11 +113,22 @@ public class TaskResourceIntTest {
     @Before
     public void initTest() {
         taskSearchRepository.deleteAll();
+
+        final User user = userRepository.findOneByLogin("admin").get();
+        project = projectRepository.save(EntityGenerators.generateProject(Collections.singleton(user), null));
+        final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
+        final UserStory userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
+
+        updatedUserStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
+
         task = new Task();
         task.setTitle(DEFAULT_TITLE);
         task.setDescription(DEFAULT_DESCRIPTION);
         task.setCreated(DEFAULT_CREATED);
         task.setUpdated(DEFAULT_UPDATED);
+        task.setProject(project);
+        task.setUserStory(userStory);
+        task.setNumber(0L);
     }
 
     @Test
@@ -204,6 +234,9 @@ public class TaskResourceIntTest {
         updatedTask.setDescription(UPDATED_DESCRIPTION);
         updatedTask.setCreated(UPDATED_CREATED);
         updatedTask.setUpdated(UPDATED_UPDATED);
+        updatedTask.setUserStory(updatedUserStory);
+        updatedTask.setProject(project);
+        updatedTask.setNumber(2L);
         TaskDTO taskDTO = taskMapper.taskToTaskDTO(updatedTask);
 
         restTaskMockMvc.perform(put("/api/tasks")
