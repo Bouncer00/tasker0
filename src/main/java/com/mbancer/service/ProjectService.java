@@ -53,4 +53,6 @@ public interface ProjectService {
     Page<Project> search(String query, Pageable pageable);
 
     void addTaskToProject(final long projectId, final long taskId);
+
+    Page<ProjectDTO> getByUser(Long userId, Pageable pageable);
 }

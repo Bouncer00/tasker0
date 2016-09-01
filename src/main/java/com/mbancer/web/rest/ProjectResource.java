@@ -172,5 +172,11 @@ public class ProjectResource {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value = "/projects/byUser/{userId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<ProjectDTO>> projectsByUser(@PathVariable("userId") Long userId, Pageable pageable){
+        return ResponseEntity.ok(projectService.getByUser(userId, pageable));
+    }
 
 }

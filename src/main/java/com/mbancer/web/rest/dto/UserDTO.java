@@ -37,10 +37,6 @@ public class UserDTO {
 
     private Set<String> authorities;
 
-    private Set<TaskDTO> tasks;
-
-    private Set<ProjectDTO> projects;
-
     public UserDTO() {
     }
 
@@ -90,6 +86,7 @@ public class UserDTO {
     public Set<String> getAuthorities() {
         return authorities;
     }
+
 
     @Override
     public String toString() {

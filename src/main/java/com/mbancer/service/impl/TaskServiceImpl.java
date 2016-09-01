@@ -119,6 +119,12 @@ public class TaskServiceImpl implements TaskService{
         task.getComments().add(comment);
     }
 
+    @Override
+    public Page<TaskDTO> getByUser(Long userId, Pageable pageable) {
+        final Page<Task> tasks = taskRepository.findAllByUserId(userId, pageable);
+        return tasks.map(taskMapper::taskToTaskDTO);
+    }
+
     private Long getNextTaskNumber(Long projectId){
         final Project project = projectRepository.findOne(projectId);
         return (long) project.getTasks().size();

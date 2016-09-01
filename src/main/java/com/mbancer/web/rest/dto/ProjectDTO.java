@@ -24,8 +24,6 @@ public class ProjectDTO implements Serializable {
 
     private String shortName;
 
-    private Set<UserDTO> users = new HashSet<>();
-
     private List<SprintDTO> sprints = new ArrayList<>();
 
     public Long getId() {
@@ -62,14 +60,6 @@ public class ProjectDTO implements Serializable {
 
     public void setDeadLine(LocalDate deadLine) {
         this.deadLine = deadLine;
-    }
-
-    public Set<UserDTO> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<UserDTO> users) {
-        this.users = users;
     }
 
     public List<SprintDTO> getSprints() {

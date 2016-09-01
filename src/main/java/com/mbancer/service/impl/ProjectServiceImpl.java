@@ -1,7 +1,9 @@
 package com.mbancer.service.impl;
 
 import com.mbancer.domain.Task;
+import com.mbancer.domain.User;
 import com.mbancer.repository.TaskRepository;
+import com.mbancer.repository.UserRepository;
 import com.mbancer.service.ProjectService;
 import com.mbancer.domain.Project;
 import com.mbancer.repository.ProjectRepository;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +40,9 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Inject
     private TaskRepository taskRepository;
+
+    @Inject
+    private UserRepository userRepository;
 
     @Inject
     private ProjectMapper projectMapper;
@@ -114,5 +120,11 @@ public class ProjectServiceImpl implements ProjectService{
         final Project project = projectRepository.findOne(projectId);
         final Task task = taskRepository.findOne(taskId);
         project.getTasks().add(task);
+    }
+
+    @Override
+    public Page<ProjectDTO> getByUser(Long userId, Pageable pageable) {
+        final Page<Project> projects = projectRepository.findAllByUsersIdIn(Collections.singletonList(userId), pageable);
+        return projects.map(projectMapper::projectToProjectDTO);
     }
 }

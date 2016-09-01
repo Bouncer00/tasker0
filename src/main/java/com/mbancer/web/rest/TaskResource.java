@@ -173,5 +173,12 @@ public class TaskResource {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value = "/tasks/byUser/{userId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<TaskDTO>> projectsByUser(@PathVariable("userId") Long userId, Pageable pageable){
+        return ResponseEntity.ok(taskService.getByUser(userId, pageable));
+    }
+
 
 }

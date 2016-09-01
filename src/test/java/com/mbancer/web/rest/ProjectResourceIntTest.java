@@ -1,10 +1,14 @@
 package com.mbancer.web.rest;
 
+import com.google.common.collect.Sets;
 import com.mbancer.Tasker0App;
 import com.mbancer.domain.Project;
+import com.mbancer.domain.User;
 import com.mbancer.repository.ProjectRepository;
+import com.mbancer.repository.UserRepository;
 import com.mbancer.service.ProjectService;
 import com.mbancer.repository.search.ProjectSearchRepository;
+import com.mbancer.service.util.EntityGenerators;
 import com.mbancer.web.rest.dto.ProjectDTO;
 import com.mbancer.web.rest.mapper.ProjectMapper;
 
@@ -12,8 +16,13 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.assertj.core.api.Assertions.doesNotHave;
 import static org.hamcrest.Matchers.hasItem;
+
+import org.mockito.AdditionalMatchers;
 import org.mockito.MockitoAnnotations;
+import org.omg.CORBA.UserException;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
@@ -30,9 +39,13 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -78,6 +91,9 @@ public class ProjectResourceIntTest {
 
     @Inject
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Inject
+    private UserRepository userRepository;
 
     private MockMvc restProjectMockMvc;
 
@@ -269,5 +285,30 @@ public class ProjectResourceIntTest {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].created").value(hasItem(DEFAULT_CREATED.toString())))
             .andExpect(jsonPath("$.[*].deadLine").value(hasItem(DEFAULT_DEAD_LINE.toString())));
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindProjectsByUserId() throws Exception {
+        final User user = userRepository.findOneByLogin("admin").get();
+        final User otherUser = userRepository.findOneByLogin("user").get();
+
+        final Project userProject = EntityGenerators.generateProject(Sets.newHashSet(user), Collections.emptyList());
+        final Project otherUserProject = EntityGenerators.generateProject(Sets.newHashSet(otherUser), Collections.emptyList());
+
+        project.getUsers().add(user);
+        userProject.getUsers().add(user);
+        otherUserProject.getUsers().add(otherUser);
+
+        projectRepository.saveAndFlush(project);
+        projectRepository.saveAndFlush(userProject);
+        projectRepository.saveAndFlush(otherUserProject);
+
+        restProjectMockMvc.perform(get("/api/projects/byUser/{id}", user.getId()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content.[*].id").value(hasItem(project.getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].id").value(hasItem(userProject.getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].id").value(not(hasItem(otherUserProject.getId().intValue()))));
+
     }
 }

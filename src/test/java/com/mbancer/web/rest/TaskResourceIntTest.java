@@ -1,5 +1,6 @@
 package com.mbancer.web.rest;
 
+import com.google.common.collect.Sets;
 import com.mbancer.Tasker0App;
 import com.mbancer.domain.*;
 import com.mbancer.repository.*;
@@ -34,6 +35,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -296,5 +298,40 @@ public class TaskResourceIntTest {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].created").value(hasItem(DEFAULT_CREATED.toString())))
             .andExpect(jsonPath("$.[*].updated").value(hasItem(DEFAULT_UPDATED.toString())));
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindTasksByUserId() throws Exception {
+        final User user = userRepository.findOneByLogin("admin").get();
+        final User otherUser = userRepository.findOneByLogin("user").get();
+
+        final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
+        final UserStory userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
+        final Task userTask0 = taskRepository.save(EntityGenerators.generateTask(user, project, userStory));
+        final Task userTask1 = taskRepository.save(EntityGenerators.generateTask(user, project, userStory));
+        final Task otherUserTask = taskRepository.save(EntityGenerators.generateTask(otherUser, project, userStory));
+
+
+        restTaskMockMvc.perform(get("/api/tasks/byUser/{id}", user.getId()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content.[*].id").value(hasItem(userTask0.getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].title").value(hasItem(userTask0.getTitle())))
+            .andExpect(jsonPath("$.content.[*].description").value(hasItem(userTask0.getDescription())))
+            .andExpect(jsonPath("$.content.[*].created").value(hasItem(userTask0.getCreated().toString())))
+            .andExpect(jsonPath("$.content.[*].userId").value(hasItem(userTask0.getUser().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].projectId").value(hasItem(userTask0.getProject().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].userStoryId").value(hasItem(userTask0.getUserStory().getId().intValue())))
+
+            .andExpect(jsonPath("$.content.[*].id").value(hasItem(userTask1.getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].title").value(hasItem(userTask1.getTitle())))
+            .andExpect(jsonPath("$.content.[*].description").value(hasItem(userTask1.getDescription())))
+            .andExpect(jsonPath("$.content.[*].created").value(hasItem(userTask1.getCreated().toString())))
+            .andExpect(jsonPath("$.content.[*].userId").value(hasItem(userTask1.getUser().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].projectId").value(hasItem(userTask1.getProject().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].userStoryId").value(hasItem(userTask1.getUserStory().getId().intValue())))
+
+            .andExpect(jsonPath("$.content.[*].id").value(not(hasItem(otherUserTask.getId().intValue()))));
+
     }
 }

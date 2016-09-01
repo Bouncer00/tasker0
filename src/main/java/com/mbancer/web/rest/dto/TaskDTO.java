@@ -30,6 +30,8 @@ public class TaskDTO implements Serializable {
 
     private Long userStoryId;
 
+    private BoardDTO boardDTO;
+
     public Long getId() {
         return id;
     }
@@ -88,6 +90,14 @@ public class TaskDTO implements Serializable {
 
     public void setUserStoryId(Long userStoryId) {
         this.userStoryId = userStoryId;
+    }
+
+    public BoardDTO getBoardDTO() {
+        return boardDTO;
+    }
+
+    public void setBoardDTO(BoardDTO boardDTO) {
+        this.boardDTO = boardDTO;
     }
 
     @Override

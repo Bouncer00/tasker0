@@ -53,4 +53,6 @@ public interface TaskService {
     Page<Task> search(String query, Pageable pageable);
 
     void addCommentToTask(long taskId, long commentId);
+
+    Page<TaskDTO> getByUser(Long userId, Pageable pageable);
 }
