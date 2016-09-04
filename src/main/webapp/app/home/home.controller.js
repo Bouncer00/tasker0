@@ -5,9 +5,9 @@
         .module('tasker0App')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state'];
+    HomeController.$inject = ['$scope', 'Principal', 'LoginService', '$state', 'Task'];
 
-    function HomeController ($scope, Principal, LoginService, $state) {
+    function HomeController ($scope, Principal, LoginService, $state, Task) {
         var vm = this;
 
         vm.account = null;
