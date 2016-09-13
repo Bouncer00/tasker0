@@ -3,7 +3,7 @@
 
     angular
         .module('tasker0App', [
-            'ngStorage', 
+            'ngStorage',
             'ngResource',
             'ngCookies',
             'ngAria',
@@ -13,8 +13,9 @@
             'ui.bootstrap.datetimepicker',
             'ui.router',
             'infinite-scroll',
-            // jhipster-needle-angularjs-add-module JHipster will add new module here
-            'angular-loading-bar'
+            'ui.bootstrap',
+            'angular-loading-bar',
+            'angularModalService'
         ])
         .run(run);
 

@@ -4,6 +4,7 @@ import com.mbancer.domain.Task;
 import com.mbancer.domain.User;
 import com.mbancer.repository.TaskRepository;
 import com.mbancer.repository.UserRepository;
+import com.mbancer.security.SecurityUtils;
 import com.mbancer.service.ProjectService;
 import com.mbancer.domain.Project;
 import com.mbancer.repository.ProjectRepository;
@@ -59,6 +60,8 @@ public class ProjectServiceImpl implements ProjectService{
     public ProjectDTO save(ProjectDTO projectDTO) {
         log.debug("Request to save Project : {}", projectDTO);
         Project project = projectMapper.projectDTOToProject(projectDTO);
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        project.getUsers().add(user);
         project = projectRepository.save(project);
         ProjectDTO result = projectMapper.projectToProjectDTO(project);
         projectSearchRepository.save(project);
@@ -125,6 +128,13 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public Page<ProjectDTO> getByUser(Long userId, Pageable pageable) {
         final Page<Project> projects = projectRepository.findAllByUsersIdIn(Collections.singletonList(userId), pageable);
+        return projects.map(projectMapper::projectToProjectDTO);
+    }
+
+    @Override
+    public Page<ProjectDTO> getByCurrentUser(Pageable pageable){
+        final User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        final Page<Project> projects = projectRepository.findAllByUsersIdIn(Collections.singletonList(user.getId()), pageable);
         return projects.map(projectMapper::projectToProjectDTO);
     }
 }

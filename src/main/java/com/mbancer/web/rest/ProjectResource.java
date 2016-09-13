@@ -21,13 +21,8 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Project.
@@ -175,8 +170,16 @@ public class ProjectResource {
     @RequestMapping(value = "/projects/byUser/{userId}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
     public ResponseEntity<Page<ProjectDTO>> projectsByUser(@PathVariable("userId") Long userId, Pageable pageable){
         return ResponseEntity.ok(projectService.getByUser(userId, pageable));
+    }
+
+    @RequestMapping(value = "/projects/byCurrentUser",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<ProjectDTO>> projectsByCurrentUser(Pageable pageable){
+        return ResponseEntity.ok(projectService.getByCurrentUser(pageable));
     }
 
 }

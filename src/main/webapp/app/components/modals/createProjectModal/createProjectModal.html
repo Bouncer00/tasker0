@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Create project</h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal">
+        <fieldset>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Project name</label>
+                <div class="col-md-4">
+                    <input id="name" ng-model="vm.project.name" name="name" type="text" placeholder="" class="form-control input-md" required="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="shortName">Project short name</label>
+                <div class="col-md-2">
+                    <input id="shortName" ng-model="vm.project.shortName" name="shortName" type="text" placeholder="" class="form-control input-md">
+                    <span class="help-block">Short name which identifies your project (4 letters at most)</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="description">Project description</label>
+                <div class="col-md-4">
+                    <textarea ng-model="vm.project.description" class="form-control" id="description" name="description"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="deadline">Deadline</label>
+                <div class="col-md-4">
+                    <input id="deadline" type="date" ng-model="vm.project.deadLine">
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="vm.ok()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+</div>

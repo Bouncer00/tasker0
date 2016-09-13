@@ -6,6 +6,7 @@ import com.mbancer.domain.Project;
 import com.mbancer.domain.User;
 import com.mbancer.repository.ProjectRepository;
 import com.mbancer.repository.UserRepository;
+import com.mbancer.security.SecurityUtils;
 import com.mbancer.service.ProjectService;
 import com.mbancer.repository.search.ProjectSearchRepository;
 import com.mbancer.service.util.EntityGenerators;
@@ -119,6 +120,7 @@ public class ProjectResourceIntTest {
         project.setCreated(DEFAULT_CREATED);
         project.setDeadLine(DEFAULT_DEAD_LINE);
         project.setShortName(DEFAULT_SHORTNAME);
+        SecurityUtils.setCurrentUserLogin("admin");
     }
 
     @Test
@@ -305,6 +307,31 @@ public class ProjectResourceIntTest {
         projectRepository.saveAndFlush(otherUserProject);
 
         restProjectMockMvc.perform(get("/api/projects/byUser/{id}", user.getId()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content.[*].id").value(hasItem(project.getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].id").value(hasItem(userProject.getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].id").value(not(hasItem(otherUserProject.getId().intValue()))));
+
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindProjectsOfCurrentUser() throws Exception {
+        final User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        final User otherUser = userRepository.findOneByLogin("user").get();
+
+        final Project userProject = EntityGenerators.generateProject(Sets.newHashSet(user), Collections.emptyList());
+        final Project otherUserProject = EntityGenerators.generateProject(Sets.newHashSet(otherUser), Collections.emptyList());
+
+        project.getUsers().add(user);
+        userProject.getUsers().add(user);
+        otherUserProject.getUsers().add(otherUser);
+
+        projectRepository.saveAndFlush(project);
+        projectRepository.saveAndFlush(userProject);
+        projectRepository.saveAndFlush(otherUserProject);
+
+        restProjectMockMvc.perform(get("/api/projects/byCurrentUser"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content.[*].id").value(hasItem(project.getId().intValue())))
             .andExpect(jsonPath("$.content.[*].id").value(hasItem(userProject.getId().intValue())))

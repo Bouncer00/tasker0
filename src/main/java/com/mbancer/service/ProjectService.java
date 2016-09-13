@@ -55,4 +55,6 @@ public interface ProjectService {
     void addTaskToProject(final long projectId, final long taskId);
 
     Page<ProjectDTO> getByUser(Long userId, Pageable pageable);
+
+    Page<ProjectDTO> getByCurrentUser(Pageable pageable);
 }

@@ -17,12 +17,18 @@ public final class SecurityUtils {
     private SecurityUtils() {
     }
 
+    private static String currentUserLogin;
+
     /**
      * Get the login of the current user.
      *
      * @return the login of the current user
      */
     public static String getCurrentUserLogin() {
+        if(currentUserLogin != null) {
+            return currentUserLogin;
+        }
+
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         String userName = null;
@@ -73,5 +79,9 @@ public final class SecurityUtils {
             }
         }
         return false;
+    }
+
+    public static void setCurrentUserLogin(final String login){
+        currentUserLogin = login;
     }
 }

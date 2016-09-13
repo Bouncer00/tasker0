@@ -19,7 +19,7 @@
                         <span class="hidden-sm">Home</span>
                     </a>
                 </li>
-                <li ui-sref-active="active">
+                <li ng-class="{active: vm.$state.includes('project')}" ui-sref-active="active">
                     <a ui-sref="projects" ng-click="vm.collapseNavbar()">
                         <span class="glyphicon glyphicon-globe">Projects</span>
                     </a>
@@ -38,7 +38,7 @@
                         <li ui-sref-active="active" >
                             <a ui-sref="projects" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
-                                <span >Project</span>
+                                <span>Project</span>
                             </a>
                         </li>
                         <li ui-sref-active="active" >
