@@ -7,12 +7,14 @@
     Project.$inject = ['$resource', 'DateUtils'];
 
     function Project ($resource, DateUtils) {
-        var resourceUrl =  'api/projects/:id';
+        var resourceUrl =  'api/projects';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
+                url: resourceUrl + "/:id",
+                params: {id: '@id'},
                 transformResponse: function (data) {
                     if (data) {
                         data = angular.fromJson(data);
@@ -22,21 +24,27 @@
                     return data;
                 }
             },
-            'update': {
-                method: 'PUT',
-                transformRequest: function (data) {
-                    data.created = DateUtils.convertLocalDateToServer(data.created);
-                    data.deadLine = DateUtils.convertLocalDateToServer(data.deadLine);
-                    return angular.toJson(data);
+            'getByCurrentUser': {
+                method: 'GET',
+                url: resourceUrl + "/byCurrentUser",
+                transformResponse: function (data) {
+                    if (data) {
+                        data = angular.fromJson(data);
+                        data.created = DateUtils.convertLocalDateFromServer(data.created);
+                        data.deadLine = DateUtils.convertLocalDateFromServer(data.deadLine);
+                    }
+                    return data;
                 }
             },
-            'save': {
-                method: 'POST',
-                transformRequest: function (data) {
-                    data.created = DateUtils.convertLocalDateToServer(data.created);
-                    data.deadLine = DateUtils.convertLocalDateToServer(data.deadLine);
-                    return angular.toJson(data);
-                }
+            'addTaskToProject': {
+                url: resourceUrl + '/:projectId/addTask/:taskId',
+                method: 'PUT',
+                params: {projectId: '@projectId', taskId: '@taskId'}
+            },
+            'getByUser': {
+                url: resourceUrl + '/byUser/:userId',
+                method: 'GET',
+                params: {userId: '@userId'}
             }
         });
     }
