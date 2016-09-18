@@ -5,15 +5,10 @@
         .module('tasker0App')
         .controller('ProjectsCtrl', ProjectsCtrl);
 
-    ProjectsCtrl.$inject = ['Project', 'createProjectModal'];
+    ProjectsCtrl.$inject = ['$scope', 'Project', 'createProjectModal'];
 
-    function ProjectsCtrl(Project, createProjectModal) {
-        var vm = this;
-        vm.createProject = createProject;
-        console.log(Object.getOwnPropertyNames(Project));
-        Project.getByCurrentUser().$promise.then(function (projects) {
-            console.log(projects);
-        });
+    function ProjectsCtrl($scope, Project, createProjectModal) {
+        $scope.createProject = createProject;
 
         function createProject() {
             createProjectModal.open().result.then(function (project) {

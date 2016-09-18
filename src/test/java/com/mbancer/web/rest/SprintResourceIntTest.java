@@ -1,5 +1,6 @@
 package com.mbancer.web.rest;
 
+import com.google.common.collect.Sets;
 import com.mbancer.Tasker0App;
 import com.mbancer.domain.Project;
 import com.mbancer.domain.Sprint;
@@ -38,6 +39,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -260,5 +262,40 @@ public class SprintResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(sprint.getName())))
             .andExpect(jsonPath("$.[*].start").value(hasItem(DEFAULT_START.toString())))
             .andExpect(jsonPath("$.[*].end").value(hasItem(DEFAULT_END.toString())));
+    }
+
+    @Test
+    @Transactional
+    public void shouldGetAllSprintsForGivenProject() throws Exception {
+        final User user = userRepository.findOneByLogin("admin").get();
+        final Project project = EntityGenerators.generateProject(Sets.newHashSet(user), Collections.emptyList());
+        final Sprint sprint0 = EntityGenerators.generateSprint(project);
+        final Sprint sprint1 = EntityGenerators.generateSprint(project);
+        final Sprint sprint2 = EntityGenerators.generateSprint(project);
+
+        projectRepository.save(project);
+        sprintRepository.save(sprint0);
+        sprintRepository.save(sprint1);
+        sprintRepository.save(sprint2);
+
+        restSprintMockMvc.perform(get("/api/sprints/byProject/{id}", project.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(jsonPath("$.content.[*].id").value(hasItem(sprint0.getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].name").value(hasItem(sprint0.getName())))
+            .andExpect(jsonPath("$.content.[*].start").value(hasItem(sprint0.getStart().toString())))
+            .andExpect(jsonPath("$.content.[*].end").value(hasItem(sprint0.getEnd().toString())))
+            .andExpect(jsonPath("$.content.[*].projectId").value(hasItem(project.getId().intValue())))
+
+            .andExpect(jsonPath("$.content.[*].id").value(hasItem(sprint1.getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].name").value(hasItem(sprint1.getName())))
+            .andExpect(jsonPath("$.content.[*].start").value(hasItem(sprint1.getStart().toString())))
+            .andExpect(jsonPath("$.content.[*].end").value(hasItem(sprint1.getEnd().toString())))
+
+            .andExpect(jsonPath("$.content.[*].id").value(hasItem(sprint2.getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].name").value(hasItem(sprint2.getName())))
+            .andExpect(jsonPath("$.content.[*].start").value(hasItem(sprint2.getStart().toString())))
+            .andExpect(jsonPath("$.content.[*].end").value(hasItem(sprint2.getEnd().toString())));
     }
 }

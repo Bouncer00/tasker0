@@ -56,7 +56,7 @@ public class SprintResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<SprintDTO> updateBoard(@Valid @RequestBody SprintDTO sprintDTO) throws URISyntaxException {
+    public ResponseEntity<SprintDTO> updateSprint(@Valid @RequestBody SprintDTO sprintDTO) throws URISyntaxException {
         if(sprintDTO.getId() == null){
             return createSprint(sprintDTO);
         }
@@ -70,7 +70,7 @@ public class SprintResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<SprintDTO>> getAllComments(Pageable pageable)
+    public ResponseEntity<List<SprintDTO>> getAllSprints(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Sprint");
         Page<Sprint> page = sprintService.findAll(pageable);
@@ -82,7 +82,7 @@ public class SprintResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<SprintDTO> getBoard(@PathVariable Long id){
+    public ResponseEntity<SprintDTO> getSprint(@PathVariable Long id){
         log.debug("REST request to get Sprint : {]", id);
         SprintDTO sprintDTO = sprintService.findOne(id);
         return Optional.ofNullable(sprintDTO)
@@ -96,7 +96,7 @@ public class SprintResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteBoard(@PathVariable Long id){
+    public ResponseEntity<Void> deleteSprint(@PathVariable Long id){
         log.debug("REST request to delete Sprint : {}", id);
         sprintService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("board", id.toString())).build();
@@ -106,11 +106,21 @@ public class SprintResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<SprintDTO>> searchBoards(@RequestParam String query, Pageable pageable) throws URISyntaxException {
+    public ResponseEntity<List<SprintDTO>> searchSprints(@RequestParam String query, Pageable pageable) throws URISyntaxException {
         log.debug("REST request to search for a page of Sprints for query {}", query);
         Page<Sprint> page = sprintService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/sprints");
         return new ResponseEntity<>(sprintMapper.sprintsToSprintDTOs(page.getContent()), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/sprints/byProject/{projectId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Page<SprintDTO>> getSprintsByProjectId(@PathVariable("projectId") Long projectId, Pageable pageable){
+        log.debug("REST request to get all Sprints for Project : {}", projectId);
+        Page<SprintDTO> sprintDTOs = sprintService.findByProjectId(projectId, pageable);
+        return ResponseEntity.ok().body(sprintDTOs);
     }
 
 }

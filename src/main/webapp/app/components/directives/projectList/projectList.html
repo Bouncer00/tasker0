@@ -1,1 +1,16 @@
-<h2>Project list</h2>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Short name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="project in projects">
+            <td>{{project.name}}</td>
+            <td>{{project.shortName}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

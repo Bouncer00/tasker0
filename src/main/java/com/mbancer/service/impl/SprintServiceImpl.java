@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
@@ -77,6 +77,13 @@ public class SprintServiceImpl implements SprintService {
     public Page<Sprint> search(String query, Pageable pageable) {
         log.debug("Request for page of Sprints for query {}", query);
         return sprintSearchRepository.search(queryStringQuery(query), pageable);
+    }
+
+    @Override
+    public Page<SprintDTO> findByProjectId(Long projectId, Pageable pageable) {
+        log.debug("Request to find Sprints for Project : {]", projectId);
+        Page<Sprint> sprints = sprintRepository.findAllByProjectIdIn(Collections.singletonList(projectId), pageable);
+        return sprints.map(sprintMapper::sprintToSprintDTO);
     }
 
     private Long getNextSprintNumber(Long projectId){

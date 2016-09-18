@@ -17,4 +17,5 @@ public interface SprintService {
 
     Page<Sprint> search(String query, Pageable pageable);
 
+    Page<SprintDTO> findByProjectId(Long projectId, Pageable pageable);
 }

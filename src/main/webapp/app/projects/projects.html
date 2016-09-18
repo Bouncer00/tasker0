@@ -1,2 +1,16 @@
-<h2>Projects</h2>
-<button class="btn btn-primary" ng-click="vm.createProject()">Create project</button>
+<div>
+    <h2>Projects</h2>
+    <div class="col-md-3">
+        <button class="btn btn-primary" ng-click="createProject()">Create project</button>
+        <project-list></project-list>
+    </div>
+    <div class="col-md-3">
+        <sprint-list></sprint-list>
+    </div>
+    <div class="col-md-3">
+        <user-story-list></user-story-list>
+    </div>
+    <div class="col-md-3">
+        <task-list></task-list>
+    </div>
+</div>
