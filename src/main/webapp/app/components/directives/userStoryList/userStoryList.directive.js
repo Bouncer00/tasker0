@@ -8,7 +8,13 @@
         return {
             templateUrl: 'app/components/directives/userStoryList/userStoryList.html',
             controller: 'userStoryListCtrl',
-            controllerAs: 'vm'
+            controllerAs: 'vm',
+            scope: {
+                control: '='
+            },
+            link: function (scope, element, attrs) {
+                scope.internalControl = scope.control || {};
+            }
         }
     }
 })();

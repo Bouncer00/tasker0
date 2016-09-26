@@ -14,6 +14,10 @@
             'get': {
                 url: url + '/:userStoryId',
                 params: {userStoryId: '@id'}
+            },
+            'getBySprint': {
+                url: url + "/bySprint/:sprintId",
+                params: {sprintId: '@sprintId'}
             }
         });
     }

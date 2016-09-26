@@ -70,11 +70,11 @@ public class UserStoryResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<UserStoryDTO>> getAllComments(Pageable pageable)
+    public ResponseEntity<List<UserStoryDTO>> getAllUserStories(Pageable pageable)
         throws URISyntaxException {
-        log.debug("REST request to get a page of Sprint");
+        log.debug("REST request to get a page of UserStory");
         Page<UserStory> page = userStoryService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/comments");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/userStories");
         return new ResponseEntity<>(userStoryMapper.userStoriesToUserStoryDTOs(page.getContent()), headers, HttpStatus.OK);
     }
 
@@ -111,5 +111,15 @@ public class UserStoryResource {
         Page<UserStory> page = userStoryService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/userStories");
         return new ResponseEntity<>(userStoryMapper.userStoriesToUserStoryDTOs(page.getContent()), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/userStories/bySprint/{sprintId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Page<UserStoryDTO>> getUserStoriesBySprintId(@PathVariable("sprintId") Long sprintId, Pageable pageable){
+        log.debug("REST request to get all Sprints for Project : {}", sprintId);
+        Page<UserStoryDTO> sprintDTOs = userStoryService.findBySprintId(sprintId, pageable);
+        return ResponseEntity.ok().body(sprintDTOs);
     }
 }

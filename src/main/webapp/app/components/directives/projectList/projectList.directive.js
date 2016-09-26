@@ -8,7 +8,14 @@
         return {
             templateUrl: 'app/components/directives/projectList/projectList.html',
             controller: 'projectListCtrl',
-            controllerAs: 'vm'
+            controllerAs: 'vm',
+            scope: {
+                control: '=',
+                selectProject: '='
+            },
+            link: function (scope, element, attrs) {
+                scope.internalControl = scope.control || {};
+            }
         }
     }
 })();

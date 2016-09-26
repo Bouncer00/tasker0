@@ -1,1 +1,18 @@
-<h2>User story list</h2>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Priority</th>
+            <th>Updated</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="userStory in userStories" ng-click="selectUserStory(userStory)">
+            <td>{{userStory.name}}</td>
+            <td>{{userStory.priority}}</td>
+            <td>{{userStory.updated}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

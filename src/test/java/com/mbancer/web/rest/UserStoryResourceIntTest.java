@@ -1,5 +1,6 @@
 package com.mbancer.web.rest;
 
+import com.google.common.collect.Sets;
 import com.mbancer.Tasker0App;
 import com.mbancer.domain.*;
 import com.mbancer.domain.UserStory;
@@ -32,9 +33,11 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -255,12 +258,14 @@ public class UserStoryResourceIntTest {
     @Test
     @Transactional
     public void searchUserStory() throws Exception {
-        // Initialize the database
+        //given
         userStoryRepository.saveAndFlush(userStory);
         userStorySearchRepository.save(userStory);
 
-        // Search the userStory
+        //when
         restUserStoryMockMvc.perform(get("/api/_search/userStories?query=id:" + userStory.getId()))
+
+        //then
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andDo(print())
@@ -271,5 +276,35 @@ public class UserStoryResourceIntTest {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())));
         //TODO fix this, find out exception reason and check also in SprintResourceIntTest same search test ( not all fields are checked )
 //            .andExpect(jsonPath("$.[*].priority").value(hasItem(DEFAULT_PRIORITY.toString())));
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindPageOfUserStoriesBySprintId() throws Exception {
+        //given
+        User admin = userRepository.findOneByLogin("admin").get();
+        final Project project = projectRepository.save(
+            EntityGenerators.generateProject(Sets.newHashSet(admin), Collections.emptyList())
+        );
+        admin.getProjects().add(project);
+        final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
+        List<UserStory> userStories = userStoryRepository.save(EntityGenerators.generateUserStories(10, sprint, Collections.emptyList()));
+        List<Integer> userStoryIds = userStories.stream().map(u -> u.getId().intValue()).collect(Collectors.toList());
+        List<String> userStoryNames = userStories.stream().map(UserStory::getName).collect(Collectors.toList());
+        List<String> userStoriesCreated = userStories.stream().map(u -> u.getCreated().toString()).collect(Collectors.toList());
+        List<String> userStoriesUpdated = userStories.stream().map(u -> u.getUpdated().toString()).collect(Collectors.toList());
+        List<String> userStoryDescriptions = userStories.stream().map(UserStory::getDescription).collect(Collectors.toList());
+
+        //when
+        restUserStoryMockMvc.perform(get("/api/userStories/bySprint/{sprintId}", sprint.getId()))
+
+        //then
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.content.[*].id").value(hasItems(userStoryIds.toArray())))
+            .andExpect(jsonPath("$.content.[*].name").value(hasItems(userStoryNames.toArray())))
+            .andExpect(jsonPath("$.content.[*].created").value(hasItems(userStoriesCreated.toArray())))
+            .andExpect(jsonPath("$.content.[*].updated").value(hasItems(userStoriesUpdated.toArray())))
+            .andExpect(jsonPath("$.content.[*].description").value(hasItems(userStoryDescriptions.toArray())));
     }
 }

@@ -16,4 +16,6 @@ public interface UserStoryService {
     void delete(Long id);
 
     Page<UserStory> search(String query, Pageable pageable);
+
+    Page<UserStoryDTO> findBySprintId(Long sprintId, Pageable pageable);
 }

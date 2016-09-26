@@ -2,13 +2,15 @@
     <h2>Projects</h2>
     <div class="col-md-3">
         <button class="btn btn-primary" ng-click="createProject()">Create project</button>
-        <project-list></project-list>
+        <project-list control="control" select-project="selectProject"></project-list>
     </div>
     <div class="col-md-3">
-        <sprint-list></sprint-list>
+        <button class="btn btn-primary" ng-click="createSprint()">Create sprint</button>
+        <sprint-list control="control"></sprint-list>
     </div>
     <div class="col-md-3">
-        <user-story-list></user-story-list>
+        <button class="btn btn-primary" ng-click="createUserStory()">Create user story</button>
+        <user-story-list control="control"></user-story-list>
     </div>
     <div class="col-md-3">
         <task-list></task-list>

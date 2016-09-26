@@ -1,1 +1,20 @@
-<h2>Sprint list</h2>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Number</th>
+            <th>Name</th>
+            <th>Start</th>
+            <th>End</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="sprint in sprints" ng-click="internalControl.fetchUserStories(sprint.id); selectSprint(sprint)">
+            <td>{{sprint.number}}</td>
+            <td>{{sprint.name}}</td>
+            <td>{{sprint.start}}</td>
+            <td>{{sprint.end}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

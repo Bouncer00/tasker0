@@ -30,10 +30,10 @@ public class Sprint implements Serializable{
     private String name;
 
     @NotNull
-    @Column(name = "start", nullable = false)
+    @Column(name = "sprint_start", nullable = false)
     private LocalDate start = LocalDate.now();
 
-    @Column(name = "end")
+    @Column(name = "sprint_end")
     private LocalDate end;
 
     @ManyToOne

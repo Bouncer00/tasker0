@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Create userStory</h3>
+</div>
+<div class="modal-body">
+    <h4>Sprint: {{::sprint.name}}</h4>
+    <form class="form-horizontal">
+        <fieldset>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="name">User story name</label>
+                <div class="col-md-4">
+                    <input id="name" ng-model="userStory.name" name="name" type="text" placeholder="" class="form-control input-md" required="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="description">User story description</label>
+                <div class="col-md-4">
+                    <textarea ng-model="vm.userStory.description" class="form-control" id="description" name="description"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="priority">User story priority</label>
+                <div class="col-md-4">
+                    <input id="priority" ng-model="userStory.priority" name="priority" type="number" placeholder="" class="form-control input-md" required="">
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

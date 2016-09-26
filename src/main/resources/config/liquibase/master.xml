@@ -19,5 +19,6 @@
     <include file="classpath:config/liquibase/changelog/20160828175800_added_constrains_user_story_sprint.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160828200200_added_short_name_to_Project.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160828201100_added_user_story_id_to_Task.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160923000500_renamed_sprint_start_end_columns.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

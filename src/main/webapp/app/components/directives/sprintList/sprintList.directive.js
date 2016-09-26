@@ -10,7 +10,10 @@
             controller: 'sprintListCtrl',
             controllerAs: 'vm',
             scope: {
-                update: '='
+                control: '='
+            },
+            link: function (scope, element, attrs) {
+                scope.internalControl = scope.control || {};
             }
         }
     }

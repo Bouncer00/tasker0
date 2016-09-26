@@ -8,12 +8,17 @@
     Sprint.$inject = ['$resource'];
 
     function Sprint($resource) {
-        var url = "/api/sprints";
+        var url = '/api/sprints';
 
         return $resource(url, {sprintId: '@id'}, {
             'get': {
-                url: url + "/:spintId",
+                url: url + '/:sprintId',
                 params: {sprintId: '@id'},
+                method: 'GET'
+            },
+            'getByProject': {
+                url: url + '/byProject/:projectId',
+                params: {projectId: '@projectId'},
                 method: 'GET'
             }
         });

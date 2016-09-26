@@ -64,4 +64,11 @@ public class UserStoryServiceImpl implements UserStoryService {
         log.debug("Request for page of UserStories for query : {]", query);
         return userStorySearchRepository.search(queryStringQuery(query), pageable);
     }
+
+    @Override
+    public Page<UserStoryDTO> findBySprintId(Long sprintId, Pageable pageable) {
+        log.debug("Request for page of UserStories by sprint : {}", sprintId);
+        Page<UserStory> userStories = userStoryRepository.findOneBySprintId(sprintId, pageable);
+        return userStories.map(userStoryMapper::userStoryToUserStoryDTO);
+    }
 }

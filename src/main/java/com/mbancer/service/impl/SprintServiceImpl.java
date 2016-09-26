@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
@@ -21,6 +22,7 @@ import java.util.Collections;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 @Service
+@Transactional
 public class SprintServiceImpl implements SprintService {
 
     private final Logger log = LoggerFactory.getLogger(SprintServiceImpl.class);
@@ -54,12 +56,14 @@ public class SprintServiceImpl implements SprintService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Sprint> findAll(Pageable pageable) {
         log.debug("Request to get all Sprints");
         return sprintRepository.findAll(pageable);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SprintDTO findOne(Long id) {
         log.debug("Request to get Sprint : {}", id);
         Sprint sprint = sprintRepository.findOne(id);
@@ -80,8 +84,9 @@ public class SprintServiceImpl implements SprintService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<SprintDTO> findByProjectId(Long projectId, Pageable pageable) {
-        log.debug("Request to find Sprints for Project : {]", projectId);
+        log.debug("Request to find Sprints for Project : {}", projectId);
         Page<Sprint> sprints = sprintRepository.findAllByProjectIdIn(Collections.singletonList(projectId), pageable);
         return sprints.map(sprintMapper::sprintToSprintDTO);
     }
