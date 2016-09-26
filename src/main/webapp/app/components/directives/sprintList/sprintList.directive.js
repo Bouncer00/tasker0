@@ -10,7 +10,8 @@
             controller: 'sprintListCtrl',
             controllerAs: 'vm',
             scope: {
-                control: '='
+                control: '=',
+                selectSprint: '='
             },
             link: function (scope, element, attrs) {
                 scope.internalControl = scope.control || {};

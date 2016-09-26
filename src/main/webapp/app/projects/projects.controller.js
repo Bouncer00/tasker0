@@ -9,20 +9,34 @@
         'Project',
         'Sprint',
         'UserStory',
+        'Task',
         'createSprintModal',
         'createProjectModal',
-        'createUserStoryModal'];
+        'createUserStoryModal',
+        'createTaskModal'];
 
-    function ProjectsCtrl($scope, Project, Sprint, UserStory, createSprintModal, createProjectModal, createUserStoryModal) {
+    function ProjectsCtrl($scope, Project, Sprint, UserStory, Task, createSprintModal, createProjectModal, createUserStoryModal, createTaskModal) {
         $scope.createProject = createProject;
         $scope.createSprint = createSprint;
         $scope.selectProject = selectProject;
+        $scope.selectSprint = selectSprint;
         $scope.createUserStory = createUserStory;
+        $scope.createTask = createTask;
         $scope.control = {};
         var currentProject;
+        var currentSprint;
+        var currentUserStory;
 
         function selectProject(project) {
             currentProject = project;
+        }
+
+        function selectSprint(sprint) {
+            currentSprint = sprint
+        }
+
+        function selectUserStory(userStory) {
+            currentUserStory = userStory;
         }
 
         function createProject() {
@@ -38,8 +52,14 @@
         }
 
         function createUserStory() {
-            createUserStoryModal.open().result.then(function (userStory) {
+            createUserStoryModal.open(currentSprint).result.then(function (userStory) {
                 UserStory.save(userStory);
+            })
+        }
+
+        function createTask() {
+            createTaskModal.open(currentUserStory).result.then(function (task) {
+                Task.save(task);
             })
         }
     }

@@ -11,12 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 @Service
+@Transactional
 public class UserStoryServiceImpl implements UserStoryService {
 
     private final Logger log = LoggerFactory.getLogger(UserStoryServiceImpl.class);
