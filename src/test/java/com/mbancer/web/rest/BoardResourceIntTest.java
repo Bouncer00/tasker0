@@ -223,7 +223,7 @@ public class BoardResourceIntTest {
         final Project project = projectRepository.save(EntityGenerators.generateProject(Collections.singleton(user), null));
         final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
         final UserStory userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
-        final Task task = taskRepository.save(EntityGenerators.generateTask(user, project, userStory));
+        final Task task = taskRepository.save(EntityGenerators.generateTask(user, project, userStory, null));
         project.getTasks().add(task);
         board0.getTasks().add(task);
         boardRepository.save(board0);

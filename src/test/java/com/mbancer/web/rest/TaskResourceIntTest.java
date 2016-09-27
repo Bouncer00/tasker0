@@ -324,9 +324,9 @@ public class TaskResourceIntTest {
 
         final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
         final UserStory userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
-        final Task userTask0 = taskRepository.save(EntityGenerators.generateTask(user, project, userStory));
-        final Task userTask1 = taskRepository.save(EntityGenerators.generateTask(user, project, userStory));
-        final Task otherUserTask = taskRepository.save(EntityGenerators.generateTask(otherUser, project, userStory));
+        final Task userTask0 = taskRepository.save(EntityGenerators.generateTask(user, project, userStory, user));
+        final Task userTask1 = taskRepository.save(EntityGenerators.generateTask(user, project, userStory, user));
+        final Task otherUserTask = taskRepository.save(EntityGenerators.generateTask(otherUser, project, userStory, user));
 
 
         restTaskMockMvc.perform(get("/api/tasks/byUser/{id}", user.getId()))

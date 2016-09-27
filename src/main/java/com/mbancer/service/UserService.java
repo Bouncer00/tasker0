@@ -206,7 +206,18 @@ public class UserService {
     public void addTaskToUser(final String login, final Long taskId){
         userRepository.findOneByLogin(login).map(user -> {
             final Task task = taskRepository.findOne(taskId);
+            task.setUser(user);
             user.getTasks().add(task);
+            return user;
+        }).orElseThrow(() -> new NoSuchElementException("User with login: " + login + " does not exist"));
+    }
+
+    @Transactional
+    public void assignTaskToUser(final String login, final Long taskId){
+        userRepository.findOneByLogin(login).map(user -> {
+            final Task task = taskRepository.findOne(taskId);
+            task.setAssignee(user);
+            user.getAssigned().add(task);
             return user;
         }).orElseThrow(() -> new NoSuchElementException("User with login: " + login + " does not exist"));
     }

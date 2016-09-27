@@ -168,7 +168,7 @@ public class UserServiceIntTest {
         admin.getProjects().add(project);
         final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
         final UserStory userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
-        final Set<Task> tasks = EntityGenerators.generateTasks(10, admin, project, userStory);
+        final Set<Task> tasks = EntityGenerators.generateTasks(10, admin, project, userStory, null);
         taskRepository.save(tasks);
         project.getTasks().addAll(tasks);
 
@@ -189,13 +189,29 @@ public class UserServiceIntTest {
         final Project project = projectRepository.save(EntityGenerators.generateProject(Collections.singleton(user), null));
         final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
         final UserStory userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
-        final Task task = taskRepository.save(EntityGenerators.generateTask(user, project, userStory));
+        final Task task = taskRepository.save(EntityGenerators.generateTask(null, project, userStory, null));
 
         //when
         userService.addTaskToUser(user.getLogin(), task.getId());
 
         //then
         assertTrue(user.getTasks().contains(task));
+    }
+
+    @Test
+    public void shouldAssignTaskToUser(){
+        //given
+        final User user = userRepository.findOneByLogin("admin").get();
+        final Project project = projectRepository.save(EntityGenerators.generateProject(Collections.singleton(user), null));
+        final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
+        final UserStory userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
+        final Task task = taskRepository.save(EntityGenerators.generateTask(null, project, userStory, null));
+
+        //when
+        userService.assignTaskToUser(user.getLogin(), task.getId());
+
+        //then
+        assertTrue(user.getAssigned().contains(task));
     }
 
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {

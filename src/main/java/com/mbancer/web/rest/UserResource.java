@@ -259,4 +259,18 @@ public class UserResource {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @RequestMapping(value = "/users/{login}/assignTask/{taskId}",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> assignTaskToUser(@PathVariable final String login, @PathVariable final long taskId){
+        try {
+            userService.assignTaskToUser(login, taskId);
+            return ResponseEntity.ok().build();
+        }
+        catch (NoSuchElementException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

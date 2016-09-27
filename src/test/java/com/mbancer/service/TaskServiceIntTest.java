@@ -53,7 +53,7 @@ public class TaskServiceIntTest {
         final Project project = projectRepository.save(EntityGenerators.generateProject(Collections.singleton(user), null));
         final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
         final UserStory userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
-        final Task task = taskRepository.save(EntityGenerators.generateTask(user, project, userStory));
+        final Task task = taskRepository.save(EntityGenerators.generateTask(user, project, userStory, null));
         final Comment comment = commentRepository.save(EntityGenerators.generateComment(user, task));
 
         //when

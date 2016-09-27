@@ -9,7 +9,7 @@ import java.util.*;
 
 public class EntityGenerators {
 
-    public static Set<Task> generateTasks(final int number, final User user, final Project project, final UserStory userStory){
+    public static Set<Task> generateTasks(final int number, final User user, final Project project, final UserStory userStory, User assignee){
         final Set<Task> tasks = new HashSet<>();
         final Random random = new Random();
         for(int i = 0 ; i < number ; i++){
@@ -22,7 +22,7 @@ public class EntityGenerators {
                     .userStory(userStory)
                     .number(random.nextLong())
                     .title(RandomStringUtils.randomAlphabetic(10))
-                    .assignee(user)
+                    .assignee(assignee)
                     .build()
             );
         }
@@ -110,8 +110,8 @@ public class EntityGenerators {
         return userStories;
     }
 
-    public static Task generateTask(final User user, final Project project, final UserStory userStory){
-        return generateTasks(1, user, project, userStory).iterator().next();
+    public static Task generateTask(final User user, final Project project, final UserStory userStory, final User assignee){
+        return generateTasks(1, user, project, userStory, assignee).iterator().next();
     }
 
     public static Project generateProject(final Set<User> users, final List<Sprint> sprints){
