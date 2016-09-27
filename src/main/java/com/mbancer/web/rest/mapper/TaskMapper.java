@@ -13,6 +13,7 @@ import java.util.List;
 public interface TaskMapper {
 
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "assignee.id", target = "assigneeId")
     @Mapping(source = "project.id", target = "projectId")
     @Mapping(source = "userStory.id", target = "userStoryId")
     TaskDTO taskToTaskDTO(Task task);
@@ -20,6 +21,7 @@ public interface TaskMapper {
     List<TaskDTO> tasksToTaskDTOs(List<Task> tasks);
 
     @Mapping(source = "userId", target = "user")
+    @Mapping(source = "assigneeId", target = "assignee")
     @Mapping(source = "projectId", target = "project")
     @Mapping(source = "userStoryId", target = "userStory")
     @Mapping(target = "comments", ignore = true)

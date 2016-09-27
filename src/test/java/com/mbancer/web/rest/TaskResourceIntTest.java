@@ -94,12 +94,17 @@ public class TaskResourceIntTest {
 
     private MockMvc restTaskMockMvc;
 
+    private User user;
+
     private Task task;
 
     private Project project;
 
-    private UserStory updatedUserStory;
+    private Sprint sprint;
 
+    private UserStory userStory;
+
+    private UserStory updatedUserStory;
 
     @PostConstruct
     public void setup() {
@@ -116,10 +121,10 @@ public class TaskResourceIntTest {
     public void initTest() {
         taskSearchRepository.deleteAll();
 
-        final User user = userRepository.findOneByLogin("admin").get();
+        user = userRepository.findOneByLogin("admin").get();
         project = projectRepository.save(EntityGenerators.generateProject(Collections.singleton(user), null));
-        final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
-        final UserStory userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
+        sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
+        userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
 
         updatedUserStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
 
@@ -130,6 +135,8 @@ public class TaskResourceIntTest {
         task.setUpdated(DEFAULT_UPDATED);
         task.setProject(project);
         task.setUserStory(userStory);
+        task.setUser(user);
+        task.setAssignee(user);
         task.setNumber(0L);
     }
 
@@ -157,7 +164,7 @@ public class TaskResourceIntTest {
 
         // Validate the Task in ElasticSearch
         Task taskEs = taskSearchRepository.findOne(testTask.getId());
-        assertThat(taskEs).isEqualToComparingFieldByField(testTask);
+        assertThat(taskEs).isEqualTo(testTask);
     }
 
     @Test
@@ -193,7 +200,10 @@ public class TaskResourceIntTest {
                 .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
                 .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
                 .andExpect(jsonPath("$.[*].created").value(hasItem(DEFAULT_CREATED.toString())))
-                .andExpect(jsonPath("$.[*].updated").value(hasItem(DEFAULT_UPDATED.toString())));
+                .andExpect(jsonPath("$.[*].updated").value(hasItem(DEFAULT_UPDATED.toString())))
+                .andExpect(jsonPath("$.[*].userId").value(hasItem(user.getId().intValue())))
+                .andExpect(jsonPath("$.[*].assigneeId").value(hasItem(user.getId().intValue())))
+                .andExpect(jsonPath("$.[*].userStoryId").value(hasItem(userStory.getId().intValue())));
     }
 
     @Test
@@ -210,7 +220,10 @@ public class TaskResourceIntTest {
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.created").value(DEFAULT_CREATED.toString()))
-            .andExpect(jsonPath("$.updated").value(DEFAULT_UPDATED.toString()));
+            .andExpect(jsonPath("$.updated").value(DEFAULT_UPDATED.toString()))
+            .andExpect(jsonPath("$.userId").value(user.getId().intValue()))
+            .andExpect(jsonPath("$.assigneeId").value(user.getId().intValue()))
+            .andExpect(jsonPath("$.userStoryId").value(userStory.getId().intValue()));
     }
 
     @Test
@@ -297,7 +310,10 @@ public class TaskResourceIntTest {
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].created").value(hasItem(DEFAULT_CREATED.toString())))
-            .andExpect(jsonPath("$.[*].updated").value(hasItem(DEFAULT_UPDATED.toString())));
+            .andExpect(jsonPath("$.[*].updated").value(hasItem(DEFAULT_UPDATED.toString())))
+            .andExpect(jsonPath("$.[*].userId").value(hasItem(user.getId().intValue())))
+            .andExpect(jsonPath("$.[*].assigneeId").value(hasItem(user.getId().intValue())))
+            .andExpect(jsonPath("$.[*].userStoryId").value(hasItem(userStory.getId().intValue())));
     }
 
     @Test
@@ -320,6 +336,7 @@ public class TaskResourceIntTest {
             .andExpect(jsonPath("$.content.[*].description").value(hasItem(userTask0.getDescription())))
             .andExpect(jsonPath("$.content.[*].created").value(hasItem(userTask0.getCreated().toString())))
             .andExpect(jsonPath("$.content.[*].userId").value(hasItem(userTask0.getUser().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].assigneeId").value(hasItem(userTask0.getUser().getId().intValue())))
             .andExpect(jsonPath("$.content.[*].projectId").value(hasItem(userTask0.getProject().getId().intValue())))
             .andExpect(jsonPath("$.content.[*].userStoryId").value(hasItem(userTask0.getUserStory().getId().intValue())))
 
@@ -328,6 +345,7 @@ public class TaskResourceIntTest {
             .andExpect(jsonPath("$.content.[*].description").value(hasItem(userTask1.getDescription())))
             .andExpect(jsonPath("$.content.[*].created").value(hasItem(userTask1.getCreated().toString())))
             .andExpect(jsonPath("$.content.[*].userId").value(hasItem(userTask1.getUser().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].assigneeId").value(hasItem(userTask1.getUser().getId().intValue())))
             .andExpect(jsonPath("$.content.[*].projectId").value(hasItem(userTask1.getProject().getId().intValue())))
             .andExpect(jsonPath("$.content.[*].userStoryId").value(hasItem(userTask1.getUserStory().getId().intValue())))
 

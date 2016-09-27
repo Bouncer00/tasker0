@@ -20,6 +20,7 @@
         $scope.createSprint = createSprint;
         $scope.selectProject = selectProject;
         $scope.selectSprint = selectSprint;
+        $scope.selectUserStory = selectUserStory;
         $scope.createUserStory = createUserStory;
         $scope.createTask = createTask;
         $scope.control = {};

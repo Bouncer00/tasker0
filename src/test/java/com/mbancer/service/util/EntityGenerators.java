@@ -22,6 +22,7 @@ public class EntityGenerators {
                     .userStory(userStory)
                     .number(random.nextLong())
                     .title(RandomStringUtils.randomAlphabetic(10))
+                    .assignee(user)
                     .build()
             );
         }

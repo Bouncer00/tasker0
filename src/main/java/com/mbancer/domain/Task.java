@@ -1,7 +1,6 @@
 package com.mbancer.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mbancer.config.Constants;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -47,6 +46,9 @@ public class Task implements Serializable {
 
     @ManyToOne
     private User user;
+
+    @ManyToOne
+    private User assignee;
 
     @ManyToOne
     private Project project;
@@ -150,6 +152,14 @@ public class Task implements Serializable {
         this.board = board;
     }
 
+    public User getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -188,6 +198,7 @@ public class Task implements Serializable {
         private LocalDate created;
         private LocalDate updated;
         private User user;
+        private User assignee;
         private Project project;
         private Set<Comment> comments = new HashSet<>();
         private Board board;
@@ -256,6 +267,11 @@ public class Task implements Serializable {
             return this;
         }
 
+        public Builder assignee(User assignee){
+            this.assignee = assignee;
+            return this;
+        }
+
         public Task build() {
             Task task = new Task();
             task.setId(id);
@@ -269,6 +285,7 @@ public class Task implements Serializable {
             task.setBoard(board);
             task.setUserStory(userStory);
             task.setNumber(number);
+            task.setAssignee(assignee);
             return task;
         }
     }

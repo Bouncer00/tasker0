@@ -10,7 +10,8 @@
             controller: 'userStoryListCtrl',
             controllerAs: 'vm',
             scope: {
-                control: '='
+                control: '=',
+                selectUserStory: '='
             },
             link: function (scope, element, attrs) {
                 scope.internalControl = scope.control || {};

@@ -98,6 +98,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @OneToMany(mappedBy = "user")
     private Set<Task> tasks;
 
+    @OneToMany(mappedBy = "assignee")
+    private Set<Task> assigned;
+
     public Set<Project> getProjects() {
         return projects;
     }
@@ -128,7 +131,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     //Lowercase the login before saving it in database
     public void setLogin(String login) {
-        this.login = login.toLowerCase(Locale.ENGLISH);
+        if(login != null) {
+            this.login = login.toLowerCase(Locale.ENGLISH);
+        }
     }
 
     public String getPassword() {
@@ -219,6 +224,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.persistentTokens = persistentTokens;
     }
 
+    public Set<Task> getAssigned() {
+        return assigned;
+    }
+
+    public void setAssigned(Set<Task> assigned) {
+        this.assigned = assigned;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -230,11 +243,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
         User user = (User) o;
 
-        if (!login.equals(user.login)) {
-            return false;
-        }
+        if(login == null && id == null) return false;
 
-        return true;
+        return (login == null || user.login == null) ? id.equals(user.id) : login.equals(user.login);
+
     }
 
     @Override
@@ -245,13 +257,17 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Override
     public String toString() {
         return "User{" +
-            "login='" + login + '\'' +
+            "id=" + id +
+            ", login='" + login + '\'' +
+            ", password='" + password + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
-            ", activated='" + activated + '\'' +
+            ", activated=" + activated +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +
-            "}";
+            ", resetKey='" + resetKey + '\'' +
+            ", resetDate=" + resetDate +
+            '}';
     }
 }

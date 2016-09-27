@@ -26,6 +26,8 @@ public class TaskDTO implements Serializable {
 
     private Long userId;
 
+    private Long assigneeId;
+
     private Long projectId;
 
     private Long userStoryId;
@@ -74,6 +76,14 @@ public class TaskDTO implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getAssigneeId() {
+        return assigneeId;
+    }
+
+    public void setAssigneeId(Long assigneeId) {
+        this.assigneeId = assigneeId;
     }
 
     public Long getProjectId() {
