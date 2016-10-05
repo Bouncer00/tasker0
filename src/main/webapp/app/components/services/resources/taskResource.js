@@ -19,6 +19,11 @@
                 params: {userId: '@id'},
                 method: 'GET'
             },
+            'getByUserStory': {
+                url: url + '/byUserStory/:userStoryId',
+                params: {userStoryId: '@userStoryId'},
+                method: 'GET'
+            },
             'addComment': {
                 url: url + '/:taskId/addComment/:commentId',
                 params: {

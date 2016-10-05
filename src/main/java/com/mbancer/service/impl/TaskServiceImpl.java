@@ -53,8 +53,7 @@ public class TaskServiceImpl implements TaskService{
      */
     public TaskDTO save(TaskDTO taskDTO) {
         log.debug("Request to save Task : {}", taskDTO);
-        Task task = taskMapper.taskDTOToTask(taskDTO);
-        task.setNumber(getNextTaskNumber(taskDTO.getProjectId()));
+        Task task = taskMapper.taskDTOToTask(taskDTO);task.setNumber(getNextTaskNumber(taskDTO.getProjectId()));
         task = taskRepository.save(task);
         TaskDTO result = taskMapper.taskToTaskDTO(task);
         taskSearchRepository.save(task);
@@ -112,7 +111,6 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    @Transactional
     public void addCommentToTask(long taskId, long commentId) {
         final Task task = taskRepository.findOne(taskId);
         final Comment comment = commentRepository.findOne(commentId);
@@ -120,8 +118,16 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<TaskDTO> getByUser(Long userId, Pageable pageable) {
         final Page<Task> tasks = taskRepository.findAllByUserId(userId, pageable);
+        return tasks.map(taskMapper::taskToTaskDTO);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TaskDTO> getByUserStory(Long userStoryId, Pageable pageable) {
+        final Page<Task> tasks = taskRepository.findAllByUserStoryId(userStoryId, pageable);
         return tasks.map(taskMapper::taskToTaskDTO);
     }
 

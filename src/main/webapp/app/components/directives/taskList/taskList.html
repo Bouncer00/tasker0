@@ -1,1 +1,18 @@
-<h3>Task list</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Created</th>
+            <th>Updated</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="task in tasks">
+            <td>{{task.title}}</td>
+            <td>{{task.created}}</td>
+            <td>{{task.updated}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

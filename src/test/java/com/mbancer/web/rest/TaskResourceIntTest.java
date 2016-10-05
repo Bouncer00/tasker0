@@ -352,4 +352,41 @@ public class TaskResourceIntTest {
             .andExpect(jsonPath("$.content.[*].id").value(not(hasItem(otherUserTask.getId().intValue()))));
 
     }
+
+    @Test
+    @Transactional
+    public void shouldFindTasksByUserStoryId() throws Exception {
+        final User user = userRepository.findOneByLogin("admin").get();
+
+        final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
+        final UserStory userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
+        final UserStory otherUserStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
+        final Task userTask0 = taskRepository.save(EntityGenerators.generateTask(user, project, userStory, user));
+        final Task userTask1 = taskRepository.save(EntityGenerators.generateTask(user, project, userStory, user));
+        final Task otherUserTask = taskRepository.save(EntityGenerators.generateTask(user, project, otherUserStory, user));
+
+
+        restTaskMockMvc.perform(get("/api/tasks/byUserStory/{id}", userStory.getId()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content.[*].id").value(hasItem(userTask0.getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].title").value(hasItem(userTask0.getTitle())))
+            .andExpect(jsonPath("$.content.[*].description").value(hasItem(userTask0.getDescription())))
+            .andExpect(jsonPath("$.content.[*].created").value(hasItem(userTask0.getCreated().toString())))
+            .andExpect(jsonPath("$.content.[*].userId").value(hasItem(userTask0.getUser().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].assigneeId").value(hasItem(userTask0.getUser().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].projectId").value(hasItem(userTask0.getProject().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].userStoryId").value(hasItem(userTask0.getUserStory().getId().intValue())))
+
+            .andExpect(jsonPath("$.content.[*].id").value(hasItem(userTask1.getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].title").value(hasItem(userTask1.getTitle())))
+            .andExpect(jsonPath("$.content.[*].description").value(hasItem(userTask1.getDescription())))
+            .andExpect(jsonPath("$.content.[*].created").value(hasItem(userTask1.getCreated().toString())))
+            .andExpect(jsonPath("$.content.[*].userId").value(hasItem(userTask1.getUser().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].assigneeId").value(hasItem(userTask1.getUser().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].projectId").value(hasItem(userTask1.getProject().getId().intValue())))
+            .andExpect(jsonPath("$.content.[*].userStoryId").value(hasItem(userTask1.getUserStory().getId().intValue())))
+
+            .andExpect(jsonPath("$.content.[*].userStoryId").value(not(hasItem(otherUserStory.getId().intValue()))));
+
+    }
 }

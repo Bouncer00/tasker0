@@ -8,7 +8,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="userStory in userStories" ng-click="selectUserStory(userStory)">
+        <tr ng-repeat="userStory in userStories" ng-click="selectUserStory(userStory); internalControl.fetchTasks(userStory.id)">
             <td>{{userStory.name}}</td>
             <td>{{userStory.priority}}</td>
             <td>{{userStory.updated}}</td>

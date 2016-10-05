@@ -55,4 +55,6 @@ public interface TaskService {
     void addCommentToTask(long taskId, long commentId);
 
     Page<TaskDTO> getByUser(Long userId, Pageable pageable);
+
+    Page<TaskDTO> getByUserStory(Long userStoryId, Pageable pageable);
 }

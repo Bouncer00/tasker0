@@ -169,6 +169,7 @@ public class TaskResource {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<Void> addCommentToTask(@PathVariable long taskId, @PathVariable long commentId){
+        log.debug("REST request to add comment : {} to Task : {}", commentId, taskId);
         taskService.addCommentToTask(taskId, commentId);
         return ResponseEntity.ok().build();
     }
@@ -176,9 +177,17 @@ public class TaskResource {
     @RequestMapping(value = "/tasks/byUser/{userId}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<TaskDTO>> projectsByUser(@PathVariable("userId") Long userId, Pageable pageable){
+    public ResponseEntity<Page<TaskDTO>> tasksByUser(@PathVariable("userId") Long userId, Pageable pageable){
+        log.debug("REST request to get tasks by User : {}", userId);
         return ResponseEntity.ok(taskService.getByUser(userId, pageable));
     }
 
+    @RequestMapping(value = "tasks/byUserStory/{userStoryId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<TaskDTO>> tasksByUserStory(@PathVariable("userStoryId") Long userStoryId, Pageable pageable){
+        log.debug("REST request to get tasks by UserStory : {}", userStoryId);
+        return ResponseEntity.ok(taskService.getByUserStory(userStoryId, pageable));
+    }
 
 }

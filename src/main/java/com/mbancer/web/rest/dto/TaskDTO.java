@@ -20,7 +20,7 @@ public class TaskDTO implements Serializable {
 
     private String description;
 
-    private LocalDate created;
+    private LocalDate created = LocalDate.now();
 
     private LocalDate updated;
 

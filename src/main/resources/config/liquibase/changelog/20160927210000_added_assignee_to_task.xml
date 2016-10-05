@@ -14,7 +14,7 @@
     <property name="floatType" value="float" dbms="mysql, oracle"/>
 
 
-    <changeSet id="20160927210000-0" author="mbancer">
+    <changeSet id="2016092700050--0" author="mbancer">
         <addColumn tableName="task">
             <column name="assignee_id" type="bigint">
                 <constraints nullable="true"/>

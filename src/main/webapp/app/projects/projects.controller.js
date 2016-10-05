@@ -60,6 +60,7 @@
 
         function createTask() {
             createTaskModal.open(currentUserStory).result.then(function (task) {
+                task.projectId = currentProject.id;
                 Task.save(task);
             })
         }
