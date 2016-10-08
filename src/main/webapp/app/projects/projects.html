@@ -5,15 +5,15 @@
         <project-list control="control" select-project="selectProject"></project-list>
     </div>
     <div class="col-md-3">
-        <button class="btn btn-primary" ng-click="createSprint()">Create sprint</button>
+        <button class="btn btn-primary" ng-disabled="!currentProject" ng-click="createSprint()">Create sprint</button>
         <sprint-list control="control" select-sprint="selectSprint"></sprint-list>
     </div>
     <div class="col-md-3">
-        <button class="btn btn-primary" ng-click="createUserStory()">Create user story</button>
+        <button class="btn btn-primary" ng-disabled="!currentSprint" ng-click="createUserStory()">Create user story</button>
         <user-story-list control="control" select-user-story="selectUserStory"></user-story-list>
     </div>
     <div class="col-md-3">
-        <button class="btn btn-primary" ng-click="createTask()">Create task</button>
+        <button class="btn btn-primary" ng-disabled="!currentUserStory" ng-click="createTask()">Create task</button>
         <task-list control="control"></task-list>
     </div>
 </div>

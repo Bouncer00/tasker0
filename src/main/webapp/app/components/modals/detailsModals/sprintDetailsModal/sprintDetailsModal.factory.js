@@ -1,24 +1,24 @@
 (function () {
     angular
         .module('tasker0App')
-        .factory('createTaskModal', createTaskModal);
+        .factory('sprintDetailsModal', sprintDetailsModal);
 
-    createTaskModal.$inject = ['$uibModal'];
+    sprintDetailsModal.$inject = ['$uibModal'];
 
-    function createTaskModal($uibModal) {
+    function sprintDetailsModal($uibModal) {
 
-        var open = function(userStory) {
+        var open = function(sprint) {
             return $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'app/components/modals/createTaskModal/createTaskModal.html',
-                controller: 'createTaskModalCtrl',
+                templateUrl: 'app/components/modals/detailsModals/sprintDetailsModal/sprintDetailsModal.html',
+                controller: 'SprintDetailsModalCtrl',
                 controllerAs: 'vm',
                 size: "lg",
                 resolve: {
-                    userStory: function () {
-                        return userStory;
+                    sprint: function () {
+                        return sprint;
                     }
                 }
             });

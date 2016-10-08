@@ -6,14 +6,16 @@
             <th>Name</th>
             <th>Start</th>
             <th>End</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="sprint in sprints" ng-click="internalControl.fetchUserStories(sprint.id); selectSprint(sprint)">
+        <tr ng-repeat="sprint in sprints" ng-click="selectSprint(sprint)">
             <td>{{sprint.number}}</td>
             <td>{{sprint.name}}</td>
             <td>{{sprint.start}}</td>
             <td>{{sprint.end}}</td>
+            <td><span ng-click="openDetails(sprint)" class="glyphicon glyphicon-info-sign"></span></td>
         </tr>
         </tbody>
     </table>

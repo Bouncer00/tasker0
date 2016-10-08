@@ -5,13 +5,15 @@
             <th>Name</th>
             <th>Priority</th>
             <th>Updated</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="userStory in userStories" ng-click="selectUserStory(userStory); internalControl.fetchTasks(userStory.id)">
+        <tr ng-repeat="userStory in userStories" ng-click="selectUserStory(userStory)">
             <td>{{userStory.name}}</td>
             <td>{{userStory.priority}}</td>
             <td>{{userStory.updated}}</td>
+            <td><span ng-click="openDetails(userStory)" class="glyphicon glyphicon-info-sign"></span></td>
         </tr>
         </tbody>
     </table>

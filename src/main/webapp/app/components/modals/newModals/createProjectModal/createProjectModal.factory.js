@@ -12,7 +12,7 @@
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'app/components/modals/createProjectModal/createProjectModal.html',
+                templateUrl: 'app/components/modals/newModals/createProjectModal/createProjectModal.html',
                 controller: 'CreateProjectModalCtrl',
                 controllerAs: 'vm',
                 size: "lg"

@@ -12,7 +12,7 @@
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'app/components/modals/createSprintModal/createSprintModal.html',
+                templateUrl: 'app/components/modals/newModals/createSprintModal/createSprintModal.html',
                 controller: 'CreateSprintModalCtrl',
                 controllerAs: 'vm',
                 size: "lg",

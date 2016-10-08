@@ -3,19 +3,26 @@
         .module('tasker0App')
         .controller('taskListCtrl', taskListCtrl);
 
-    taskListCtrl.$inject = ['$scope', 'Task'];
+    taskListCtrl.$inject = ['$scope', 'Task', 'taskDetailsModal'];
 
-    function taskListCtrl($scope, Task) {
+    function taskListCtrl($scope, Task, taskDetailsModal) {
         $scope.fetchTasks = fetchTasks;
-        $scope.control.fetchTasks = function (userStoryId) {
-            fetchTasks(userStoryId)
-        };
+        $scope.openDetails = openDetails;
+
+        $scope.control.resetTasks = resetTasks;
+        $scope.control.fetchTasks = fetchTasks;
+        function resetTasks() {
+            $scope.tasks = [];
+        }
 
         function fetchTasks(userStoryId) {
             Task.getByUserStory({userStoryId: userStoryId}).$promise.then(function (result) {
                 $scope.tasks = result.content;
-                console.log($scope.tasks);
             });
+        }
+        
+        function openDetails(task) {
+            taskDetailsModal.open(task);
         }
     }
 })();

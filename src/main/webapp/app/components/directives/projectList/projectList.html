@@ -4,12 +4,14 @@
         <tr>
             <th>Name</th>
             <th>Short name</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="project in projects" ng-click="internalControl.fetchSprints(project.id); selectProject(project)">
+        <tr ng-repeat="project in projects" ng-click="selectProject(project)">
             <td>{{project.name}}</td>
             <td>{{project.shortName}}</td>
+            <td><span ng-click="openDetails(project)" class="glyphicon glyphicon-info-sign"></span></td>
         </tr>
         </tbody>
     </table>

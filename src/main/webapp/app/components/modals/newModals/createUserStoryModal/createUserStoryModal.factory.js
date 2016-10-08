@@ -12,7 +12,7 @@
                 animation: true,
                 ariaLabelledBy: 'modal-title',
                 ariaDescribedBy: 'modal-body',
-                templateUrl: 'app/components/modals/createUserStoryModal/createUserStoryModal.html',
+                templateUrl: 'app/components/modals/newModals/createUserStoryModal/createUserStoryModal.html',
                 controller: 'CreateUserStoryModalCtrl',
                 controllerAs: 'vm',
                 size: "lg",
