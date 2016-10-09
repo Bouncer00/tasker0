@@ -2,6 +2,7 @@ package com.mbancer.service;
 
 import com.mbancer.domain.Project;
 import com.mbancer.web.rest.dto.ProjectDTO;
+import com.mbancer.web.rest.dto.UserDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -57,4 +58,6 @@ public interface ProjectService {
     Page<ProjectDTO> getByUser(Long userId, Pageable pageable);
 
     Page<ProjectDTO> getByCurrentUser(Pageable pageable);
+
+    Page<UserDTO> getMembers(Long projectId, Pageable pageable);
 }

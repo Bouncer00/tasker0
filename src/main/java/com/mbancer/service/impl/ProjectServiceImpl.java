@@ -10,7 +10,9 @@ import com.mbancer.domain.Project;
 import com.mbancer.repository.ProjectRepository;
 import com.mbancer.repository.search.ProjectSearchRepository;
 import com.mbancer.web.rest.dto.ProjectDTO;
+import com.mbancer.web.rest.dto.UserDTO;
 import com.mbancer.web.rest.mapper.ProjectMapper;
+import com.mbancer.web.rest.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -47,6 +49,9 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Inject
     private ProjectMapper projectMapper;
+
+    @Inject
+    private UserMapper userMapper;
 
     @Inject
     private ProjectSearchRepository projectSearchRepository;
@@ -126,15 +131,24 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ProjectDTO> getByUser(Long userId, Pageable pageable) {
         final Page<Project> projects = projectRepository.findAllByUsersIdIn(Collections.singletonList(userId), pageable);
         return projects.map(projectMapper::projectToProjectDTO);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ProjectDTO> getByCurrentUser(Pageable pageable){
         final User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
         final Page<Project> projects = projectRepository.findAllByUsersIdIn(Collections.singletonList(user.getId()), pageable);
         return projects.map(projectMapper::projectToProjectDTO);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UserDTO> getMembers(Long projectId, Pageable pageable) {
+        Page<User> members = userRepository.findAllByProjectsIdIn(Collections.singletonList(projectId), pageable);
+        return members.map(userMapper::userToUserDTO);
     }
 }

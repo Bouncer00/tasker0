@@ -21,6 +21,10 @@ public class Project implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public Project(){
+        created = LocalDate.now();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

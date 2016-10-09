@@ -5,6 +5,7 @@ import com.mbancer.domain.User;
 import com.mbancer.web.rest.dto.UserDTO;
 import org.mapstruct.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,7 +16,22 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", uses = {ProjectMapper.class, TaskMapper.class})
 public interface UserMapper {
 
-    UserDTO userToUserDTO(User user);
+    default UserDTO userToUserDTO(User user){
+        if ( user == null ) {
+            return null;
+        }
+
+        UserDTO userDTO = new UserDTO(user);
+
+        if ( userDTO.getAuthorities() != null ) {
+            Collection<String> targetCollection = stringsFromAuthorities( user.getAuthorities() );
+            if ( targetCollection != null ) {
+                userDTO.getAuthorities().addAll( targetCollection );
+            }
+        }
+
+        return userDTO;
+    }
 
     List<UserDTO> usersToUserDTOs(List<User> users);
 

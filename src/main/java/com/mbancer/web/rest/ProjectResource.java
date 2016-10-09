@@ -3,6 +3,7 @@ package com.mbancer.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.mbancer.domain.Project;
 import com.mbancer.service.ProjectService;
+import com.mbancer.web.rest.dto.UserDTO;
 import com.mbancer.web.rest.util.HeaderUtil;
 import com.mbancer.web.rest.util.PaginationUtil;
 import com.mbancer.web.rest.dto.ProjectDTO;
@@ -163,6 +164,7 @@ public class ProjectResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> addTaskToProject(@PathVariable long projectId, @PathVariable long taskId){
+        log.debug("REST request to add task : {} to project : {}", taskId, projectId);
         projectService.addTaskToProject(projectId, taskId);
         return ResponseEntity.ok().build();
     }
@@ -172,14 +174,26 @@ public class ProjectResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<Page<ProjectDTO>> projectsByUser(@PathVariable("userId") Long userId, Pageable pageable){
+        log.debug("REST request to get projects by user : {}", userId);
         return ResponseEntity.ok(projectService.getByUser(userId, pageable));
     }
 
     @RequestMapping(value = "/projects/byCurrentUser",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
     public ResponseEntity<Page<ProjectDTO>> projectsByCurrentUser(Pageable pageable){
+        log.debug("REST request to get projects by currently logged user");
         return ResponseEntity.ok(projectService.getByCurrentUser(pageable));
+    }
+
+    @RequestMapping(value = "/projects/{projectId}/members",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Page<UserDTO>> membersOfProject(@PathVariable("projectId") Long projectId, Pageable pageable){
+        log.debug("REST request to get members of project : {}", projectId);
+        return ResponseEntity.ok(projectService.getMembers(projectId, pageable));
     }
 
 }

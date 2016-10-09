@@ -11,6 +11,10 @@ import java.util.*;
  */
 public class ProjectDTO implements Serializable {
 
+    public ProjectDTO(){
+        created = LocalDate.now();
+    }
+
     private Long id;
 
     @NotNull

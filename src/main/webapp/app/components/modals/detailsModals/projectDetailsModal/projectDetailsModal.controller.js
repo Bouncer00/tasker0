@@ -3,9 +3,10 @@
         .module('tasker0App')
         .controller('ProjectDetailsModalCtrl', ProjectDetailsModalCtrl);
 
-    ProjectDetailsModalCtrl.$inject = ['$scope'];
-    
-    function ProjectDetailsModalCtrl($scope) {
-        
+    ProjectDetailsModalCtrl.$inject = ['$scope', 'project'];
+
+    function ProjectDetailsModalCtrl($scope, project) {
+        $scope.project = project;
+        console.log(project);
     }
 })();

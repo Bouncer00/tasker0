@@ -9,9 +9,12 @@
 
     function sprintListCtrl($scope, Sprint, sprintDetailsModal) {
         $scope.fetchSprints = fetchSprints;
-        $scope.control.resetSprints = resetSprints;
-        $scope.control.fetchSprints = fetchSprints;
         $scope.openDetails = openDetails;
+
+        if($scope.control) {
+            $scope.control.resetSprints = resetSprints;
+            $scope.control.fetchSprints = fetchSprints;
+        }
 
         function resetSprints() {
             $scope.sprints = [];

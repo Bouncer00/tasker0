@@ -9,8 +9,11 @@
         $scope.fetchTasks = fetchTasks;
         $scope.openDetails = openDetails;
 
-        $scope.control.resetTasks = resetTasks;
-        $scope.control.fetchTasks = fetchTasks;
+        if($scope.control) {
+            $scope.control.resetTasks = resetTasks;
+            $scope.control.fetchTasks = fetchTasks;
+        }
+
         function resetTasks() {
             $scope.tasks = [];
         }
@@ -20,7 +23,7 @@
                 $scope.tasks = result.content;
             });
         }
-        
+
         function openDetails(task) {
             taskDetailsModal.open(task);
         }

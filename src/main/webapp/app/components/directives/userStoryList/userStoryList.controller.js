@@ -10,10 +10,13 @@
     function userStoryListCtrl($scope, UserStory, userStoryDetailsModal) {
 
         $scope.fetchUserStories = fetchUserStories;
-        $scope.control.resetUserStories = resetUserStories;
-        $scope.control.fetchUserStories = fetchUserStories;
         $scope.openDetails = openDetails;
 
+        if($scope.control) {
+            $scope.control.resetUserStories = resetUserStories;
+            $scope.control.fetchUserStories = fetchUserStories;
+        }
+        
         function resetUserStories() {
             $scope.userStories = [];
         }
@@ -23,7 +26,7 @@
                 $scope.userStories = result.content;
             });
         }
-        
+
         function openDetails(userStory) {
             userStoryDetailsModal.open(userStory);
         }

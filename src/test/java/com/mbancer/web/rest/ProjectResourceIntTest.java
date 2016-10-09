@@ -46,8 +46,10 @@ import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -317,6 +319,7 @@ public class ProjectResourceIntTest {
     @Test
     @Transactional
     public void shouldFindProjectsOfCurrentUser() throws Exception {
+        //given
         final User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
         final User otherUser = userRepository.findOneByLogin("user").get();
 
@@ -331,11 +334,38 @@ public class ProjectResourceIntTest {
         projectRepository.saveAndFlush(userProject);
         projectRepository.saveAndFlush(otherUserProject);
 
+        //when
         restProjectMockMvc.perform(get("/api/projects/byCurrentUser"))
+         //then
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content.[*].id").value(hasItem(project.getId().intValue())))
             .andExpect(jsonPath("$.content.[*].id").value(hasItem(userProject.getId().intValue())))
             .andExpect(jsonPath("$.content.[*].id").value(not(hasItem(otherUserProject.getId().intValue()))));
+
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindAllMembersOfGivenProject() throws Exception {
+        //given
+        final User admin = userRepository.findOneByLogin("admin").get();
+        final User user = userRepository.findOneByLogin("user").get();
+        final Project project = EntityGenerators.generateProject(Sets.newHashSet(admin, user), Collections.emptyList());
+        projectRepository.save(project);
+
+        //when
+        restProjectMockMvc.perform(get("/api/projects/{projectId}/members", project.getId()))
+        //then
+        .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content.[*].login").value(hasItems(user.getLogin())))
+            .andExpect(jsonPath("$.content.[*].firstName").value(hasItems(user.getFirstName())))
+            .andExpect(jsonPath("$.content.[*].lastName").value(hasItems(user.getLastName())))
+            .andExpect(jsonPath("$.content.[*].email").value(hasItems(user.getEmail())))
+
+            .andExpect(jsonPath("$.content.[*].login").value(hasItems(admin.getLogin())))
+            .andExpect(jsonPath("$.content.[*].firstName").value(hasItems(admin.getFirstName())))
+            .andExpect(jsonPath("$.content.[*].lastName").value(hasItems(admin.getLastName())))
+            .andExpect(jsonPath("$.content.[*].email").value(hasItems(admin.getEmail())));
 
     }
 }
