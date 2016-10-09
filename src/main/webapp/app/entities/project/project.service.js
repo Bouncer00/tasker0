@@ -13,7 +13,7 @@
             'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
-                url: resourceUrl + "/:id",
+                url: resourceUrl + '/:id',
                 params: {id: '@id'},
                 transformResponse: function (data) {
                     if (data) {
@@ -26,7 +26,7 @@
             },
             'getByCurrentUser': {
                 method: 'GET',
-                url: resourceUrl + "/byCurrentUser",
+                url: resourceUrl + '/byCurrentUser',
                 transformResponse: function (data) {
                     if (data) {
                         data = angular.fromJson(data);
@@ -45,6 +45,11 @@
                 url: resourceUrl + '/byUser/:userId',
                 method: 'GET',
                 params: {userId: '@userId'}
+            },
+            'getMembers': {
+                url: resourceUrl + '/:projectId/members',
+                method: 'GET',
+                params: {projectId: '@projectId'}
             }
         });
     }

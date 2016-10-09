@@ -3,10 +3,17 @@
         .module('tasker0App')
         .controller('ProjectDetailsModalCtrl', ProjectDetailsModalCtrl);
 
-    ProjectDetailsModalCtrl.$inject = ['$scope', 'project'];
+    ProjectDetailsModalCtrl.$inject = ['$scope', 'Project', 'project'];
 
-    function ProjectDetailsModalCtrl($scope, project) {
+    function ProjectDetailsModalCtrl($scope, Project, project) {
         $scope.project = project;
-        console.log(project);
+
+        getProjectMembers();
+
+        function getProjectMembers() {
+            Project.getMembers({projectId: project.id}).$promise.then(function (result) {
+                console.log(result);
+            });
+        }
     }
 })();
