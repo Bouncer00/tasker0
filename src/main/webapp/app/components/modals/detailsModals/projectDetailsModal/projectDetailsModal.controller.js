@@ -12,7 +12,8 @@
 
         function getProjectMembers() {
             Project.getMembers({projectId: project.id}).$promise.then(function (result) {
-                console.log(result);
+                $scope.members = result.content;
+                console.log($scope.members);
             });
         }
     }

@@ -22,6 +22,20 @@
         <label for="name">Decription:</label>
         <span id="name">{{project.description}}</span>
     </div>
+    <div class="row">
+        <div class="col-xs-4">
+            <label for="projectMembers">Project members:</label>
+            <select id="projectMembers" class="form-control btn btn-primary dropdown-toggle" data-ng-options="member.login for member in members"
+                    data-ng-model="selectedMember">
+                <option ng-repeat="member in members"><a href="#">member.login</a></option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label for="addMember"></label>
+        <input id="addMember" class="form-control input-md" type="text">
+        <button class="btn btn-primary">Add member</button>
+    </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-default">Close</button>
