@@ -16,9 +16,9 @@
                 console.log($scope.members);
             });
         }
-        
-        function addMember(member) {
-            
+
+        function addMember(email) {
+
         }
     }
 })();

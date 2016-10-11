@@ -50,6 +50,11 @@
                 url: resourceUrl + '/:projectId/members',
                 method: 'GET',
                 params: {projectId: '@projectId'}
+            },
+            'addMemberToProject': {
+                url: resourceUrl + '/:projectId/addMember/:email',
+                method: 'PUT',
+                params: {projectId: '@projectId', email: '@email'}
             }
         });
     }
