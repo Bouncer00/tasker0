@@ -368,4 +368,25 @@ public class ProjectResourceIntTest {
             .andExpect(jsonPath("$.content.[*].email").value(hasItems(admin.getEmail())));
 
     }
+
+    @Test
+    @Transactional
+    public void shouldAddUserToProject() throws Exception {
+        //given
+        final User admin = userRepository.findOneByLogin("admin").get();
+        final User user = userRepository.findOneByLogin("user").get();
+        final Project project = EntityGenerators.generateProject(Sets.newHashSet(admin), Collections.emptyList());
+        projectRepository.save(project);
+
+        //when
+        restProjectMockMvc.perform(put("/api/projects/{projectId}/addMember/{email}", project.getId(), user.getEmail()))
+        //then
+            .andExpect(status().isOk());
+
+        final Project updatedProject = projectRepository.findOne(project.getId());
+        final User updatedUser = userRepository.findOne(user.getId());
+        assertThat(updatedProject.getUsers()).contains(admin, updatedUser);
+        assertThat(updatedUser.getProjects()).contains(updatedProject);
+
+    }
 }

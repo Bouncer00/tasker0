@@ -2,6 +2,7 @@ package com.mbancer.service.impl;
 
 import com.mbancer.domain.Task;
 import com.mbancer.domain.User;
+import com.mbancer.exceptions.NoSuchUserException;
 import com.mbancer.repository.TaskRepository;
 import com.mbancer.repository.UserRepository;
 import com.mbancer.security.SecurityUtils;
@@ -22,10 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import java.util.Optional;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -150,5 +148,19 @@ public class ProjectServiceImpl implements ProjectService{
     public Page<UserDTO> getMembers(Long projectId, Pageable pageable) {
         Page<User> members = userRepository.findAllByProjectsIdIn(Collections.singletonList(projectId), pageable);
         return members.map(userMapper::userToUserDTO);
+    }
+
+    @Override
+    @Transactional
+    public void addMemberToProject(Long projectId, String email) throws NoSuchUserException {
+        final Project project = projectRepository.findOne(projectId);
+        final Optional<User> userOptional = userRepository.findOneByEmail(email);
+
+        if(!userOptional.isPresent()) throw new NoSuchUserException("User: " + email + " does not exist");
+
+        final User user = userOptional.get();
+        project.getUsers().add(user);
+        user.getProjects().add(project);
+
     }
 }

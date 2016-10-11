@@ -16,5 +16,9 @@
                 console.log($scope.members);
             });
         }
+        
+        function addMember(member) {
+            
+        }
     }
 })();

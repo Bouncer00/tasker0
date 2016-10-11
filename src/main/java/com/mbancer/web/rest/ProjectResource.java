@@ -2,6 +2,7 @@ package com.mbancer.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.mbancer.domain.Project;
+import com.mbancer.exceptions.NoSuchUserException;
 import com.mbancer.service.ProjectService;
 import com.mbancer.web.rest.dto.UserDTO;
 import com.mbancer.web.rest.util.HeaderUtil;
@@ -194,6 +195,19 @@ public class ProjectResource {
     public ResponseEntity<Page<UserDTO>> membersOfProject(@PathVariable("projectId") Long projectId, Pageable pageable){
         log.debug("REST request to get members of project : {}", projectId);
         return ResponseEntity.ok(projectService.getMembers(projectId, pageable));
+    }
+
+    @RequestMapping(value = "/projects/{projectId}/addMember/{email}",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> addMemberToProject(@PathVariable("projectId") Long projectId, @PathVariable("email") String email){
+        log.debug("REST request to add member : {} to project : {}", email, projectId);
+        try {
+            projectService.addMemberToProject(projectId, email);
+            return ResponseEntity.ok().build();
+        } catch (NoSuchUserException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
