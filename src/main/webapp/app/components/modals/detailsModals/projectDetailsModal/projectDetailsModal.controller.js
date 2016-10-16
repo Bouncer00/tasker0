@@ -7,6 +7,7 @@
 
     function ProjectDetailsModalCtrl($scope, Project, project) {
         $scope.project = project;
+        $scope.addMember = addMember;
 
         getProjectMembers();
 
@@ -18,7 +19,10 @@
         }
 
         function addMember(email) {
-
+            Project.addMember({projectId: $scope.project.id, email:email})
+                .$promise.then(function (result) {
+                getProjectMembers();
+            });
         }
     }
 })();

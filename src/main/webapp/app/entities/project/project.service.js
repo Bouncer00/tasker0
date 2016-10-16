@@ -51,7 +51,7 @@
                 method: 'GET',
                 params: {projectId: '@projectId'}
             },
-            'addMemberToProject': {
+            'addMember': {
                 url: resourceUrl + '/:projectId/addMember/:email',
                 method: 'PUT',
                 params: {projectId: '@projectId', email: '@email'}

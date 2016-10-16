@@ -3,9 +3,9 @@
         .module('tasker0App')
         .controller('SprintDetailsModalCtrl', SprintDetailsModalCtrl);
 
-    SprintDetailsModalCtrl.$inject = ['$scope'];
+    SprintDetailsModalCtrl.$inject = ['$scope', 'sprint'];
 
-    function SprintDetailsModalCtrl($scope) {
-
+    function SprintDetailsModalCtrl($scope, sprint) {
+        $scope.sprint = sprint;
     }
 })();

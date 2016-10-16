@@ -2,7 +2,22 @@
     <h3 class="modal-title" id="modal-title">Sprint details</h3>
 </div>
 <div class="modal-body">
-
+    <div class="row">
+        <label for="number">Number:</label>
+        <span id="number">{{sprint.number}}</span>
+    </div>
+    <div class="row">
+        <label for="name">Name:</label>
+        <span id="name">{{sprint.name}}</span>
+    </div>
+    <div class="row">
+        <label for="created">Created:</label>
+        <span id="created">{{sprint.start}}</span>
+    </div>
+    <div class="row">
+        <label for="deadline">Deadline:</label>
+        <span id="deadline">{{sprint.end}}</span>
+    </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-default">Close</button>

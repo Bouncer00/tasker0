@@ -2,7 +2,26 @@
     <h3 class="modal-title" id="modal-title">User story details</h3>
 </div>
 <div class="modal-body">
-
+    <div class="row">
+        <label for="name">Name:</label>
+        <span id="name">{{::userStory.name}}</span>
+    </div>
+    <div class="row">
+        <label for="description">Description:</label>
+        <span id="description">{{::userStory.description}}</span>
+    </div>
+    <div class="row">
+        <label for="created">Created:</label>
+        <span id="created">{{::userStory.created}}</span>
+    </div>
+    <div class="row">
+        <label for="deadline">Updated:</label>
+        <span id="deadline">{{::userStory.updated}}</span>
+    </div>
+    <div class="row">
+        <label for="priority">Priority:</label>
+        <span id="priority">{{::userStory.priority}}</span>
+    </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-default">Close</button>

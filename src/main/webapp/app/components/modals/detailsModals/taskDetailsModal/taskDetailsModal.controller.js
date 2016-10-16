@@ -3,9 +3,9 @@
         .module('tasker0App')
         .controller('TaskDetailsModalCtrl', TaskDetailsModalCtrl);
 
-    TaskDetailsModalCtrl.$inject = ['$scope'];
+    TaskDetailsModalCtrl.$inject = ['$scope', 'task'];
 
-    function TaskDetailsModalCtrl($scope) {
-
+    function TaskDetailsModalCtrl($scope, task) {
+        $scope.task = task;
     }
 })();

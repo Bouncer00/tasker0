@@ -3,9 +3,9 @@
         .module('tasker0App')
         .controller('UserStoryDetailsModalCtrl', UserStoryDetailsModalCtrl);
 
-    UserStoryDetailsModalCtrl.$inject = ['$scope'];
+    UserStoryDetailsModalCtrl.$inject = ['$scope', 'userStory'];
 
-    function UserStoryDetailsModalCtrl($scope) {
-
+    function UserStoryDetailsModalCtrl($scope, userStory) {
+        $scope.userStory = userStory;
     }
 })();
