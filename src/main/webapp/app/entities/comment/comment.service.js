@@ -34,6 +34,13 @@
                     data.date = DateUtils.convertLocalDateToServer(data.date);
                     return angular.toJson(data);
                 }
+            },
+            'getByTaskId': {
+                method: 'GET',
+                url: resourceUrl + '/byTask/:taskId',
+                params: {
+                    taskId: '@taskId'
+                }
             }
         });
     }

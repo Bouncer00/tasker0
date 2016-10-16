@@ -29,28 +29,18 @@ import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
-/**
- * REST controller for managing Comment.
- */
 @RestController
 @RequestMapping("/api")
 public class CommentResource {
 
     private final Logger log = LoggerFactory.getLogger(CommentResource.class);
-        
+
     @Inject
     private CommentService commentService;
-    
+
     @Inject
     private CommentMapper commentMapper;
-    
-    /**
-     * POST  /comments : Create a new comment.
-     *
-     * @param commentDTO the commentDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new commentDTO, or with status 400 (Bad Request) if the comment has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
-     */
+
     @RequestMapping(value = "/comments",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,15 +56,6 @@ public class CommentResource {
             .body(result);
     }
 
-    /**
-     * PUT  /comments : Updates an existing comment.
-     *
-     * @param commentDTO the commentDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated commentDTO,
-     * or with status 400 (Bad Request) if the commentDTO is not valid,
-     * or with status 500 (Internal Server Error) if the commentDTO couldnt be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
-     */
     @RequestMapping(value = "/comments",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -90,13 +71,6 @@ public class CommentResource {
             .body(result);
     }
 
-    /**
-     * GET  /comments : get all the comments.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of comments in body
-     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
-     */
     @RequestMapping(value = "/comments",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -104,17 +78,11 @@ public class CommentResource {
     public ResponseEntity<List<CommentDTO>> getAllComments(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Comments");
-        Page<Comment> page = commentService.findAll(pageable); 
+        Page<Comment> page = commentService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/comments");
         return new ResponseEntity<>(commentMapper.commentsToCommentDTOs(page.getContent()), headers, HttpStatus.OK);
     }
 
-    /**
-     * GET  /comments/:id : get the "id" comment.
-     *
-     * @param id the id of the commentDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the commentDTO, or with status 404 (Not Found)
-     */
     @RequestMapping(value = "/comments/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -129,12 +97,6 @@ public class CommentResource {
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    /**
-     * DELETE  /comments/:id : delete the "id" comment.
-     *
-     * @param id the id of the commentDTO to delete
-     * @return the ResponseEntity with status 200 (OK)
-     */
     @RequestMapping(value = "/comments/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -145,13 +107,6 @@ public class CommentResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("comment", id.toString())).build();
     }
 
-    /**
-     * SEARCH  /_search/comments?query=:query : search for the comment corresponding
-     * to the query.
-     *
-     * @param query the query of the comment search
-     * @return the result of the search
-     */
     @RequestMapping(value = "/_search/comments",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -162,6 +117,16 @@ public class CommentResource {
         Page<Comment> page = commentService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/comments");
         return new ResponseEntity<>(commentMapper.commentsToCommentDTOs(page.getContent()), headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/comments/byTask/{taskId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Page<CommentDTO>> getCommentsByTask(@PathVariable("taskId") Long taskId, Pageable pageable){
+        log.debug("REST request to get Comments by Task : {}", taskId);
+        Page<CommentDTO> comments = commentService.getByTaskId(taskId, pageable);
+        return ResponseEntity.ok(comments);
     }
 
 

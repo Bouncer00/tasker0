@@ -101,4 +101,10 @@ public class CommentServiceImpl implements CommentService{
         log.debug("Request to search for a page of Comments for query {}", query);
         return commentSearchRepository.search(queryStringQuery(query), pageable);
     }
+
+    @Override
+    public Page<CommentDTO> getByTaskId(Long taskId, Pageable pageable) {
+        Page<Comment> comments = commentRepository.findAllByTaskId(taskId, pageable);
+        return comments.map(commentMapper::commentToCommentDTO);
+    }
 }

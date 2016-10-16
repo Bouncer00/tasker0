@@ -1,10 +1,11 @@
 package com.mbancer.web.rest;
 
 import com.mbancer.Tasker0App;
-import com.mbancer.domain.Comment;
-import com.mbancer.repository.CommentRepository;
+import com.mbancer.domain.*;
+import com.mbancer.repository.*;
 import com.mbancer.repository.search.CommentSearchRepository;
 import com.mbancer.service.CommentService;
+import com.mbancer.service.util.EntityGenerators;
 import com.mbancer.web.rest.dto.CommentDTO;
 import com.mbancer.web.rest.mapper.CommentMapper;
 import org.junit.Before;
@@ -27,10 +28,12 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -69,6 +72,21 @@ public class CommentResourceIntTest {
 
     @Inject
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
+    @Inject
+    private UserRepository userRepository;
+
+    @Inject
+    private SprintRepository sprintRepository;
+
+    @Inject
+    private UserStoryRepository userStoryRepository;
+
+    @Inject
+    private ProjectRepository projectRepository;
+
+    @Inject
+    private TaskRepository taskRepository;
 
     private MockMvc restCommentMockMvc;
 
@@ -262,5 +280,35 @@ public class CommentResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(comment.getId().intValue())))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
             .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT.toString())));
+    }
+
+    @Test
+    @Transactional
+    public void shouldGetCommentsByTaskId() throws Exception {
+        //given
+        final User admin = userRepository.findOneByLogin("admin").get();
+        final User user = userRepository.findOneByLogin("user").get();
+        final Project project = projectRepository.save(EntityGenerators.generateProject(Collections.singleton(user), null));
+        final Sprint sprint = sprintRepository.save(EntityGenerators.generateSprint(project));
+        final UserStory userStory = userStoryRepository.save(EntityGenerators.generateUserStory(sprint, Collections.emptyList()));
+        final Task task = taskRepository.save(EntityGenerators.generateTask(user, project, userStory, null));
+        final Comment adminComment = commentRepository.save(EntityGenerators.generateComment(admin, task));
+        final Comment userComment = commentRepository.save(EntityGenerators.generateComment(user, task));
+
+        //when
+        restCommentMockMvc.perform(get("/api/comments/byTask/{taskId}", task.getId()))
+        //then
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.content.[*].id").value(hasItem(adminComment.getId().intValue())))
+        .andExpect(jsonPath("$.content.[*].date").value(hasItem(adminComment.getDate().toString())))
+        .andExpect(jsonPath("$.content.[*].text").value(hasItem(adminComment.getText())))
+        .andExpect(jsonPath("$.content.[*].authorId").value(hasItem(admin.getId().intValue())))
+        .andExpect(jsonPath("$.content.[*].taskId").value(hasItem(task.getId().intValue())))
+
+        .andExpect(jsonPath("$.content.[*].id").value(hasItem(userComment.getId().intValue())))
+        .andExpect(jsonPath("$.content.[*].date").value(hasItem(userComment.getDate().toString())))
+        .andExpect(jsonPath("$.content.[*].text").value(hasItem(userComment.getText())))
+        .andExpect(jsonPath("$.content.[*].authorId").value(hasItem(user.getId().intValue())))
+        .andExpect(jsonPath("$.content.[*].taskId").value(hasItem(task.getId().intValue())));
     }
 }
