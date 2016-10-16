@@ -64,7 +64,7 @@ server:
 # JHipster specific properties
 # ===================================================================
 
-jhipster:
+app:
     async:
         corePoolSize: 2
         maxPoolSize: 50

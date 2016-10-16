@@ -1,6 +1,6 @@
 package com.mbancer.service;
 
-import com.mbancer.config.JHipsterProperties;
+import com.mbancer.config.AppProperties;
 import com.mbancer.domain.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
@@ -39,7 +39,7 @@ public class MailServiceTest {
     private MailService mailService = new MailService();
 
     @Mock
-    private JHipsterProperties jHipsterProperties;
+    private AppProperties appProperties;
 
     @Mock
     private JavaMailSenderImpl javaMailSender;
@@ -55,7 +55,7 @@ public class MailServiceTest {
         PowerMockito.when(messageSource.getMessage(anyString(), any(), any(Locale.class)))
             .thenReturn("exampleContent");
         when(javaMailSender.createMimeMessage()).thenCallRealMethod();
-        when(jHipsterProperties.getMail()).thenReturn(new JHipsterProperties.Mail());
+        when(appProperties.getMail()).thenReturn(new AppProperties.Mail());
 
         ReflectionTestUtils.setField(mailService, "templateEngine", templateEngine);
         ReflectionTestUtils.setField(mailService, "messageSource", messageSource);

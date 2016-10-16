@@ -2,7 +2,6 @@ package com.mbancer.config;
 
 import com.mbancer.security.*;
 import com.mbancer.web.filter.CsrfCookieGeneratorFilter;
-import com.mbancer.config.JHipsterProperties;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +27,7 @@ import javax.inject.Inject;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Inject
-    private JHipsterProperties jHipsterProperties;
+    private AppProperties appProperties;
 
     @Inject
     private AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
@@ -87,7 +86,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .rememberMe()
             .rememberMeServices(rememberMeServices)
             .rememberMeParameter("remember-me")
-            .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
+            .key(appProperties.getSecurity().getRememberMe().getKey())
         .and()
             .formLogin()
             .loginProcessingUrl("/api/authentication")

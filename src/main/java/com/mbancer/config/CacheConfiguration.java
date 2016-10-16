@@ -45,10 +45,10 @@ public class CacheConfiguration {
     }
 
     @Bean
-    public CacheManager cacheManager(JHipsterProperties jHipsterProperties) {
+    public CacheManager cacheManager(AppProperties appProperties) {
         log.debug("Starting Ehcache");
         cacheManager = net.sf.ehcache.CacheManager.create();
-        cacheManager.getConfiguration().setMaxBytesLocalHeap(jHipsterProperties.getCache().getEhcache().getMaxBytesLocalHeap());
+        cacheManager.getConfiguration().setMaxBytesLocalHeap(appProperties.getCache().getEhcache().getMaxBytesLocalHeap());
         log.debug("Registering Ehcache Metrics gauges");
         Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
         for (EntityType<?> entity : entities) {
@@ -61,7 +61,7 @@ public class CacheConfiguration {
 
             net.sf.ehcache.Cache cache = cacheManager.getCache(name);
             if (cache != null) {
-                cache.getCacheConfiguration().setTimeToLiveSeconds(jHipsterProperties.getCache().getTimeToLiveSeconds());
+                cache.getCacheConfiguration().setTimeToLiveSeconds(appProperties.getCache().getTimeToLiveSeconds());
                 net.sf.ehcache.Ehcache decoratedCache = InstrumentedEhcache.instrument(metricRegistry, cache);
                 cacheManager.replaceCacheWithDecoratedCache(cache, decoratedCache);
             }

@@ -2,7 +2,7 @@ package com.mbancer;
 
 import com.mbancer.config.Constants;
 import com.mbancer.config.DefaultProfileUtil;
-import com.mbancer.config.JHipsterProperties;
+import com.mbancer.config.AppProperties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ import java.util.Collection;
 
 @ComponentScan
 @EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class })
-@EnableConfigurationProperties({ JHipsterProperties.class, LiquibaseProperties.class })
+@EnableConfigurationProperties({ AppProperties.class, LiquibaseProperties.class })
 public class Tasker0App {
 
     private static final Logger log = LoggerFactory.getLogger(Tasker0App.class);

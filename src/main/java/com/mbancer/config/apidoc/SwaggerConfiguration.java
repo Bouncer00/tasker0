@@ -1,14 +1,12 @@
 package com.mbancer.config.apidoc;
 
 import com.mbancer.config.Constants;
-import com.mbancer.config.JHipsterProperties;
+import com.mbancer.config.AppProperties;
 
 import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.*;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 import springfox.documentation.service.ApiInfo;
@@ -38,27 +36,27 @@ public class SwaggerConfiguration {
     /**
      * Swagger Springfox configuration.
      *
-     * @param jHipsterProperties the properties of the application
+     * @param appProperties the properties of the application
      * @return the Swagger Springfox configuration
      */
     @Bean
-    public Docket swaggerSpringfoxDocket(JHipsterProperties jHipsterProperties) {
+    public Docket swaggerSpringfoxDocket(AppProperties appProperties) {
         log.debug("Starting Swagger");
         StopWatch watch = new StopWatch();
         watch.start();
         Contact contact = new Contact(
-            jHipsterProperties.getSwagger().getContactName(),
-            jHipsterProperties.getSwagger().getContactUrl(),
-            jHipsterProperties.getSwagger().getContactEmail());
+            appProperties.getSwagger().getContactName(),
+            appProperties.getSwagger().getContactUrl(),
+            appProperties.getSwagger().getContactEmail());
 
         ApiInfo apiInfo = new ApiInfo(
-            jHipsterProperties.getSwagger().getTitle(),
-            jHipsterProperties.getSwagger().getDescription(),
-            jHipsterProperties.getSwagger().getVersion(),
-            jHipsterProperties.getSwagger().getTermsOfServiceUrl(),
+            appProperties.getSwagger().getTitle(),
+            appProperties.getSwagger().getDescription(),
+            appProperties.getSwagger().getVersion(),
+            appProperties.getSwagger().getTermsOfServiceUrl(),
             contact,
-            jHipsterProperties.getSwagger().getLicense(),
-            jHipsterProperties.getSwagger().getLicenseUrl());
+            appProperties.getSwagger().getLicense(),
+            appProperties.getSwagger().getLicenseUrl());
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo)

@@ -26,11 +26,11 @@ public class LoggingConfiguration {
     private String serverPort;
 
     @Inject
-    private JHipsterProperties jHipsterProperties;
+    private AppProperties appProperties;
 
     @PostConstruct
     private void init() {
-        if (jHipsterProperties.getLogging().getLogstash().isEnabled()) {
+        if (appProperties.getLogging().getLogstash().isEnabled()) {
             addLogstashAppender();
         }
     }
@@ -44,8 +44,8 @@ public class LoggingConfiguration {
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"}";
 
         // Set the Logstash appender config from JHipster properties
-        logstashAppender.setSyslogHost(jHipsterProperties.getLogging().getLogstash().getHost());
-        logstashAppender.setPort(jHipsterProperties.getLogging().getLogstash().getPort());
+        logstashAppender.setSyslogHost(appProperties.getLogging().getLogstash().getHost());
+        logstashAppender.setPort(appProperties.getLogging().getLogstash().getPort());
         logstashAppender.setCustomFields(customFields);
 
         // Limit the maximum length of the forwarded stacktrace so that it won't exceed the 8KB UDP limit of logstash
@@ -60,7 +60,7 @@ public class LoggingConfiguration {
         AsyncAppender asyncLogstashAppender = new AsyncAppender();
         asyncLogstashAppender.setContext(context);
         asyncLogstashAppender.setName("ASYNC_LOGSTASH");
-        asyncLogstashAppender.setQueueSize(jHipsterProperties.getLogging().getLogstash().getQueueSize());
+        asyncLogstashAppender.setQueueSize(appProperties.getLogging().getLogstash().getQueueSize());
         asyncLogstashAppender.addAppender(logstashAppender);
         asyncLogstashAppender.start();
 

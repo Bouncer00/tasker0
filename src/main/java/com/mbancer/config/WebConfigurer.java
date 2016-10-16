@@ -37,7 +37,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private Environment env;
 
     @Inject
-    private JHipsterProperties jHipsterProperties;
+    private AppProperties appProperties;
 
     @Autowired(required = false)
     private MetricRegistry metricRegistry;
@@ -109,7 +109,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         log.debug("Registering Caching HTTP Headers Filter");
         FilterRegistration.Dynamic cachingHttpHeadersFilter =
             servletContext.addFilter("cachingHttpHeadersFilter",
-                new CachingHttpHeadersFilter(jHipsterProperties));
+                new CachingHttpHeadersFilter(appProperties));
 
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/content/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/app/*");
@@ -143,11 +143,11 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     }
 
     @Bean
-    @ConditionalOnProperty(name = "jhipster.cors.allowed-origins")
+    @ConditionalOnProperty(name = "app.cors.allowed-origins")
     public CorsFilter corsFilter() {
         log.debug("Registering CORS filter");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = jHipsterProperties.getCors();
+        CorsConfiguration config = appProperties.getCors();
         source.registerCorsConfiguration("/api/**", config);
         source.registerCorsConfiguration("/v2/api-docs", config);
         source.registerCorsConfiguration("/oauth/**", config);

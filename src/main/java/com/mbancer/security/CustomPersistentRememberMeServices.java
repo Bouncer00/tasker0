@@ -3,7 +3,7 @@ package com.mbancer.security;
 import com.mbancer.domain.PersistentToken;
 import com.mbancer.repository.PersistentTokenRepository;
 import com.mbancer.repository.UserRepository;
-import com.mbancer.config.JHipsterProperties;
+import com.mbancer.config.AppProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -69,10 +69,10 @@ public class CustomPersistentRememberMeServices extends
     private UserRepository userRepository;
 
     @Inject
-    public CustomPersistentRememberMeServices(JHipsterProperties jHipsterProperties, org.springframework.security.core.userdetails
+    public CustomPersistentRememberMeServices(AppProperties appProperties, org.springframework.security.core.userdetails
         .UserDetailsService userDetailsService) {
 
-        super(jHipsterProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
+        super(appProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
         random = new SecureRandom();
     }
 

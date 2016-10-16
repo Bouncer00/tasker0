@@ -1,6 +1,6 @@
 package com.mbancer.security.social;
 
-import com.mbancer.config.JHipsterProperties;
+import com.mbancer.config.AppProperties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class CustomSignInAdapter implements SignInAdapter {
     private UserDetailsService userDetailsService;
 
     @Inject
-    private JHipsterProperties jHipsterProperties;
+    private AppProperties appProperties;
 
 
     @Override
@@ -36,6 +36,6 @@ public class CustomSignInAdapter implements SignInAdapter {
             null,
             user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(newAuth);
-        return jHipsterProperties.getSocial().getRedirectAfterSignIn();
+        return appProperties.getSocial().getRedirectAfterSignIn();
     }
 }

@@ -57,7 +57,7 @@ server:
 # JHipster specific properties
 # ===================================================================
 
-jhipster:
+app:
     http:
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 1461

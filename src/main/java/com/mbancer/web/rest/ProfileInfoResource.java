@@ -1,6 +1,6 @@
 package com.mbancer.web.rest;
 
-import com.mbancer.config.JHipsterProperties;
+import com.mbancer.config.AppProperties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +21,7 @@ public class ProfileInfoResource {
     Environment env;
 
     @Inject
-    private JHipsterProperties jHipsterProperties;
+    private AppProperties appProperties;
 
     @RequestMapping(value = "/profile-info",
         method = RequestMethod.GET,
@@ -32,7 +32,7 @@ public class ProfileInfoResource {
 
     private String getRibbonEnv() {
         String[] activeProfiles = env.getActiveProfiles();
-        String[] displayOnActiveProfiles = jHipsterProperties.getRibbon().getDisplayOnActiveProfiles();
+        String[] displayOnActiveProfiles = appProperties.getRibbon().getDisplayOnActiveProfiles();
 
         if (displayOnActiveProfiles == null) {
             return null;
