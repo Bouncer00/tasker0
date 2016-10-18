@@ -1,0 +1,9 @@
+.text-row-body {
+    margin-left: 5%;
+    font-size: 115%;
+}
+
+.comments-box {
+    border: solid;
+    min-height: 30em;
+}

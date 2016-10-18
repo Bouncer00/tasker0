@@ -7,5 +7,6 @@
 
     function TaskDetailsModalCtrl($scope, task) {
         $scope.task = task;
+        console.log(task);
     }
 })();

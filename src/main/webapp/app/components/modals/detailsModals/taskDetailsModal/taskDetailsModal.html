@@ -3,20 +3,48 @@
 </div>
 <div class="modal-body">
     <div class="row">
-        <label for="title">Title:</label>
-        <span id="title">{{task.title}}</span>
+        <div class="col-xs-6">
+            <div class="text-row-body">
+                <label for="title">Title:</label>
+                <span id="title">{{task.title}}</span>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="text-row-body">
+                <label for="board">Board:</label>
+                <span id="board">{{task.boardDTO}}</span>
+            </div>
+        </div>
     </div>
     <div class="row">
-        <label for="description">Description:</label>
-        <span id="description">{{task.description}}</span>
+        <div class="col-xs-12">
+            <div class="text-row-body">
+                <label for="description">Description:</label>
+                <span id="description">{{task.description}}</span>
+            </div>
+        </div>
     </div>
     <div class="row">
-        <label for="created">Created:</label>
-        <span id="created">{{task.start}}</span>
+        <div class="col-xs-6">
+            <div class="text-row-body">
+                <label for="created">Created:</label>
+                <span id="created">{{task.start}}</span>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="text-row-body">
+                <label for="updated">Updated:</label>
+                <span id="updated">{{task.updated}}</span>
+            </div>
+        </div>
     </div>
     <div class="row">
-        <label for="updated">Updated:</label>
-        <span id="updated">{{task.updated}}</span>
+
+    </div>
+    <div class="row">
+        <div class="comments-box">
+
+        </div>
     </div>
 </div>
 <div class="modal-footer">
