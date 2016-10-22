@@ -28,10 +28,13 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -239,5 +242,23 @@ public class BoardResourceIntTest {
         //then
         assertThat(board0.getTasks()).doesNotContain(task);
         assertThat(board1.getTasks()).contains(task);
+    }
+
+    @Test
+    @Transactional
+    public void shouldFindBoardsByProjectId() throws Exception {
+        //given
+        final User user = userRepository.findOneByLogin("admin").get();
+        final Project project = projectRepository.save(EntityGenerators.generateProject(Collections.singleton(user), null));
+        final Set<Board> boards = EntityGenerators.generateBoards(10, project, Collections.emptyList());
+        boardRepository.save(boards);
+
+        //when
+        restBoardMockMvc.perform(get("/api/boards/byProject/{projectId}", project.getId()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.content.[*].id").value(hasItems(boards.stream().map(board -> board.getId().intValue()).collect(Collectors.toList()).toArray())))
+            .andExpect(jsonPath("$.content.[*].name").value(hasItems(boards.stream().map(Board::getName).collect(Collectors.toList()).toArray())))
+            .andExpect(jsonPath("$.content.[*].number").value(hasItems(boards.stream().map(Board::getNumber).collect(Collectors.toList()).toArray())))
+            .andExpect(jsonPath("$.content.[*].projectId").value(hasItems(boards.stream().map(board -> board.getProject().getId().intValue()).collect(Collectors.toList()).toArray())));
     }
 }

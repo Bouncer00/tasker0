@@ -30,6 +30,8 @@ public class ProjectDTO implements Serializable {
 
     private List<SprintDTO> sprints = new ArrayList<>();
 
+    private List<BoardDTO> boards = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -80,6 +82,14 @@ public class ProjectDTO implements Serializable {
 
     public void setShortName(String shortName) {
         this.shortName = shortName;
+    }
+
+    public List<BoardDTO> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(List<BoardDTO> boards) {
+        this.boards = boards;
     }
 
     @Override

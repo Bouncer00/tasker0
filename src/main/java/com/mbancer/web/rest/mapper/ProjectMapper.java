@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Mapper for the entity Project and its DTO ProjectDTO.
  */
-@Mapper(componentModel = "spring", uses = {SprintMapper.class})
+@Mapper(componentModel = "spring", uses = {SprintMapper.class, BoardMapper.class})
 public interface ProjectMapper {
 
     ProjectDTO projectToProjectDTO(Project project);

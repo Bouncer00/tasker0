@@ -127,4 +127,14 @@ public class BoardResource {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @RequestMapping(value = "/boards/byProject/{projectId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Page<BoardDTO>> getBoardsByProject(@PathVariable("projectId") Long projectId, Pageable pageable){
+        log.debug("REST request to get Boards by Project : {}", projectId);
+        Page<BoardDTO> boards = boardService.getByProject(projectId, pageable);
+        return ResponseEntity.ok(boards);
+    }
 }

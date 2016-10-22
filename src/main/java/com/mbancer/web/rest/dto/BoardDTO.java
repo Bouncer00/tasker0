@@ -6,6 +6,7 @@ public class BoardDTO {
 
     public Long id;
     public String name;
+    private Long number;
     public Long projectId;
 
     public Long getId() {
@@ -22,6 +23,14 @@ public class BoardDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getNumber() {
+        return number;
+    }
+
+    public void setNumber(Long number) {
+        this.number = number;
     }
 
     public Long getProjectId() {

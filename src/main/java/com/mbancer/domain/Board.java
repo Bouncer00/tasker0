@@ -28,6 +28,8 @@ public class Board implements Serializable{
     @Length(max = 255)
     private String name;
 
+    private Long number;
+
     @ManyToOne
     private Project project;
 
@@ -72,9 +74,18 @@ public class Board implements Serializable{
         return new Builder();
     }
 
+    public Long getNumber() {
+        return number;
+    }
+
+    public void setNumber(Long number) {
+        this.number = number;
+    }
+
     public static class Builder {
         private Long id;
         private String name;
+        private Long number;
         private Project project;
         private List<Task> tasks = new ArrayList<>();
 
@@ -105,10 +116,16 @@ public class Board implements Serializable{
             return this;
         }
 
+        public Builder number(final Long number){
+            this.number = number;
+            return this;
+        }
+
         public Board build() {
             Board board = new Board();
             board.setId(id);
             board.setName(name);
+            board.setNumber(number);
             board.setProject(project);
             board.setTasks(tasks);
             return board;

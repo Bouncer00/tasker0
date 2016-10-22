@@ -92,4 +92,10 @@ public class BoardServiceImpl implements BoardService {
             return targetBoard.getTasks().add(task);
         }).orElseThrow(() -> new IllegalArgumentException("Source board " + sourceBoard + " does not have task " + taskId));
     }
+
+    @Override
+    public Page<BoardDTO> getByProject(Long projectId, Pageable pageable) {
+        Page<Board> boards = boardRepository.findAllByProjectId(projectId, pageable);
+        return boards.map(boardMapper::boardToBoardDTO);
+    }
 }

@@ -18,4 +18,6 @@ public interface BoardService {
     Page<Board> search(String query, Pageable pageable);
 
     void moveTaskFromSourceBoardToTarget(Long sourceBoardId, Long targetBoard, Long taskId);
+
+    Page<BoardDTO> getByProject(Long projectId, Pageable pageable);
 }

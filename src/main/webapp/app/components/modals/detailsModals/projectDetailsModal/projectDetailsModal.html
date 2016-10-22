@@ -1,5 +1,16 @@
 <div class="modal-header">
     <h3 class="modal-title" id="modal-title">Project details</h3>
+    <div class="row">
+        <span class="btn btn-default" ng-repeat="board in project.boards">{{board.name}}
+            <i class="glyphicon glyphicon-remove" ng-click="deleteBoard(board)"></i>
+        </span>
+    </div>
+    <div class="row">
+        <input type="text" ng-model="board.name">
+        <button class="btn btn-primary" ng-click="addBoard(board)">
+            Add board
+        </button>
+    </div>
 </div>
 <div class="modal-body">
     <div class="row">
@@ -7,21 +18,21 @@
         <span id="name">{{project.name}}</span>
     </div>
     <div class="row">
-        <label for="name">Short name:</label>
-        <span id="name">{{project.shortName}}</span>
+        <label for="shortName">Short name:</label>
+        <span id="shortName">{{project.shortName}}</span>
     </div>
     <div class="row">
-        <label for="name">Created:</label>
-        <span id="name">{{project.created}}</span>
+        <label for="created">Created:</label>
+        <span id="created">{{project.created}}</span>
     </div>
     <div class="row">
-        <label for="name">Deadline:</label>
-        <span id="name">{{project.deadline}}</span>
+        <label for="deadline">Deadline:</label>
+        <span id="deadline">{{project.deadline}}</span>
     </div>
     <div class="row">
-        <label for="name">Decription:</label>
-        <span id="name">{{project.description}}</span>
-    </div>
+        <label for="description">Decription:</label>
+        <span id="description">{{project.description}}</span>
+    </div>ddd
     <div class="row">
         <div class="col-xs-4">
             <label for="projectMembers">Project members:</label>

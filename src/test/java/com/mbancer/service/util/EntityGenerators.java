@@ -110,6 +110,20 @@ public class EntityGenerators {
         return userStories;
     }
 
+    public static Set<Board> generateBoards(int number, final Project project, final List<Task> tasks) {
+        final Set<Board> boards = new HashSet<>();
+        final Random random = new Random();
+        for(int i = 0 ; i < number ; i++){
+            boards.add(Board.builder()
+                .project(project)
+                .tasks(tasks)
+                .number(random.nextLong())
+                .name(RandomStringUtils.randomAlphabetic(10))
+                .build());
+        }
+        return boards;
+    }
+
     public static Task generateTask(final User user, final Project project, final UserStory userStory, final User assignee){
         return generateTasks(1, user, project, userStory, assignee).iterator().next();
     }
@@ -129,4 +143,9 @@ public class EntityGenerators {
     public static UserStory generateUserStory(final Sprint sprint, final List<Task> tasks){
         return generateUserStories(1, sprint, tasks).iterator().next();
     }
+
+    public static Board generateBoard(final Project project, final List<Task> tasks){
+        return generateBoards(1, project, tasks).iterator().next();
+    }
+
 }

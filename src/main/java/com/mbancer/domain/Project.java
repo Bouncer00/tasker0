@@ -62,6 +62,10 @@ public class Project implements Serializable {
     @OrderBy("number DESC")
     private List<Task> tasks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "project", orphanRemoval = true)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private List<Board> boards;
+
     public Long getId() {
         return id;
     }
@@ -134,6 +138,14 @@ public class Project implements Serializable {
         this.tasks = tasks;
     }
 
+    public List<Board> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(List<Board> boards) {
+        this.boards = boards;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -176,6 +188,7 @@ public class Project implements Serializable {
         private Set<User> users = new HashSet<>();
         private List<Task> tasks = new ArrayList<>();
         private List<Sprint> sprints = new ArrayList<>();
+        private List<Board> boards = new ArrayList<>();
 
         private Builder() {
         }
@@ -224,6 +237,11 @@ public class Project implements Serializable {
             return this;
         }
 
+        public Builder boards(List<Board> boards){
+            this.boards = boards;
+            return this;
+        }
+
         public Project build() {
             Project project = new Project();
             project.setId(id);
@@ -235,6 +253,7 @@ public class Project implements Serializable {
             project.setUsers(users);
             project.setSprints(sprints);
             project.setTasks(tasks);
+            project.setBoards(boards);
             return project;
         }
     }
