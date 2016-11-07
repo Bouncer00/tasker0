@@ -8,24 +8,25 @@ import java.util.Set;
 import java.util.Objects;
 
 
-/**
- * A DTO for the Comment entity.
- */
 public class CommentDTO implements Serializable {
 
     private Long id;
 
     @NotNull
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
 
     @NotNull
     private String text;
 
 
     private Long authorId;
-    
+
+    private String authorFirstName;
+
+    private String authorLastName;
+
     private Long taskId;
-    
+
     public Long getId() {
         return id;
     }
@@ -54,6 +55,22 @@ public class CommentDTO implements Serializable {
 
     public void setAuthorId(Long userId) {
         this.authorId = userId;
+    }
+
+    public String getAuthorFirstName() {
+        return authorFirstName;
+    }
+
+    public void setAuthorFirstName(String authorFirstName) {
+        this.authorFirstName = authorFirstName;
+    }
+
+    public String getAuthorLastName() {
+        return authorLastName;
+    }
+
+    public void setAuthorLastName(String authorLastName) {
+        this.authorLastName = authorLastName;
     }
 
     public Long getTaskId() {

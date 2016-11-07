@@ -234,10 +234,13 @@ public class BoardResourceIntTest {
 
         //when
         restBoardMockMvc.perform(
-            put("/api/boards/moveTask/{sourceBoardId}/{targetBoardId}/{taskId}",
-                board0.getId(), board1.getId(), task.getId()))
-                .andDo(print())
-                .andExpect(status().isOk());
+            put("/api/boards/moveTask",
+                board0.getId(), board1.getId(), task.getId())
+                .param("sourceBoardId", board0.getId().toString())
+                .param("targetBoardId", board1.getId().toString())
+                .param("taskId", task.getId().toString())
+        )
+            .andExpect(status().isOk());
 
         //then
         assertThat(board0.getTasks()).doesNotContain(task);

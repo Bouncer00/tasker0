@@ -3,8 +3,7 @@ package com.mbancer.web.rest.dto;
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -32,7 +31,9 @@ public class TaskDTO implements Serializable {
 
     private Long userStoryId;
 
-    private BoardDTO boardDTO;
+    private BoardDTO board;
+
+    private List<CommentDTO> comments;
 
     public Long getId() {
         return id;
@@ -102,12 +103,20 @@ public class TaskDTO implements Serializable {
         this.userStoryId = userStoryId;
     }
 
-    public BoardDTO getBoardDTO() {
-        return boardDTO;
+    public BoardDTO getBoard() {
+        return board;
     }
 
-    public void setBoardDTO(BoardDTO boardDTO) {
-        this.boardDTO = boardDTO;
+    public void setBoard(BoardDTO board) {
+        this.board = board;
+    }
+
+    public List<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDTO> comments) {
+        this.comments = comments;
     }
 
     @Override

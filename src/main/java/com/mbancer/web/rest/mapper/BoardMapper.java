@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = ProjectMapper.class)
 public interface BoardMapper {
 
     @Mapping(source = "project.id", target = "projectId")
@@ -20,14 +20,5 @@ public interface BoardMapper {
     Board boardDTOToBoard(BoardDTO boardDTO);
 
     List<Board> boardDTOsToBoards(List<BoardDTO> boardDTOs);
-
-    default Project projectFromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        Project project = new Project();
-        project.setId(id);
-        return project;
-    }
 
 }

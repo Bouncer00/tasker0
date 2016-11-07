@@ -12,7 +12,9 @@
         <div class="col-xs-6">
             <div class="text-row-body">
                 <label for="board">Board:</label>
-                <span id="board">{{task.boardDTO}}</span>
+                <select id="board" ng-model="selectedBoard"
+                                    ng-options="board as board.name for board in boards"
+                                    ng-change="changeTaskBoard(selectedBoard)"></select>
             </div>
         </div>
     </div>
@@ -39,11 +41,31 @@
         </div>
     </div>
     <div class="row">
-
-    </div>
-    <div class="row">
         <div class="comments-box">
-
+            <div class="row">
+                <div class="col-xs-11">
+                    <div class="actionBox">
+                         <ul class="commentList">
+                             <li ng-repeat="comment in task.comments">
+                                 <div class="commenterImage">
+                                     {{comment.authorFirstName}} {{comment.authorLastName}} <span class="date sub-text">{{comment.date}}</span>
+                                 </div>
+                                 <div class="commentText">
+                                     <p class="">{{comment.text}}</p>
+                               </div>
+                             </li>
+                         </ul>
+                     </div>
+                </div>
+                <div class="col-xs-11">
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="comment">
+                        <span class="input-group-btn">
+                             <button class="btn btn-default" ng-click="addComment(comment)" type="button">Add comment</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

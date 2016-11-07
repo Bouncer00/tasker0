@@ -9,13 +9,14 @@ import java.util.List;
 /**
  * Mapper for the entity Task and its DTO TaskDTO.
  */
-@Mapper(componentModel = "spring", uses = {UserMapper.class, ProjectMapper.class, UserStoryMapper.class})
+@Mapper(componentModel = "spring", uses = {UserMapper.class, ProjectMapper.class, UserStoryMapper.class, BoardMapper.class, CommentMapper.class})
 public interface TaskMapper {
 
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "assignee.id", target = "assigneeId")
     @Mapping(source = "project.id", target = "projectId")
     @Mapping(source = "userStory.id", target = "userStoryId")
+    @Mapping(source = "board", target = "board")
     TaskDTO taskToTaskDTO(Task task);
 
     List<TaskDTO> tasksToTaskDTOs(List<Task> tasks);

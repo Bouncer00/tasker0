@@ -113,11 +113,11 @@ public class BoardResource {
         return new ResponseEntity<>(boardMapper.boardsToBoardDTOs(page.getContent()), headers, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/boards/moveTask/{sourceBoardId}/{targetBoardId}/{taskId}",
+    @RequestMapping(value = "/boards/moveTask",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> moveTaskBetweenBoards(@PathVariable Long sourceBoardId, @PathVariable Long targetBoardId, @PathVariable Long taskId){
+    public ResponseEntity<?> moveTaskBetweenBoards(@RequestParam(name = "sourceBoardId", required = false) Long sourceBoardId, @RequestParam("targetBoardId") Long targetBoardId, @RequestParam("taskId") Long taskId){
         log.debug("REST request to move task {} from board {} to board {}", taskId, sourceBoardId, targetBoardId);
         try {
             boardService.moveTaskFromSourceBoardToTarget(sourceBoardId, targetBoardId, taskId);

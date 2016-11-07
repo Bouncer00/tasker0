@@ -13,6 +13,8 @@ import java.util.List;
 public interface CommentMapper {
 
     @Mapping(source = "author.id", target = "authorId")
+    @Mapping(source = "author.firstName", target = "authorFirstName")
+    @Mapping(source = "author.lastName", target = "authorLastName")
     @Mapping(source = "task.id", target = "taskId")
     CommentDTO commentToCommentDTO(Comment comment);
 

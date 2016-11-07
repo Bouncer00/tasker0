@@ -1,5 +1,8 @@
 package com.mbancer.service.impl;
 
+import com.mbancer.domain.User;
+import com.mbancer.repository.UserRepository;
+import com.mbancer.security.SecurityUtils;
 import com.mbancer.service.CommentService;
 import com.mbancer.domain.Comment;
 import com.mbancer.repository.CommentRepository;
@@ -19,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static java.util.Objects.isNull;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
@@ -39,6 +43,9 @@ public class CommentServiceImpl implements CommentService{
     @Inject
     private CommentSearchRepository commentSearchRepository;
 
+    @Inject
+    private UserRepository userRepository;
+
     /**
      * Save a comment.
      *
@@ -48,6 +55,11 @@ public class CommentServiceImpl implements CommentService{
     public CommentDTO save(CommentDTO commentDTO) {
         log.debug("Request to save Comment : {}", commentDTO);
         Comment comment = commentMapper.commentDTOToComment(commentDTO);
+        if(isNull(comment.getAuthor())){
+            final String userLogin = SecurityUtils.getCurrentUserLogin();
+            final User user = userRepository.findOneByLogin(userLogin).get();
+            comment.setAuthor(user);
+        }
         comment = commentRepository.save(comment);
         CommentDTO result = commentMapper.commentToCommentDTO(comment);
         commentSearchRepository.save(comment);

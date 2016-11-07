@@ -15,12 +15,15 @@
                 url: url + '/:boardId', params: {boardId: '@id'}, method: 'GET'
             },
             'moveTask': {
-                url: url + '/moveTask/:source/:target/:taskId',
-                params: {source: '@source', target: '@target', taskId: '@taskId'},
+                url: url + '/moveTask',
+                params: {sourceBoardId: '@sourceBoardId', targetBoardId: '@targetBoardId', taskId: '@taskId'},
                 method: 'PUT'
             },
             'delete': {
                 url: url + '/:boardId', params: {boardId: '@boardId'}, method: 'DELETE'
+            },
+            'byProject': {
+                url: url + '/byProject/:projectId', params: {projectId: '@projectId'}, method: 'GET'
             }
         });
     }
