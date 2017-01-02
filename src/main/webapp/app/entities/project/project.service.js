@@ -55,6 +55,9 @@
                 url: resourceUrl + '/:projectId/addMember/:email',
                 method: 'PUT',
                 params: {projectId: '@projectId', email: '@email'}
+            },
+            'delete': {
+                url: resourceUrl + '/:projectId', params: {projectId: '@projectId'}, method: 'DELETE'
             }
         });
     }

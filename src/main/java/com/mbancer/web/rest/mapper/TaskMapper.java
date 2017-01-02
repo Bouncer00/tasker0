@@ -17,6 +17,10 @@ public interface TaskMapper {
     @Mapping(source = "project.id", target = "projectId")
     @Mapping(source = "userStory.id", target = "userStoryId")
     @Mapping(source = "board", target = "board")
+    @Mapping(source = "user.firstName", target = "userFirstName")
+    @Mapping(source = "user.lastName", target = "userLastName")
+    @Mapping(source = "assignee.firstName", target = "assigneeFirstName")
+    @Mapping(source = "assignee.lastName", target = "assigneeLastName")
     TaskDTO taskToTaskDTO(Task task);
 
     List<TaskDTO> tasksToTaskDTOs(List<Task> tasks);

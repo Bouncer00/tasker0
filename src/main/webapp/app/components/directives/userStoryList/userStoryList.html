@@ -6,6 +6,7 @@
             <th>Priority</th>
             <th>Updated</th>
             <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -13,7 +14,14 @@
             <td>{{userStory.name}}</td>
             <td>{{userStory.priority}}</td>
             <td>{{userStory.updated}}</td>
-            <td><span ng-click="openDetails(userStory)" class="glyphicon glyphicon-info-sign"></span></td>
+            <td>
+                <span ng-click="openDetails(userStory)" class="glyphicon glyphicon-info-sign"></span>
+                <span ng-click="moveUp(userStory)" class="glyphicon glyphicon-arrow-up"></span>
+                <span ng-click="moveDown(userStory)" class="glyphicon glyphicon-arrow-down"></span>
+            </td>
+            <td>
+                <span ng-click="remove(userStory)" class="glyphicon glyphicon-remove"></span>
+            </td>
         </tr>
         </tbody>
     </table>

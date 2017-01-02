@@ -106,8 +106,11 @@ public class CommentDTO implements Serializable {
     public String toString() {
         return "CommentDTO{" +
             "id=" + id +
-            ", date='" + date + "'" +
-            ", text='" + text + "'" +
+            ", text='" + text + '\'' +
+            ", authorId=" + authorId +
+            ", authorFirstName='" + authorFirstName + '\'' +
+            ", authorLastName='" + authorLastName + '\'' +
+            ", taskId=" + taskId +
             '}';
     }
 }

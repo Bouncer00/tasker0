@@ -100,6 +100,8 @@ public class TaskResourceIntTest {
 
     private Project project;
 
+    private String mort = ":*";
+
     private Sprint sprint;
 
     private UserStory userStory;

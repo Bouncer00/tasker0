@@ -2,8 +2,10 @@ package com.mbancer.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.mbancer.domain.Board;
+import com.mbancer.domain.Task;
 import com.mbancer.service.BoardService;
 import com.mbancer.web.rest.dto.BoardDTO;
+import com.mbancer.web.rest.dto.TaskDTO;
 import com.mbancer.web.rest.mapper.BoardMapper;
 import com.mbancer.web.rest.util.HeaderUtil;
 import com.mbancer.web.rest.util.PaginationUtil;
@@ -120,8 +122,8 @@ public class BoardResource {
     public ResponseEntity<?> moveTaskBetweenBoards(@RequestParam(name = "sourceBoardId", required = false) Long sourceBoardId, @RequestParam("targetBoardId") Long targetBoardId, @RequestParam("taskId") Long taskId){
         log.debug("REST request to move task {} from board {} to board {}", taskId, sourceBoardId, targetBoardId);
         try {
-            boardService.moveTaskFromSourceBoardToTarget(sourceBoardId, targetBoardId, taskId);
-            return ResponseEntity.ok().build();
+            final TaskDTO task = boardService.moveTaskFromSourceBoardToTarget(sourceBoardId, targetBoardId, taskId);
+            return ResponseEntity.ok(task);
         }
         catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());

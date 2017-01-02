@@ -57,4 +57,11 @@ public interface TaskService {
     Page<TaskDTO> getByUser(Long userId, Pageable pageable);
 
     Page<TaskDTO> getByUserStory(Long userStoryId, Pageable pageable);
+
+    void moveTaskByIdUp(final Long taskId);
+
+    void moveTaskByIdDown(final Long taskId);
+
+    void assignTaskToCurrentUser(final Long taskId);
+
 }

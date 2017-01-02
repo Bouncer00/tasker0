@@ -1,11 +1,15 @@
 package com.mbancer.domain;
 
 import com.mbancer.config.Constants;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
@@ -43,8 +47,12 @@ public class UserStory {
 
     @OneToMany(mappedBy = "userStory")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @OrderBy("number")
+    @Cascade(CascadeType.DELETE)
     private List<Task> tasks;
 
+    @NotNull
+    private Long number;
 
     public Long getId() {
         return id;
@@ -108,6 +116,14 @@ public class UserStory {
 
     public void setPriority(Long priority) {
         this.priority = priority;
+    }
+
+    public Long getNumber() {
+        return number;
+    }
+
+    public void setNumber(Long number) {
+        this.number = number;
     }
 
     @Override

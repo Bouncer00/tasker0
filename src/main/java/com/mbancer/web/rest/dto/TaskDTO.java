@@ -19,13 +19,21 @@ public class TaskDTO implements Serializable {
 
     private String description;
 
-    private LocalDate created = LocalDate.now();
+    private LocalDate created;
 
     private LocalDate updated;
 
     private Long userId;
 
     private Long assigneeId;
+
+    private String userFirstName;
+
+    private String userLastName;
+
+    private String assigneeFirstName;
+
+    private String assigneeLastName;
 
     private Long projectId;
 
@@ -34,6 +42,10 @@ public class TaskDTO implements Serializable {
     private BoardDTO board;
 
     private List<CommentDTO> comments;
+
+    public TaskDTO() {
+        created = LocalDate.now();
+    }
 
     public Long getId() {
         return id;
@@ -117,6 +129,38 @@ public class TaskDTO implements Serializable {
 
     public void setComments(List<CommentDTO> comments) {
         this.comments = comments;
+    }
+
+    public String getUserFirstName() {
+        return userFirstName;
+    }
+
+    public void setUserFirstName(String userFirstName) {
+        this.userFirstName = userFirstName;
+    }
+
+    public String getUserLastName() {
+        return userLastName;
+    }
+
+    public void setUserLastName(String userLastName) {
+        this.userLastName = userLastName;
+    }
+
+    public String getAssigneeFirstName() {
+        return assigneeFirstName;
+    }
+
+    public void setAssigneeFirstName(String assigneeFirstName) {
+        this.assigneeFirstName = assigneeFirstName;
+    }
+
+    public String getAssigneeLastName() {
+        return assigneeLastName;
+    }
+
+    public void setAssigneeLastName(String assigneeLastName) {
+        this.assigneeLastName = assigneeLastName;
     }
 
     @Override

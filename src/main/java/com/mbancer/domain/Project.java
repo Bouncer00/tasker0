@@ -1,10 +1,14 @@
 package com.mbancer.domain;
 
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -55,15 +59,18 @@ public class Project implements Serializable {
 
     @OneToMany(mappedBy = "project", orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Cascade(CascadeType.DELETE)
     private List<Sprint> sprints;
 
     @OneToMany(mappedBy = "project", orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OrderBy("number DESC")
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     private List<Task> tasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "project", orphanRemoval = true)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Cascade(CascadeType.DELETE)
     private List<Board> boards;
 
     public Long getId() {

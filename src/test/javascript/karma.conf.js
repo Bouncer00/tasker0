@@ -29,6 +29,7 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/lodash/lodash.js',
             'src/main/webapp/bower_components/sockjs-client/dist/sockjs.js',
             'src/main/webapp/bower_components/stomp-websocket/lib/stomp.min.js',
+            'src/main/webapp/bower_components/angular-scroll-glue/src/scrollglue.js',
             'src/main/webapp/bower_components/angular/angular.js',
             'src/main/webapp/bower_components/angular-aria/angular-aria.js',
             'src/main/webapp/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
@@ -43,6 +44,8 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/ng-file-upload/ng-file-upload.js',
             'src/main/webapp/bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
             'src/main/webapp/bower_components/angular-modal-service/dst/angular-modal-service.js',
+            'src/main/webapp/bower_components/ng-confirm/dist/ng-confirm.js',
+            'src/main/webapp/bower_components/angular-bootstrap-confirm/dist/angular-bootstrap-confirm.js',
             'src/main/webapp/bower_components/angular-mocks/angular-mocks.js',
             // endbower
             'src/main/webapp/app/app.module.js',

@@ -1,5 +1,6 @@
 package com.mbancer.service.impl;
 
+import com.mbancer.domain.Project;
 import com.mbancer.domain.Sprint;
 import com.mbancer.repository.ProjectRepository;
 import com.mbancer.repository.SprintRepository;
@@ -73,6 +74,8 @@ public class SprintServiceImpl implements SprintService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Sprint : {}", id);
+        Sprint sprint = sprintRepository.findOne(id);
+        sprint.getProject().getSprints().remove(sprint);
         sprintRepository.delete(id);
         sprintSearchRepository.delete(id);
     }

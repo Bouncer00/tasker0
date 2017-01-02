@@ -20,4 +20,8 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
     Page<Task> findAllByUserId(Long userId, Pageable pageable);
 
     Page<Task> findAllByUserStoryId(Long userStoryId, Pageable pageable);
+
+    Task findOneByUserStoryIdAndNumber(long userStoryId, long number);
+
+    Page<Task> findAllByUserStoryIdOrderByNumber(Long userStoryId, Pageable pageable);
 }

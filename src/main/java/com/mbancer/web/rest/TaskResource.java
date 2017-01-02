@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -101,6 +102,7 @@ public class TaskResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Transactional
     public ResponseEntity<List<TaskDTO>> getAllTasks(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Tasks");
@@ -188,6 +190,33 @@ public class TaskResource {
     public ResponseEntity<Page<TaskDTO>> tasksByUserStory(@PathVariable("userStoryId") Long userStoryId, Pageable pageable){
         log.debug("REST request to get tasks by UserStory : {}", userStoryId);
         return ResponseEntity.ok(taskService.getByUserStory(userStoryId, pageable));
+    }
+
+    @RequestMapping(value = "tasks/assignToCurrentUser/{taskId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> assignTaskToCurrentUser(@PathVariable("taskId") Long taskId){
+        log.debug("REST request to assign task to current user");
+        taskService.assignTaskToCurrentUser(taskId);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "tasks/moveUp/{taskId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> moveTaskUp(@PathVariable("taskId") Long taskId){
+        log.debug("REST request to assign task to current user");
+        taskService.moveTaskByIdUp(taskId);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "tasks/moveDown/{taskId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> moveTaskDown(@PathVariable("taskId") Long taskId){
+        log.debug("REST request to assign task to current user");
+        taskService.moveTaskByIdDown(taskId);
+        return ResponseEntity.ok().build();
     }
 
 }

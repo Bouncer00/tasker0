@@ -18,4 +18,8 @@ public interface UserStoryService {
     Page<UserStory> search(String query, Pageable pageable);
 
     Page<UserStoryDTO> findBySprintId(Long sprintId, Pageable pageable);
+
+    UserStory getNextUserStory(UserStory userStory);
+
+    UserStory getPreviousUserStory(UserStory userStory);
 }

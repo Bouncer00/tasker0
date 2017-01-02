@@ -5,6 +5,7 @@
             <th>Name</th>
             <th>Short name</th>
             <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -12,6 +13,8 @@
             <td>{{project.name}}</td>
             <td>{{project.shortName}}</td>
             <td><span ng-click="openDetails(project)" class="glyphicon glyphicon-info-sign"></span></td>
+            <!--<td><span ng-really-message="Are you sure ?" ng-really-click="deleteProject(project)" class="glyphicon glyphicon glyphicon-remove"></span></td>-->
+            <td><span ng-click="deleteProject(project)" class="glyphicon glyphicon glyphicon-remove"></span></td>
         </tr>
         </tbody>
     </table>

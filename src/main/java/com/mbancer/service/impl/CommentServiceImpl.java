@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,6 +62,7 @@ public class CommentServiceImpl implements CommentService{
             comment.setAuthor(user);
         }
         comment = commentRepository.save(comment);
+        comment.getTask().setUpdated(LocalDate.now());
         CommentDTO result = commentMapper.commentToCommentDTO(comment);
         commentSearchRepository.save(comment);
         return result;

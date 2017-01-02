@@ -15,7 +15,8 @@
             'infinite-scroll',
             'ui.bootstrap',
             'angular-loading-bar',
-            'angularModalService'
+            'angularModalService',
+            'luegg.directives'
         ])
         .run(run);
 

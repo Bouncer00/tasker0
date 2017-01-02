@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.util.StopWatch;
 
@@ -32,12 +33,18 @@ public class AsyncSpringLiquibase extends SpringLiquibase {
 
     private final Logger log = LoggerFactory.getLogger(AsyncSpringLiquibase.class);
 
-    @Inject
-    @Qualifier("taskExecutor")
-    private TaskExecutor taskExecutor;
+//    @Inject
+//    @Qualifier("taskExecutor")
+    private TaskExecutor taskExecutor = new SimpleAsyncTaskExecutor();
+
+//    @Inject
+    private Environment env;
 
     @Inject
-    private Environment env;
+    public AsyncSpringLiquibase(final Environment env) {
+        this.env = env;
+        taskExecutor = new SimpleAsyncTaskExecutor();
+    }
 
     @Override
     public void afterPropertiesSet() throws LiquibaseException {

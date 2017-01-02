@@ -11,12 +11,12 @@
         return $resource(url, {taskId: '@id'}, {
             'getById': {
                 url: url + '/:taskId',
-                params: {taskId: '@id'},
+                params: {taskId: '@taskId'},
                 method: 'GET'
             },
             'getByUser': {
                 url: url + '/byUser/:userId',
-                params: {userId: '@id'},
+                params: {userId: '@userId'},
                 method: 'GET'
             },
             'getByUserStory': {
@@ -31,6 +31,18 @@
                     commentId: '@commentId'
                 },
                 method: 'PUT'
+            },
+            'delete': {
+                url: url + '/:taskId', params: {taskId: '@taskId'}, method: 'DELETE'
+            },
+            'assignToCurrentUser': {
+                url: url + "/assignToCurrentUser/:taskId", params: {taskId: '@taskId', method: 'GET'}
+            },
+            'moveUp': {
+                url: url + "/moveUp/:taskId", param: {taskId: "@taskId"}, method: 'GET'
+            },
+            'moveDown': {
+                url: url + "/moveDown/:taskId", param: {taskId: "@taskId"}, method: 'GET'
             }
         })
     }

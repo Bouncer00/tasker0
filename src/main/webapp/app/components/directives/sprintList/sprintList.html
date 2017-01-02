@@ -7,6 +7,7 @@
             <th>Start</th>
             <th>End</th>
             <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -16,6 +17,7 @@
             <td>{{sprint.start}}</td>
             <td>{{sprint.end}}</td>
             <td><span ng-click="openDetails(sprint)" class="glyphicon glyphicon-info-sign"></span></td>
+            <td><span ng-click="remove(sprint)" class="glyphicon glyphicon-remove"></span></td>
         </tr>
         </tbody>
     </table>

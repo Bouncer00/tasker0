@@ -3,26 +3,39 @@
         .module('tasker0App')
         .controller('TaskDetailsModalCtrl', TaskDetailsModalCtrl);
 
-    TaskDetailsModalCtrl.$inject = ['$scope', 'task', 'Comment', 'Board'];
+    TaskDetailsModalCtrl.$inject = ['$scope', 'task', 'Comment', 'Board', 'Task'];
 
-    function TaskDetailsModalCtrl($scope, task, Comment, Board) {
-        $scope.task = task;
+    function TaskDetailsModalCtrl($scope, task, Comment, Board, Task) {
         $scope.addComment = addComment;
         $scope.changeTaskBoard = changeTaskBoard;
-        $scope.selectedBoard = task.board;
+        $scope.assignTaskToCurrentUser = assignTaskToCurrentUser;
 
-        console.log($scope.selectedBoard);
-        console.log(task);
-        getBoards();
+        fetchTaskById(task.id);
+
+        function fetchTaskById(id) {
+            Task.getById({taskId: task.id}).$promise.then(function (result) {
+                $scope.task = result;
+                console.log($scope.task);
+                getBoards();
+            });
+        }
+
+        function assignTaskToCurrentUser() {
+            Task.assignToCurrentUser({taskId: $scope.task.id}).$promise.then(function (result) {
+                fetchTaskById($scope.task.id);
+            });
+        }
 
         function changeTaskBoard(newBoard) {
-            console.log(task);
-            console.log("Change task", task.board, newBoard, task.id);
             if(task.board == null || task.board == undefined){
                 Board.moveTask({
                     targetBoardId: newBoard.id,
                     taskId: task.id}
-                )
+                ).$promise.then(function (result) {
+                    $scope.task = result;
+                    // $scope.selectedBoard = $scope.task.board;
+                    // console.log($scope.task);
+                })
             }
             else {
                 Board.moveTask({
@@ -30,7 +43,11 @@
                         targetBoardId: newBoard.id,
                         taskId: task.id
                     }
-                )
+                ).$promise.then(function (result) {
+                    $scope.task = result;
+                    // $scope.selectedBoard = $scope.task.board;
+                    // console.log($scope.task);
+                })
             }
         }
 

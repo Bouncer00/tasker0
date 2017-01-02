@@ -1,13 +1,11 @@
 package com.mbancer.service.impl;
 
-import com.mbancer.domain.Comment;
-import com.mbancer.domain.Project;
-import com.mbancer.repository.CommentRepository;
-import com.mbancer.repository.ProjectRepository;
+import com.mbancer.domain.*;
+import com.mbancer.repository.*;
+import com.mbancer.security.SecurityUtils;
 import com.mbancer.service.TaskService;
-import com.mbancer.domain.Task;
-import com.mbancer.repository.TaskRepository;
 import com.mbancer.repository.search.TaskSearchRepository;
+import com.mbancer.service.UserStoryService;
 import com.mbancer.web.rest.dto.TaskDTO;
 import com.mbancer.web.rest.mapper.TaskMapper;
 import org.slf4j.Logger;
@@ -37,13 +35,19 @@ public class TaskServiceImpl implements TaskService{
     private CommentRepository commentRepository;
 
     @Inject
-    private ProjectRepository projectRepository;
+    private UserStoryRepository userStoryRepository;
 
     @Inject
     private TaskMapper taskMapper;
 
     @Inject
+    private UserRepository userRepository;
+
+    @Inject
     private TaskSearchRepository taskSearchRepository;
+
+    @Inject
+    private UserStoryService userStoryService;
 
     /**
      * Save a task.
@@ -53,10 +57,15 @@ public class TaskServiceImpl implements TaskService{
      */
     public TaskDTO save(TaskDTO taskDTO) {
         log.debug("Request to save Task : {}", taskDTO);
-        Task task = taskMapper.taskDTOToTask(taskDTO);task.setNumber(getNextTaskNumber(taskDTO.getProjectId()));
+        Task task = taskMapper.taskDTOToTask(taskDTO);
+        task.setNumber(getNextTaskNumber(taskDTO.getUserStoryId()));
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        UserStory userStory = userStoryRepository.findOne(taskDTO.getUserStoryId());
+        userStory.getTasks().add(task);
+        task.setUser(user);
+        user.getTasks().add(task);
         task = taskRepository.save(task);
         TaskDTO result = taskMapper.taskToTaskDTO(task);
-        taskSearchRepository.save(task);
         return result;
     }
 
@@ -127,12 +136,73 @@ public class TaskServiceImpl implements TaskService{
     @Override
     @Transactional(readOnly = true)
     public Page<TaskDTO> getByUserStory(Long userStoryId, Pageable pageable) {
-        final Page<Task> tasks = taskRepository.findAllByUserStoryId(userStoryId, pageable);
+        final Page<Task> tasks = taskRepository.findAllByUserStoryIdOrderByNumber(userStoryId, pageable);
         return tasks.map(taskMapper::taskToTaskDTO);
     }
 
-    private Long getNextTaskNumber(Long projectId){
-        final Project project = projectRepository.findOne(projectId);
-        return (long) project.getTasks().size();
+    @Override
+    public void moveTaskByIdUp(final Long taskId){
+        final Task task = taskRepository.findOne(taskId);
+        final Task previousTask = getPreviousTask(task);
+        long taskNumber = task.getNumber();
+        task.setNumber(previousTask.getNumber());
+        previousTask.setNumber(taskNumber);
+    }
+
+
+    @Override
+    public void moveTaskByIdDown(final Long taskId){
+        final Task task = taskRepository.findOne(taskId);
+        final Task nextTask = getNextTask(task);
+        long taskNumber = task.getNumber();
+        task.setNumber(nextTask.getNumber());
+        nextTask.setNumber(taskNumber);
+    }
+
+
+    public void assignTaskToCurrentUser(final Long taskId){
+        final Task task = taskRepository.findOne(taskId);
+        final User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        task.setAssignee(user);
+        taskRepository.save(task);
+    }
+
+    private Task getNextTask(Task task) {
+        if(task.getNumber() == task.getUserStory().getTasks().size() - 1){
+            UserStory userStory = userStoryRepository.findOne(task.getUserStory().getId());
+            UserStory nextUserStory = userStoryService.getNextUserStory(userStory);
+            userStory.getTasks().remove(task);
+            for(Task usTask: nextUserStory.getTasks()){
+                usTask.setNumber(usTask.getNumber() + 1);
+            }
+            task.setUserStory(nextUserStory);
+            task.setNumber(0L);
+            nextUserStory.getTasks().add(task);
+            return task;
+        }
+        UserStory userStory = userStoryRepository.findOne(task.getUserStory().getId());
+        return taskRepository.findOneByUserStoryIdAndNumber(userStory.getId(), task.getNumber() + 1);
+    }
+
+    private Task getPreviousTask(Task task) {
+        UserStory userStory = userStoryRepository.findOne(task.getUserStory().getId());
+        if(task.getNumber() == 0){
+            UserStory previousUserStory = userStoryService.getPreviousUserStory(userStory);
+            task.setUserStory(previousUserStory);
+            task.setNumber((long)previousUserStory.getTasks().size());
+            userStory.getTasks().remove(task);
+            for(Task usTask: userStory.getTasks()){
+                usTask.setNumber(usTask.getNumber() - 1);
+            }
+            previousUserStory.getTasks().add(task);
+            return task;
+        }
+
+        return taskRepository.findOneByUserStoryIdAndNumber(userStory.getId(), task.getNumber() - 1);
+    }
+
+    private Long getNextTaskNumber(Long userStoryId){
+        final UserStory userStory = userStoryRepository.findOne(userStoryId);
+        return (long) userStory.getTasks().size();
     }
 }

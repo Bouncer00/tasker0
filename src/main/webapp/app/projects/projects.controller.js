@@ -71,14 +71,18 @@
 
         function createProject() {
             createProjectModal.open().result.then(function (project) {
-                Project.save(project);
+                Project.save(project).$promise.then(function (result) {
+                    $scope.control.getProjects();
+                });
             });
         }
 
         function createSprint() {
             if($scope.currentProject) {
                 createSprintModal.open($scope.currentProject).result.then(function (sprint) {
-                    Sprint.save(sprint);
+                    Sprint.save(sprint).$promise.then(function (result) {
+                        $scope.control.fetchSprints(result.projectId);
+                    });
                 });
             }
         }
@@ -86,7 +90,9 @@
         function createUserStory() {
             if($scope.currentSprint) {
                 createUserStoryModal.open($scope.currentSprint).result.then(function (userStory) {
-                    UserStory.save(userStory);
+                    UserStory.save(userStory).$promise.then(function (result) {
+                        $scope.control.fetchUserStories(result.sprintId);
+                    });
                 })
             }
         }
@@ -95,7 +101,9 @@
             if($scope.currentUserStory) {
                 createTaskModal.open($scope.currentUserStory).result.then(function (task) {
                     task.projectId = $scope.currentProject.id;
-                    Task.save(task);
+                    Task.save(task).$promise.then(function (result) {
+                        $scope.control.fetchTasks(result.userStoryId);
+                    });
                 })
             }
         }

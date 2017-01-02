@@ -22,7 +22,7 @@ import java.time.ZonedDateTime;
  * A user.
  */
 @Entity
-@Table(name = "jhi_user")
+@Table(name = "app_user")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "user")
 public class User extends AbstractAuditingEntity implements Serializable {

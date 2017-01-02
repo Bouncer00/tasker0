@@ -2,6 +2,8 @@ package com.mbancer.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -41,6 +43,7 @@ public class Sprint implements Serializable{
 
     @OneToMany(mappedBy = "sprint")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Cascade(CascadeType.DELETE)
     private Set<UserStory> userStories;
 
     public Long getId() {

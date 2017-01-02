@@ -3,7 +3,11 @@
     font-size: 115%;
 }
 
-.comments-box {
-    border: solid;
-    min-height: 30em;
+.comments-list-box{
+    height: 30em;
+    overflow: auto;
+}
+
+.margined-task-row{
+    margin: 2%;
 }

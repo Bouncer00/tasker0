@@ -18,6 +18,9 @@
             'getBySprint': {
                 url: url + "/bySprint/:sprintId",
                 params: {sprintId: '@sprintId'}
+            },
+            'delete': {
+                url: url + '/:userStoryId', params: {userStoryId: '@userStoryId'}, method: 'DELETE'
             }
         });
     }

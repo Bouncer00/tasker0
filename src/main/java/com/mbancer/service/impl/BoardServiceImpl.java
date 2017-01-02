@@ -9,7 +9,9 @@ import com.mbancer.repository.TaskRepository;
 import com.mbancer.repository.search.BoardSearchRepository;
 import com.mbancer.service.BoardService;
 import com.mbancer.web.rest.dto.BoardDTO;
+import com.mbancer.web.rest.dto.TaskDTO;
 import com.mbancer.web.rest.mapper.BoardMapper;
+import com.mbancer.web.rest.mapper.TaskMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,8 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
+import static java.util.Objects.nonNull;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 @Service
@@ -44,6 +48,9 @@ public class BoardServiceImpl implements BoardService {
 
     @Inject
     private TaskRepository taskRepository;
+
+    @Inject
+    private TaskMapper taskMapper;
 
     @Override
     public BoardDTO save(BoardDTO boardDTO) {
@@ -95,7 +102,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void moveTaskFromSourceBoardToTarget(Long sourceBoardId, @NotNull Long targetBoardId, @NotNull Long taskId) {
+    public TaskDTO moveTaskFromSourceBoardToTarget(Long sourceBoardId, @NotNull Long targetBoardId, @NotNull Long taskId) {
         log.debug("Request to move task {} from board {} to board {}", taskId, sourceBoardId, targetBoardId);
         final Board targetBoard = boardRepository.findOne(targetBoardId);
         final Task task = taskRepository.findOne(taskId);
@@ -108,16 +115,17 @@ public class BoardServiceImpl implements BoardService {
         }
         else{
             final Board sourceBoard = boardRepository.findOne(sourceBoardId);
-            sourceBoard.getTasks().remove(task);
-            targetBoard.getTasks().add(task);
+            if(nonNull(sourceBoard.getTasks())) {
+                sourceBoard.getTasks().remove(task);
+            }
+            if(nonNull(targetBoard.getTasks())) {
+                targetBoard.getTasks().add(task);
+            }
             task.setBoard(targetBoard);
         }
-//        final Optional<Task> taskOptional = sourceBoard.getTasks().stream().filter(task -> task.getId().equals(taskId)).findFirst();
-
-        /*taskOptional.map(task -> {
-            sourceBoard.getTasks().remove(task);
-            return targetBoard.getTasks().add(task);
-        }).orElseThrow(() -> new IllegalArgumentException("Source board " + sourceBoard + " does not have task " + taskId));*/
+        task.setUpdated(LocalDate.now());
+        System.out.println("Task board" + task.getBoard());
+        return taskMapper.taskToTaskDTO(taskRepository.save(task));
     }
 
     @Override

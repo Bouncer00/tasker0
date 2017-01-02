@@ -20,6 +20,9 @@
                 url: url + '/byProject/:projectId',
                 params: {projectId: '@projectId'},
                 method: 'GET'
+            },
+            'delete': {
+                url: url + '/:sprintId', params: {sprintId: '@sprintId'}, method: 'DELETE'
             }
         });
     }

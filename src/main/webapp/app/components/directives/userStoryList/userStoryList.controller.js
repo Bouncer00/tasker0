@@ -11,6 +11,7 @@
 
         $scope.fetchUserStories = fetchUserStories;
         $scope.openDetails = openDetails;
+        $scope.remove = remove
 
         if($scope.control) {
             $scope.control.resetUserStories = resetUserStories;
@@ -29,6 +30,12 @@
 
         function openDetails(userStory) {
             userStoryDetailsModal.open(userStory);
+        }
+        
+        function remove(userStory) {
+            UserStory.delete({userStoryId: userStory.id}).$promise.then(function (result) {
+                fetchUserStories(userStory.sprintId);
+            })
         }
     }
 })();

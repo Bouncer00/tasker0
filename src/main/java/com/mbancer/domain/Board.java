@@ -35,7 +35,7 @@ public class Board implements Serializable{
 
     @OneToMany(mappedBy = "board")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @OrderBy("priority ASC")
+//    @OrderBy("priority ASC")
     private List<Task> tasks = new ArrayList<>();
 
     public Long getId() {
@@ -80,6 +80,15 @@ public class Board implements Serializable{
 
     public void setNumber(Long number) {
         this.number = number;
+    }
+
+    @Override
+    public String toString() {
+        return "Board{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", number=" + number +
+            '}';
     }
 
     public static class Builder {
