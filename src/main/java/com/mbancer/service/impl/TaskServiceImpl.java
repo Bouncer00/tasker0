@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
+import java.time.LocalDate;
+
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
@@ -164,6 +166,7 @@ public class TaskServiceImpl implements TaskService{
         final Task task = taskRepository.findOne(taskId);
         final User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
         task.setAssignee(user);
+        task.setUpdated(LocalDate.now());
         taskRepository.save(task);
     }
 

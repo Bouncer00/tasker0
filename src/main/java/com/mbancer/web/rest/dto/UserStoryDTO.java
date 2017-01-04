@@ -1,6 +1,7 @@
 package com.mbancer.web.rest.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class UserStoryDTO {
@@ -18,6 +19,20 @@ public class UserStoryDTO {
     private Long sprintId;
 
     private Long priority;
+
+    private List<CommentDTO> comments;
+
+    public UserStoryDTO() {
+        created = LocalDate.now();
+    }
+
+    public List<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDTO> comments) {
+        this.comments = comments;
+    }
 
     public Long getId() {
         return id;

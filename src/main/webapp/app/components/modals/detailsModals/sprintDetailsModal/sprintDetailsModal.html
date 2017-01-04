@@ -18,6 +18,34 @@
         <label for="deadline">Deadline:</label>
         <span id="deadline">{{sprint.end}}</span>
     </div>
+    <div class="row">
+        <label style="margin-left: 5%">Comments:</label>
+        <div class="comments-box">
+            <div class="row">
+                <div class="col-xs-11 comments-list-box" scroll-glue>
+                    <ul class="commentList">
+                        <li ng-repeat="comment in sprint.comments">
+                            <div class="commenterImage">
+                                {{comment.authorFirstName}} {{comment.authorLastName}} <span class="date sub-text">{{comment.date}}</span>
+                            </div>
+                            <div class="commentText">
+                                <p class="">{{comment.text}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xs-11">
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="comment">
+                        <span class="input-group-btn">
+                             <button class="btn btn-default" ng-click="addComment(comment); comment=null" type="button">Add comment</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-default">Close</button>

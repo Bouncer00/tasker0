@@ -22,4 +22,5 @@
     <include file="classpath:config/liquibase/changelog/20160927210000_added_assignee_to_task.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20161022000000_added_board_number.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170102000000_added_user_story_number.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170103000000_added_sprint_and_user_story_comments.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

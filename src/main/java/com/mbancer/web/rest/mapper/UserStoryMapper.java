@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {SprintMapper.class})
+@Mapper(componentModel = "spring", uses = {SprintMapper.class, CommentMapper.class})
 public interface UserStoryMapper {
 
     @Mapping(source = "sprint.id", target = "sprintId")

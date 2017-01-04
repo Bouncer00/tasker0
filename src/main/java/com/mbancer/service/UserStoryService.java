@@ -22,4 +22,8 @@ public interface UserStoryService {
     UserStory getNextUserStory(UserStory userStory);
 
     UserStory getPreviousUserStory(UserStory userStory);
+
+    void moveUserStoryByIdUp(Long userStoryId);
+
+    void moveUserStoryByIdDown(Long userStoryId);
 }

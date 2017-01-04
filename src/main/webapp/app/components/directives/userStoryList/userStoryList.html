@@ -10,10 +10,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="userStory in userStories" ng-click="selectUserStory(userStory)">
-            <td>{{userStory.name}}</td>
-            <td>{{userStory.priority}}</td>
-            <td>{{userStory.updated}}</td>
+        <tr ng-repeat="userStory in userStories" >
+            <td ng-click="selectUserStory(userStory)">{{userStory.name}}</td>
+            <td ng-click="selectUserStory(userStory)">{{userStory.priority}}</td>
+            <td ng-click="selectUserStory(userStory)">{{userStory.updated}}</td>
             <td>
                 <span ng-click="openDetails(userStory)" class="glyphicon glyphicon-info-sign"></span>
                 <span ng-click="moveUp(userStory)" class="glyphicon glyphicon-arrow-up"></span>

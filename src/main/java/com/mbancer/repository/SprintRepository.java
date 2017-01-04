@@ -15,4 +15,5 @@ public interface SprintRepository extends JpaRepository<Sprint, Long>{
 
     Page<Sprint> findAllByProjectIdIn(List<Long> longs, Pageable pageable);
 
+    Sprint findOneByProjectIdAndNumber(Long id, long l);
 }

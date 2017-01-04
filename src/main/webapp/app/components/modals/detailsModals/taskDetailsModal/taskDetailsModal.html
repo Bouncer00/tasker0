@@ -25,7 +25,13 @@
     </div>
     <div class="row margined-task-row">
         <div class="col-xs-8">
-                <label for="assignee">Assignee</label>
+            <label for="createdBy">Created by:</label>
+            <span id="createdBy">{{task.userFirstName}} {{task.userLastName}}</span>
+        </div>
+    </div>
+    <div class="row margined-task-row">
+        <div class="col-xs-8">
+                <label for="assignee">Assignee:</label>
                 <span id="assignee">{{task.assigneeFirstName}} {{task.assigneeLastName}}</span>
             <button class="btn btn-primary" style="margin-left: 2%" ng-click="assignTaskToCurrentUser()">Assign to me</button>
 
@@ -46,14 +52,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12">
-            <div>
-                <label for="description">Description:</label>
-                <span id="description">{{task.description}}</span>
-            </div>
+        <div class="col-xs-12" style="margin-left: 3%">
+            <label for="description">Description:</label>
+            <span id="description">{{task.description}}</span>
         </div>
     </div>
     <div class="row">
+        <label style="margin-left: 5%">Comments:</label>
         <div class="comments-box">
             <div class="row">
                 <div class="col-xs-11 comments-list-box" scroll-glue>

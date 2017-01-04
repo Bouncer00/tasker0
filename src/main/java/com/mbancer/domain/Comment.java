@@ -2,6 +2,7 @@ package com.mbancer.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.JoinColumnOrFormula;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -38,6 +39,28 @@ public class Comment implements Serializable {
 
     @ManyToOne
     private Task task;
+
+    @ManyToOne
+    private UserStory userStory;
+
+    @ManyToOne
+    private Sprint sprint;
+
+    public UserStory getUserStory() {
+        return userStory;
+    }
+
+    public void setUserStory(UserStory userStory) {
+        this.userStory = userStory;
+    }
+
+    public Sprint getSprint() {
+        return sprint;
+    }
+
+    public void setSprint(Sprint sprint) {
+        this.sprint = sprint;
+    }
 
     public Long getId() {
         return id;

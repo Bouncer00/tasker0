@@ -1,5 +1,6 @@
 package com.mbancer.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mbancer.config.Constants;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
@@ -12,8 +13,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "user_story")
@@ -50,6 +50,21 @@ public class UserStory {
     @OrderBy("number")
     @Cascade(CascadeType.DELETE)
     private List<Task> tasks;
+
+    @OneToMany(mappedBy = "userStory")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Cascade(CascadeType.DELETE)
+    @OrderBy("date")
+    private List<Comment> comments = new ArrayList<>();
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     @NotNull
     private Long number;

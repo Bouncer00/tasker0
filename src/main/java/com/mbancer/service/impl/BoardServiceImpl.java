@@ -124,7 +124,6 @@ public class BoardServiceImpl implements BoardService {
             task.setBoard(targetBoard);
         }
         task.setUpdated(LocalDate.now());
-        System.out.println("Task board" + task.getBoard());
         return taskMapper.taskToTaskDTO(taskRepository.save(task));
     }
 

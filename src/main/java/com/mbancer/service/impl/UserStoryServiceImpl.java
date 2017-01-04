@@ -1,10 +1,14 @@
 package com.mbancer.service.impl;
 
 import com.mbancer.domain.Sprint;
+import com.mbancer.domain.Task;
 import com.mbancer.domain.UserStory;
+import com.mbancer.repository.CommentRepository;
 import com.mbancer.repository.SprintRepository;
 import com.mbancer.repository.UserStoryRepository;
+import com.mbancer.repository.search.SprintSearchRepository;
 import com.mbancer.repository.search.UserStorySearchRepository;
+import com.mbancer.service.SprintService;
 import com.mbancer.service.UserStoryService;
 import com.mbancer.web.rest.dto.UserStoryDTO;
 import com.mbancer.web.rest.mapper.UserStoryMapper;
@@ -37,13 +41,21 @@ public class UserStoryServiceImpl implements UserStoryService {
     @Inject
     private SprintRepository sprintRepository;
 
+    @Inject
+    private SprintService sprintService;
+
+    @Inject
+    private CommentRepository commentRepository;
+
     @Override
     public UserStoryDTO save(UserStoryDTO userStoryDTO) {
         log.debug("Request to save UserStory : {}", userStoryDTO);
         UserStory userStory = userStoryMapper.userStoryDTOToUserStory(userStoryDTO);
         userStory.setNumber(getNextUserStoryNumber(userStoryDTO.getSprintId()));
+        Sprint sprint = sprintRepository.findOne(userStoryDTO.getSprintId());
+        sprint.getUserStories().add(userStory);
+        userStory.setSprint(sprint);
         userStory = userStoryRepository.save(userStory);
-        userStorySearchRepository.save(userStory);
         return userStoryMapper.userStoryToUserStoryDTO(userStory);
     }
 
@@ -65,6 +77,7 @@ public class UserStoryServiceImpl implements UserStoryService {
         log.debug("Request to delete UserStory : {]", id);
         UserStory userStory = userStoryRepository.findOne(id);
         userStory.getSprint().getUserStories().remove(userStory);
+        userStory.getComments().forEach(commentRepository::delete);
         userStoryRepository.delete(id);
         userStorySearchRepository.delete(id);
     }
@@ -78,7 +91,7 @@ public class UserStoryServiceImpl implements UserStoryService {
     @Override
     public Page<UserStoryDTO> findBySprintId(Long sprintId, Pageable pageable) {
         log.debug("Request for page of UserStories by sprint : {}", sprintId);
-        Page<UserStory> userStories = userStoryRepository.findOneBySprintId(sprintId, pageable);
+        Page<UserStory> userStories = userStoryRepository.findAllBySprintIdOrderByNumber(sprintId, pageable);
         return userStories.map(userStoryMapper::userStoryToUserStoryDTO);
     }
 
@@ -92,6 +105,59 @@ public class UserStoryServiceImpl implements UserStoryService {
     public UserStory getPreviousUserStory(UserStory userStory) {
         if(userStory.getNumber() == 0) return userStory;
         return userStoryRepository.findOneBySprintIdAndNumber(userStory.getSprint().getId(), userStory.getNumber() - 1);
+    }
+
+    @Override
+    public void moveUserStoryByIdUp(final Long userStoryId){
+        final UserStory userStory = userStoryRepository.findOne(userStoryId);
+        final UserStory previousUserStory = moveUserStoryUp(userStory);
+        long userStoryNumber = userStory.getNumber();
+        userStory.setNumber(previousUserStory.getNumber());
+        previousUserStory.setNumber(userStoryNumber);
+    }
+
+
+    @Override
+    public void moveUserStoryByIdDown(final Long userStoryId){
+        final UserStory userStory = userStoryRepository.findOne(userStoryId);
+        final UserStory nextUserStory = moveUserStoryDown(userStory);
+        long userStoryNumber = userStory.getNumber();
+        userStory.setNumber(nextUserStory.getNumber());
+        nextUserStory.setNumber(userStoryNumber);
+    }
+
+    private UserStory moveUserStoryDown(UserStory userStory) {
+        if(userStory.getNumber() == userStory.getSprint().getUserStories().size() - 1){
+            Sprint sprint = sprintRepository.findOne(userStory.getSprint().getId());
+            Sprint nextSprint = sprintService.getNextSprint(sprint);
+            sprint.getUserStories().remove(userStory);
+            for(UserStory usUserStory: nextSprint.getUserStories()){
+                usUserStory.setNumber(usUserStory.getNumber() + 1);
+            }
+            userStory.setSprint(nextSprint);
+            userStory.setNumber(0L);
+            nextSprint.getUserStories().add(userStory);
+            return userStory;
+        }
+        Sprint sprint = sprintRepository.findOne(userStory.getSprint().getId());
+        return userStoryRepository.findOneBySprintIdAndNumber(sprint.getId(), userStory.getNumber() + 1);
+    }
+
+    private UserStory moveUserStoryUp(UserStory userStory) {
+        Sprint sprint = sprintRepository.findOne(userStory.getSprint().getId());
+        if(userStory.getNumber() == 0){
+            Sprint previousSprint = sprintService.getPreviousSprint(sprint);
+            userStory.setSprint(previousSprint);
+            userStory.setNumber((long)previousSprint.getUserStories().size());
+            sprint.getUserStories().remove(userStory);
+            for(UserStory usUserStory: sprint.getUserStories()){
+                usUserStory.setNumber(usUserStory.getNumber() - 1);
+            }
+            previousSprint.getUserStories().add(userStory);
+            return userStory;
+        }
+
+        return userStoryRepository.findOneBySprintIdAndNumber(sprint.getId(), userStory.getNumber() - 1);
     }
 
     private Long getNextUserStoryNumber(Long sprintId){

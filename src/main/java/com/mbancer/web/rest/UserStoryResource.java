@@ -122,4 +122,22 @@ public class UserStoryResource {
         Page<UserStoryDTO> sprintDTOs = userStoryService.findBySprintId(sprintId, pageable);
         return ResponseEntity.ok().body(sprintDTOs);
     }
+
+    @RequestMapping(value = "userStories/moveUp/{userStoryId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> moveUserStoryUp(@PathVariable("userStoryId") Long userStoryId){
+        log.debug("REST request to move userStory {} up", userStoryId);
+        userStoryService.moveUserStoryByIdUp(userStoryId);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "userStories/moveDown/{userStoryId}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> moveUserStoryDown(@PathVariable("userStoryId") Long userStoryId){
+        log.debug("REST request to move userStory {} down", userStoryId);
+        userStoryService.moveUserStoryByIdDown(userStoryId);
+        return ResponseEntity.ok().build();
+    }
 }

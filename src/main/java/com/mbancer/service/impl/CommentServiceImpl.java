@@ -1,11 +1,9 @@
 package com.mbancer.service.impl;
 
-import com.mbancer.domain.User;
-import com.mbancer.repository.UserRepository;
+import com.mbancer.domain.*;
+import com.mbancer.repository.*;
 import com.mbancer.security.SecurityUtils;
 import com.mbancer.service.CommentService;
-import com.mbancer.domain.Comment;
-import com.mbancer.repository.CommentRepository;
 import com.mbancer.repository.search.CommentSearchRepository;
 import com.mbancer.web.rest.dto.CommentDTO;
 import com.mbancer.web.rest.mapper.CommentMapper;
@@ -47,6 +45,15 @@ public class CommentServiceImpl implements CommentService{
     @Inject
     private UserRepository userRepository;
 
+    @Inject
+    private UserStoryRepository userStoryRepository;
+
+    @Inject
+    private TaskRepository taskRepository;
+
+    @Inject
+    private SprintRepository sprintRepository;
+
     /**
      * Save a comment.
      *
@@ -56,13 +63,29 @@ public class CommentServiceImpl implements CommentService{
     public CommentDTO save(CommentDTO commentDTO) {
         log.debug("Request to save Comment : {}", commentDTO);
         Comment comment = commentMapper.commentDTOToComment(commentDTO);
+        comment = commentRepository.save(comment);
         if(isNull(comment.getAuthor())){
             final String userLogin = SecurityUtils.getCurrentUserLogin();
             final User user = userRepository.findOneByLogin(userLogin).get();
             comment.setAuthor(user);
         }
-        comment = commentRepository.save(comment);
-        comment.getTask().setUpdated(LocalDate.now());
+        if(null != comment.getTask()) {
+            Task ts = taskRepository.findOne(comment.getTask().getId());
+            ts.setUpdated(LocalDate.now());
+            ts.getComments().add(comment);
+            taskRepository.save(ts);
+        }
+        if(null != comment.getUserStory()){
+            UserStory us = userStoryRepository.findOne(comment.getUserStory().getId());
+            us.setUpdated(LocalDate.now());
+            us.getComments().add(comment);
+            userStoryRepository.save(us);
+        }
+        if(null != comment.getSprint()){
+            Sprint sp = sprintRepository.findOne(comment.getSprint().getId());
+            sp.getComments().add(comment);
+            sprintRepository.save(sp);
+        }
         CommentDTO result = commentMapper.commentToCommentDTO(comment);
         commentSearchRepository.save(comment);
         return result;

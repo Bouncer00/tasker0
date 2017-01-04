@@ -2,6 +2,7 @@ package com.mbancer.web.rest.dto;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,6 +21,16 @@ public class SprintDTO {
     private LocalDate end;
 
     private Set<UserStoryDTO> userStories = new HashSet<>();
+
+    private List<CommentDTO> comments;
+
+    public List<CommentDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDTO> comments) {
+        this.comments = comments;
+    }
 
     public Long getId() {
         return id;

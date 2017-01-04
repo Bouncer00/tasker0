@@ -18,4 +18,8 @@ public interface SprintService {
     Page<Sprint> search(String query, Pageable pageable);
 
     Page<SprintDTO> findByProjectId(Long projectId, Pageable pageable);
+
+    Sprint getNextSprint(Sprint sprint);
+
+    Sprint getPreviousSprint(Sprint sprint);
 }

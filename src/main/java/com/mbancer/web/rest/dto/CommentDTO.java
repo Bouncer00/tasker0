@@ -27,6 +27,26 @@ public class CommentDTO implements Serializable {
 
     private Long taskId;
 
+    private Long userStoryId;
+
+    private Long sprintId;
+
+    public Long getUserStoryId() {
+        return userStoryId;
+    }
+
+    public void setUserStoryId(Long userStoryId) {
+        this.userStoryId = userStoryId;
+    }
+
+    public Long getSprintId() {
+        return sprintId;
+    }
+
+    public void setSprintId(Long sprintId) {
+        this.sprintId = sprintId;
+    }
+
     public Long getId() {
         return id;
     }

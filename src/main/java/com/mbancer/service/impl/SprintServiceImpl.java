@@ -2,6 +2,7 @@ package com.mbancer.service.impl;
 
 import com.mbancer.domain.Project;
 import com.mbancer.domain.Sprint;
+import com.mbancer.repository.CommentRepository;
 import com.mbancer.repository.ProjectRepository;
 import com.mbancer.repository.SprintRepository;
 import com.mbancer.repository.search.SprintSearchRepository;
@@ -40,6 +41,9 @@ public class SprintServiceImpl implements SprintService {
     @Inject
     private ProjectRepository projectRepository;
 
+    @Inject
+    private CommentRepository commentRepository;
+
     @Override
     public SprintDTO save(SprintDTO sprintDTO) {
         log.debug("Request to save Sprint : {}", sprintDTO);
@@ -50,8 +54,10 @@ public class SprintServiceImpl implements SprintService {
             sprintDTO.setStart(LocalDate.now());
         }
         Sprint sprint = sprintMapper.sprintDTOToSprint(sprintDTO);
+        Project project = projectRepository.findOne(sprintDTO.getProjectId());
+        project.getSprints().add(sprint);
+        sprint.setProject(project);
         sprint = sprintRepository.save(sprint);
-        sprintSearchRepository.save(sprint);
         SprintDTO result = sprintMapper.sprintToSprintDTO(sprint);
         return result;
     }
@@ -76,6 +82,7 @@ public class SprintServiceImpl implements SprintService {
         log.debug("Request to delete Sprint : {}", id);
         Sprint sprint = sprintRepository.findOne(id);
         sprint.getProject().getSprints().remove(sprint);
+        sprint.getComments().forEach(commentRepository::delete);
         sprintRepository.delete(id);
         sprintSearchRepository.delete(id);
     }
@@ -92,6 +99,18 @@ public class SprintServiceImpl implements SprintService {
         log.debug("Request to find Sprints for Project : {}", projectId);
         Page<Sprint> sprints = sprintRepository.findAllByProjectIdIn(Collections.singletonList(projectId), pageable);
         return sprints.map(sprintMapper::sprintToSprintDTO);
+    }
+
+    @Override
+    public Sprint getNextSprint(Sprint sprint) {
+        if(sprint.getNumber() == sprint.getProject().getSprints().size() - 1) return sprint;
+        return sprintRepository.findOneByProjectIdAndNumber(sprint.getProject().getId(), sprint.getNumber() + 1);
+    }
+
+    @Override
+    public Sprint getPreviousSprint(Sprint sprint) {
+        if(sprint.getNumber() == 0) return sprint;
+        return sprintRepository.findOneByProjectIdAndNumber(sprint.getProject().getId(), sprint.getNumber() - 1);
     }
 
     private Long getNextSprintNumber(Long projectId){

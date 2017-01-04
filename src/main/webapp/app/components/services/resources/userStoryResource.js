@@ -21,6 +21,12 @@
             },
             'delete': {
                 url: url + '/:userStoryId', params: {userStoryId: '@userStoryId'}, method: 'DELETE'
+            },
+            'moveUp': {
+                url: url + "/moveUp/:userStoryId", param: {userStoryId: "@userStoryId"}, method: 'GET'
+            },
+            'moveDown': {
+                url: url + "/moveDown/:userStoryId", param: {userStoryId: "@userStoryId"}, method: 'GET'
             }
         });
     }

@@ -9,4 +9,6 @@ public interface UserStoryRepository extends JpaRepository<UserStory, Long> {
     Page<UserStory> findOneBySprintId(Long sprintId, Pageable pageable);
 
     UserStory findOneBySprintIdAndNumber(Long sprintId, Long number);
+
+    Page<UserStory> findAllBySprintIdOrderByNumber(Long sprintId, Pageable pageable);
 }
