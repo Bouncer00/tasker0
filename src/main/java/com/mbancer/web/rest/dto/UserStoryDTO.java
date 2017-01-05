@@ -1,6 +1,6 @@
 package com.mbancer.web.rest.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,9 +12,9 @@ public class UserStoryDTO {
 
     private String description;
 
-    private LocalDate created;
+    private LocalDateTime created;
 
-    private LocalDate updated;
+    private LocalDateTime updated;
 
     private Long sprintId;
 
@@ -23,7 +23,7 @@ public class UserStoryDTO {
     private List<CommentDTO> comments;
 
     public UserStoryDTO() {
-        created = LocalDate.now();
+        created = LocalDateTime.now();
     }
 
     public List<CommentDTO> getComments() {
@@ -58,19 +58,19 @@ public class UserStoryDTO {
         this.description = description;
     }
 
-    public LocalDate getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDate created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
 
-    public LocalDate getUpdated() {
+    public LocalDateTime getUpdated() {
         return updated;
     }
 
-    public void setUpdated(LocalDate updated) {
+    public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
     }
 
@@ -117,8 +117,8 @@ public class UserStoryDTO {
         private Long id;
         private String name;
         private String description;
-        private LocalDate created;
-        private LocalDate updated;
+        private LocalDateTime created;
+        private LocalDateTime updated;
         private Long sprintId;
 
         private Builder() {
@@ -143,12 +143,12 @@ public class UserStoryDTO {
             return this;
         }
 
-        public Builder created(LocalDate created) {
+        public Builder created(LocalDateTime created) {
             this.created = created;
             return this;
         }
 
-        public Builder updated(LocalDate updated) {
+        public Builder updated(LocalDateTime updated) {
             this.updated = updated;
             return this;
         }

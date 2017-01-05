@@ -3,7 +3,7 @@ package com.mbancer.service.util;
 import com.mbancer.domain.*;
 import org.apache.commons.lang.RandomStringUtils;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -16,7 +16,7 @@ public class EntityGenerators {
             tasks.add(
                 Task.builder()
                     .user(user)
-                    .created(LocalDate.now())
+                    .created(LocalDateTime.now())
                     .description(RandomStringUtils.randomAlphabetic(10))
                     .project(project)
                     .userStory(userStory)
@@ -37,9 +37,9 @@ public class EntityGenerators {
             final Project project = builder
                 .name(RandomStringUtils.randomAlphabetic(10))
                 .description(RandomStringUtils.randomAlphabetic(10))
-                .created(LocalDate.now())
+                .created(LocalDateTime.now())
                 .shortName(RandomStringUtils.randomAlphabetic(4))
-                .deadLine(LocalDate.now().plus(2, ChronoUnit.YEARS))
+                .deadLine(LocalDateTime.now().plus(2, ChronoUnit.YEARS))
                 .build();
 
             if(users != null){
@@ -60,9 +60,9 @@ public class EntityGenerators {
         for(int i = 0 ; i < number ; i++){
             final Comment comment =
                 Comment.builder()
-                    .date(LocalDate.now())
+                    .date(LocalDateTime.now())
                     .text(RandomStringUtils.randomAlphabetic(10))
-                    .date(LocalDate.now())
+                    .date(LocalDateTime.now())
                     .build();
             if(author != null){
                 comment.setAuthor(author);
@@ -83,8 +83,8 @@ public class EntityGenerators {
                 .project(project)
                 .name(RandomStringUtils.randomAlphabetic(10))
                 .number(random.nextLong())
-                .start(LocalDate.now().minus(10, ChronoUnit.DAYS))
-                .end(LocalDate.now())
+                .start(LocalDateTime.now().minus(10, ChronoUnit.DAYS))
+                .end(LocalDateTime.now())
                 .userStories(Collections.emptySet())
                 .build();
             sprints.add(sprint);
@@ -97,12 +97,13 @@ public class EntityGenerators {
         final Random random = new Random();
         for(int i = 0 ; i < number ; i++){
             final UserStory userStory = UserStory.builder()
-                .created(LocalDate.now().minus(10, ChronoUnit.DAYS))
-                .updated(LocalDate.now())
+                .created(LocalDateTime.now().minus(10, ChronoUnit.DAYS))
+                .updated(LocalDateTime.now())
                 .description(RandomStringUtils.randomAlphabetic(10))
                 .name(RandomStringUtils.randomAlphabetic(5))
                 .priority(random.nextLong())
                 .sprint(sprint)
+                .number((long)i)
                 .tasks(tasks)
                 .build();
             userStories.add(userStory);

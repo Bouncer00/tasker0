@@ -25,8 +25,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="varchar(255)"/>
-            <column name="created" type="date"/>
-            <column name="updated" type="date"/>
+            <column name="created" type="timestamp"/>
+            <column name="updated" type="timestamp"/>
             <column name="sprint_id" type="bigint">
                 <constraints nullable="false"/>
             </column>

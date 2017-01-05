@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -71,8 +70,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "activation_key", length = 20)
     @JsonIgnore
     private String activationKey;
-
-    LocalDateTime a = LocalDateTime.now();
 
     @Size(max = 20)
     @Column(name = "reset_key", length = 20)

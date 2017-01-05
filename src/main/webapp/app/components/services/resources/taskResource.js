@@ -36,13 +36,16 @@
                 url: url + '/:taskId', params: {taskId: '@taskId'}, method: 'DELETE'
             },
             'assignToCurrentUser': {
-                url: url + "/assignToCurrentUser/:taskId", params: {taskId: '@taskId', method: 'GET'}
+                url: url + "/assignedToCurrentUser/:taskId", params: {taskId: '@taskId', method: 'GET'}, isArray: true
             },
             'moveUp': {
                 url: url + "/moveUp/:taskId", param: {taskId: "@taskId"}, method: 'GET'
             },
             'moveDown': {
                 url: url + "/moveDown/:taskId", param: {taskId: "@taskId"}, method: 'GET'
+            },
+            'update': {
+                url: url, method: 'PUT'
             }
         })
     }

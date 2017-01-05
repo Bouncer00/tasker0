@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -28,7 +28,7 @@ public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public Task(){
-        created = LocalDate.now();
+        created = LocalDateTime.now();
     }
 
     @Id
@@ -46,10 +46,10 @@ public class Task implements Serializable {
     private String description;
 
     @Column(name = "created")
-    private LocalDate created;
+    private LocalDateTime created;
 
     @Column(name = "updated")
-    private LocalDate updated;
+    private LocalDateTime updated;
 
     @ManyToOne
     private User user;
@@ -96,19 +96,19 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public LocalDate getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDate created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
 
-    public LocalDate getUpdated() {
+    public LocalDateTime getUpdated() {
         return updated;
     }
 
-    public void setUpdated(LocalDate updated) {
+    public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
     }
 
@@ -203,8 +203,8 @@ public class Task implements Serializable {
         private Long id;
         private String title;
         private String description;
-        private LocalDate created;
-        private LocalDate updated;
+        private LocalDateTime created;
+        private LocalDateTime updated;
         private User user;
         private User assignee;
         private Project project;
@@ -235,12 +235,12 @@ public class Task implements Serializable {
             return this;
         }
 
-        public Builder created(LocalDate created) {
+        public Builder created(LocalDateTime created) {
             this.created = created;
             return this;
         }
 
-        public Builder updated(LocalDate updated) {
+        public Builder updated(LocalDateTime updated) {
             this.updated = updated;
             return this;
         }

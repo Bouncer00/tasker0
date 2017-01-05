@@ -15,13 +15,13 @@
 
 
     <changeSet id="2016092200050--0" author="mbancer">
-        <renameColumn columnDataType="date"
+        <renameColumn columnDataType="timestamp"
                       newColumnName="sprint_start"
                       oldColumnName="start"
                       schemaName="public"
                       tableName="sprint"/>
 
-        <renameColumn columnDataType="date"
+        <renameColumn columnDataType="timestamp"
                       newColumnName="sprint_end"
                       oldColumnName="end"
                       schemaName="public"

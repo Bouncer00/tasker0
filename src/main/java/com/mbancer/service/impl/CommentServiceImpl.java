@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,13 +71,13 @@ public class CommentServiceImpl implements CommentService{
         }
         if(null != comment.getTask()) {
             Task ts = taskRepository.findOne(comment.getTask().getId());
-            ts.setUpdated(LocalDate.now());
+            ts.setUpdated(LocalDateTime.now());
             ts.getComments().add(comment);
             taskRepository.save(ts);
         }
         if(null != comment.getUserStory()){
             UserStory us = userStoryRepository.findOne(comment.getUserStory().getId());
-            us.setUpdated(LocalDate.now());
+            us.setUpdated(LocalDateTime.now());
             us.getComments().add(comment);
             userStoryRepository.save(us);
         }

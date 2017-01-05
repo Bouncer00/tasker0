@@ -24,10 +24,10 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="true"/>
             </column>
-            <column name="start" type="date">
+            <column name="start" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-            <column name="end" type="date"/>
+            <column name="end" type="timestamp"/>
             <column name="project_id" type="bigint">
                 <constraints nullable="false"/>
             </column>

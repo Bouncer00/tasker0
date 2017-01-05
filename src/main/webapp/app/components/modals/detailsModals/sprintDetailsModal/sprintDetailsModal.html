@@ -1,22 +1,46 @@
 <div class="modal-header">
     <h3 class="modal-title" id="modal-title">Sprint details</h3>
 </div>
-<div class="modal-body">
+<div class="modal-body" style="margin-left: 10%">
     <div class="row">
-        <label for="number">Number:</label>
-        <span id="number">{{sprint.number}}</span>
-    </div>
-    <div class="row">
-        <label for="name">Name:</label>
-        <span id="name">{{sprint.name}}</span>
-    </div>
-    <div class="row">
-        <label for="created">Created:</label>
-        <span id="created">{{sprint.start}}</span>
-    </div>
-    <div class="row">
-        <label for="deadline">Deadline:</label>
-        <span id="deadline">{{sprint.end}}</span>
+        <div class="col-xs-6">
+            <div class="row">
+                    <label for="number">Number:</label>
+                    <span id="number">{{sprint.number}}</span>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <label for="name">Name:</label>
+                    <span id="name">{{sprint.name}}</span>
+                </div>
+                <div class="row">
+                    <input type="text" ng-model="newName"/>
+                    <button ng-click="updateName(sprint, newName); newName=null" class="btn btn-primary">Update name</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="row">
+                <div class="row">
+                    <label for="created">Start:</label>
+                    <span id="created">{{sprint.start | date:'yyyy-MM-dd HH:mm'}}</span>
+                </div>
+                <div class="row">
+                    <input type="date" ng-model="newCreated"/>
+                    <button ng-click="updateCreated(sprint, newCreated); newCreated=null" class="btn btn-primary">Update start</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <label for="deadline">End:</label>
+                    <span id="deadline">{{sprint.end | date:'yyyy-MM-dd HH:mm'}}</span>
+                </div>
+                <div class="row">
+                    <input type="date" ng-model="newDeadline"/>
+                    <button ng-click="updateDeadline(sprint, newDeadline); newDeadline=null" class="btn btn-primary">Update end</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
         <label style="margin-left: 5%">Comments:</label>
@@ -26,7 +50,7 @@
                     <ul class="commentList">
                         <li ng-repeat="comment in sprint.comments">
                             <div class="commenterImage">
-                                {{comment.authorFirstName}} {{comment.authorLastName}} <span class="date sub-text">{{comment.date}}</span>
+                                {{comment.authorFirstName}} {{comment.authorLastName}} <span class="date sub-text">{{comment.date | date:'yyyy-MM-dd HH:mm'}}</span>
                             </div>
                             <div class="commentText">
                                 <p class="">{{comment.text}}</p>

@@ -29,7 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
@@ -56,11 +57,11 @@ public class TaskResourceIntTest {
     private static final String DEFAULT_DESCRIPTION = "AAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBB";
 
-    private static final LocalDate DEFAULT_CREATED = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_CREATED = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDateTime DEFAULT_CREATED = LocalDateTime.of(1, Month.FEBRUARY, 1, 1, 1);
+    private static final LocalDateTime UPDATED_CREATED = LocalDateTime.now(ZoneId.systemDefault());
 
-    private static final LocalDate DEFAULT_UPDATED = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_UPDATED = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDateTime DEFAULT_UPDATED = LocalDateTime.of(1, Month.FEBRUARY, 1, 1, 1);
+    private static final LocalDateTime UPDATED_UPDATED = LocalDateTime.now(ZoneId.systemDefault());
 
     @Inject
     private TaskRepository taskRepository;

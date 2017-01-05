@@ -1,6 +1,6 @@
 package com.mbancer.domain;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Notification {
@@ -9,7 +9,7 @@ public class Notification {
 
     private String authorLastName;
 
-    private LocalDate date;
+    private LocalDateTime date;
 
     private String text;
 
@@ -29,11 +29,11 @@ public class Notification {
         this.authorLastName = authorLastName;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

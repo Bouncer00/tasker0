@@ -11,7 +11,7 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -26,7 +26,7 @@ public class Project implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public Project(){
-        created = LocalDate.now();
+        created = LocalDateTime.now();
     }
 
     @Id
@@ -45,10 +45,10 @@ public class Project implements Serializable {
     private String description;
 
     @Column(name = "created")
-    private LocalDate created;
+    private LocalDateTime created;
 
     @Column(name = "dead_line")
-    private LocalDate deadLine;
+    private LocalDateTime deadLine;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -105,19 +105,19 @@ public class Project implements Serializable {
         this.description = description;
     }
 
-    public LocalDate getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDate created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
 
-    public LocalDate getDeadLine() {
+    public LocalDateTime getDeadLine() {
         return deadLine;
     }
 
-    public void setDeadLine(LocalDate deadLine) {
+    public void setDeadLine(LocalDateTime deadLine) {
         this.deadLine = deadLine;
     }
 
@@ -190,8 +190,8 @@ public class Project implements Serializable {
         private String name;
         private String shortName;
         private String description;
-        private LocalDate created;
-        private LocalDate deadLine;
+        private LocalDateTime created;
+        private LocalDateTime deadLine;
         private Set<User> users = new HashSet<>();
         private List<Task> tasks = new ArrayList<>();
         private List<Sprint> sprints = new ArrayList<>();
@@ -224,12 +224,12 @@ public class Project implements Serializable {
             return this;
         }
 
-        public Builder created(LocalDate created) {
+        public Builder created(LocalDateTime created) {
             this.created = created;
             return this;
         }
 
-        public Builder deadLine(LocalDate deadLine) {
+        public Builder deadLine(LocalDateTime deadLine) {
             this.deadLine = deadLine;
             return this;
         }

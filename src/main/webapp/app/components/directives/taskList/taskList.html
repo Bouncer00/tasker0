@@ -12,15 +12,15 @@
         <tbody>
         <tr ng-repeat="task in tasks">
             <td>{{task.title}}</td>
-            <td>{{task.created}}</td>
-            <td>{{task.updated}}</td>
+            <td>{{task.created | date:'yyyy-MM-dd HH:mm'}}</td>
+            <td>{{task.updated | date:'yyyy-MM-dd HH:mm'}}</td>
             <td>
                 <span ng-click="openDetails(task)" class="glyphicon glyphicon-info-sign"></span>
-                <span ng-click="moveUp(task)" class="glyphicon glyphicon-arrow-up"></span>
-                <span ng-click="moveDown(task)" class="glyphicon glyphicon-arrow-down"></span>
+                <span ng-if="!assigned" ng-click="moveUp(task)" class="glyphicon glyphicon-arrow-up"></span>
+                <span ng-if="!assigned" ng-click="moveDown(task)" class="glyphicon glyphicon-arrow-down"></span>
             </td>
             <td>
-                <span ng-click="remove(task)" class="glyphicon glyphicon-remove"></span>
+                <span ng-if="!assigned" ng-click="remove(task)" class="glyphicon glyphicon-remove"></span>
             </td>
         </tr>
         </tbody>

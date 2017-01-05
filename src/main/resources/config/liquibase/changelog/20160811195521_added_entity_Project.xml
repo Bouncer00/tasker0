@@ -24,22 +24,22 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            
+
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            
-            <column name="created" type="date">
+
+            <column name="created" type="timestamp">
                 <constraints nullable="true" />
             </column>
-            
-            <column name="dead_line" type="date">
+
+            <column name="dead_line" type="timestamp">
                 <constraints nullable="true" />
             </column>
-            
+
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>
-        
+
         <createTable tableName="project_users">
             <column name="users_id" type="bigint">
                 <constraints nullable="false"/>
@@ -50,6 +50,6 @@
         </createTable>
 
         <addPrimaryKey columnNames="projects_id, users_id" tableName="project_users"/>
-        
+
     </changeSet>
 </databaseChangeLog>

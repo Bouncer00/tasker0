@@ -1,6 +1,6 @@
 package com.mbancer.web.rest.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.List;
@@ -19,9 +19,9 @@ public class TaskDTO implements Serializable {
 
     private String description;
 
-    private LocalDate created;
+    private LocalDateTime created;
 
-    private LocalDate updated;
+    private LocalDateTime updated;
 
     private Long userId;
 
@@ -44,7 +44,7 @@ public class TaskDTO implements Serializable {
     private List<CommentDTO> comments;
 
     public TaskDTO() {
-        created = LocalDate.now();
+        created = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -68,18 +68,18 @@ public class TaskDTO implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    public LocalDate getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDate created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
-    public LocalDate getUpdated() {
+    public LocalDateTime getUpdated() {
         return updated;
     }
 
-    public void setUpdated(LocalDate updated) {
+    public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
     }
 

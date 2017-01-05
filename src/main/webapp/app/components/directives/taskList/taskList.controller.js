@@ -16,15 +16,22 @@
             $scope.control.resetTasks = resetTasks;
             $scope.control.fetchTasks = fetchTasks;
         }
+        console.log($scope);
+
+        if($scope.assigned){
+            Task.assignToCurrentUser().$promise.then(function (result) {
+                $scope.tasks = result;
+            });
+        }
 
         function resetTasks() {
             $scope.tasks = [];
         }
 
         function fetchTasks(userStoryId) {
-            Task.getByUserStory({userStoryId: userStoryId}).$promise.then(function (result) {
-                $scope.tasks = result.content;
-            });
+                Task.getByUserStory({userStoryId: userStoryId}).$promise.then(function (result) {
+                    $scope.tasks = result.content;
+                });
         }
 
         function openDetails(task) {

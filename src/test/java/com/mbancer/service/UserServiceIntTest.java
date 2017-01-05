@@ -8,7 +8,7 @@ import java.time.ZonedDateTime;
 
 import com.mbancer.service.util.EntityGenerators;
 import com.mbancer.service.util.RandomUtil;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
@@ -63,8 +63,8 @@ public class UserServiceIntTest {
     public void testRemoveOldPersistentTokens() {
         User admin = userRepository.findOneByLogin("admin").get();
         int existingCount = persistentTokenRepository.findByUser(admin).size();
-        generateUserToken(admin, "1111-1111", LocalDate.now());
-        LocalDate now = LocalDate.now();
+        generateUserToken(admin, "1111-1111", LocalDateTime.now());
+        LocalDateTime now = LocalDateTime.now();
         generateUserToken(admin, "2222-2222", now.minusDays(32));
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 2);
         userService.removeOldPersistentTokens();
@@ -158,10 +158,10 @@ public class UserServiceIntTest {
         User admin = userRepository.findOneByLogin("admin").get();
         final Project project = projectRepository.save(
             Project.builder()
-            .created(LocalDate.now())
+            .created(LocalDateTime.now())
             .name(RandomStringUtils.randomAlphabetic(10))
             .shortName(RandomStringUtils.randomAlphabetic(5))
-            .deadLine(LocalDate.now().plus(2, ChronoUnit.YEARS))
+            .deadLine(LocalDateTime.now().plus(2, ChronoUnit.YEARS))
             .users(Collections.singleton(admin))
             .build()
         );
@@ -214,12 +214,12 @@ public class UserServiceIntTest {
         assertTrue(user.getAssigned().contains(task));
     }
 
-    private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
+    private void generateUserToken(User user, String tokenSeries, LocalDateTime LocalDateTime) {
         PersistentToken token = new PersistentToken();
         token.setSeries(tokenSeries);
         token.setUser(user);
         token.setTokenValue(tokenSeries + "-data");
-        token.setTokenDate(localDate);
+        token.setTokenDate(LocalDateTime);
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
         persistentTokenRepository.saveAndFlush(token);

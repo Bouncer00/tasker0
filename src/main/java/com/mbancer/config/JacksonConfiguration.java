@@ -1,10 +1,10 @@
 package com.mbancer.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -38,7 +38,7 @@ public class JacksonConfiguration {
     public void postConstruct() {
         this.builder.serializers(new ZonedDateTimeSerializer(ISO_FIXED_FORMAT));
         //Will not be needed anymore with SB 1.4 (Jackson > 2.7.1)
-        this.builder.deserializerByType(LocalDate.class, new LocalDateDeserializer(ISO_DATE_OPTIONAL_TIME));
+        this.builder.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(ISO_DATE_OPTIONAL_TIME));
     }
 
     @Bean

@@ -1,6 +1,6 @@
 package com.mbancer.web.rest.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.*;
@@ -12,7 +12,7 @@ import java.util.*;
 public class ProjectDTO implements Serializable {
 
     public ProjectDTO(){
-        created = LocalDate.now();
+        created = LocalDateTime.now();
     }
 
     private Long id;
@@ -22,9 +22,9 @@ public class ProjectDTO implements Serializable {
 
     private String description;
 
-    private LocalDate created;
+    private LocalDateTime created;
 
-    private LocalDate deadLine;
+    private LocalDateTime deadLine;
 
     private String shortName;
 
@@ -53,18 +53,18 @@ public class ProjectDTO implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    public LocalDate getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDate created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
-    public LocalDate getDeadLine() {
+    public LocalDateTime getDeadLine() {
         return deadLine;
     }
 
-    public void setDeadLine(LocalDate deadLine) {
+    public void setDeadLine(LocalDateTime deadLine) {
         this.deadLine = deadLine;
     }
 

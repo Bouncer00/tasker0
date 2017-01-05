@@ -26,7 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
@@ -50,8 +51,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CommentResourceIntTest {
 
 
-    private static final LocalDate DEFAULT_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDateTime DEFAULT_DATE = LocalDateTime.of(1, Month.FEBRUARY, 1, 1, 1);
+    private static final LocalDateTime UPDATED_DATE = LocalDateTime.now(ZoneId.systemDefault());
     private static final String DEFAULT_TEXT = "AAAAA";
     private static final String UPDATED_TEXT = "BBBBB";
 

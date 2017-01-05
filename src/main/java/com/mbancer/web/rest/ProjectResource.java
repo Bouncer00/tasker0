@@ -210,4 +210,17 @@ public class ProjectResource {
         }
     }
 
+    @RequestMapping(value = "/projects/{projectId}/deleteMember/{email}",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteMemberFromProject(@PathVariable("projectId") Long projectId, @PathVariable("email") String email){
+        log.debug("REST request to delete member : {} from project : {}", email, projectId);
+        try {
+            projectService.deleteMemberFromProject(projectId, email);
+            return ResponseEntity.ok().build();
+        } catch (NoSuchUserException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

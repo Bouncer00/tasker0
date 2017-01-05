@@ -56,6 +56,11 @@
                 method: 'PUT',
                 params: {projectId: '@projectId', email: '@email'}
             },
+            'deleteMember': {
+                url: resourceUrl + '/:projectId/deleteMember/:email',
+                method: 'PUT',
+                params: {projectId: '@projectId', email: '@email'}
+            },
             'delete': {
                 url: resourceUrl + '/:projectId', params: {projectId: '@projectId'}, method: 'DELETE'
             }

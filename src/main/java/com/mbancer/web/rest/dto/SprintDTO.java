@@ -1,6 +1,6 @@
 package com.mbancer.web.rest.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -16,9 +16,9 @@ public class SprintDTO {
 
     private Long projectId;
 
-    private LocalDate start;
+    private LocalDateTime start;
 
-    private LocalDate end;
+    private LocalDateTime end;
 
     private Set<UserStoryDTO> userStories = new HashSet<>();
 
@@ -72,19 +72,19 @@ public class SprintDTO {
         this.userStories = userStories;
     }
 
-    public LocalDate getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public void setStart(LocalDate start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public LocalDate getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDate end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 
@@ -115,8 +115,8 @@ public class SprintDTO {
         private String name;
         private Long projectId;
         private Set<UserStoryDTO> tasks = new HashSet<>();
-        private LocalDate start;
-        private LocalDate end;
+        private LocalDateTime start;
+        private LocalDateTime end;
 
         private Builder() {
         }
@@ -150,12 +150,12 @@ public class SprintDTO {
             return this;
         }
 
-        public Builder start(LocalDate start) {
+        public Builder start(LocalDateTime start) {
             this.start = start;
             return this;
         }
 
-        public Builder end(LocalDate end){
+        public Builder end(LocalDateTime end){
             this.end = end;
             return this;
         }

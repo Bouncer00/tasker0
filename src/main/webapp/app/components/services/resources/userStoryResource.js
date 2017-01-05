@@ -27,6 +27,9 @@
             },
             'moveDown': {
                 url: url + "/moveDown/:userStoryId", param: {userStoryId: "@userStoryId"}, method: 'GET'
+            },
+            'update': {
+                url: url, method: 'PUT'
             }
         });
     }

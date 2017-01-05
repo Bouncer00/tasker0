@@ -63,7 +63,7 @@ public class SwaggerConfiguration {
             .forCodeGeneration(true)
             .genericModelSubstitutes(ResponseEntity.class)
             .ignoredParameterTypes(java.sql.Date.class)
-            .directModelSubstitute(java.time.LocalDate.class, java.sql.Date.class)
+            .directModelSubstitute(java.time.LocalDateTime.class, java.sql.Date.class)
             .directModelSubstitute(java.time.ZonedDateTime.class, Date.class)
             .directModelSubstitute(java.time.LocalDateTime.class, Date.class)
             .select()

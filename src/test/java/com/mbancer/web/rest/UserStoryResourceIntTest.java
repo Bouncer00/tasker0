@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
@@ -54,14 +54,14 @@ public class UserStoryResourceIntTest {
     private static final Long DEFAULT_PRIORITY = 1L;
     private static final String DEFAULT_NAME = "AAAA";
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAAAA";
-    private static final LocalDate DEFAULT_CREATED = LocalDate.now().minus(3, ChronoUnit.WEEKS);
-    private static final LocalDate DEFAULT_UPDATED = LocalDate.now().minus(1, ChronoUnit.WEEKS);
+    private static final LocalDateTime DEFAULT_CREATED = LocalDateTime.now().minus(3, ChronoUnit.WEEKS);
+    private static final LocalDateTime DEFAULT_UPDATED = LocalDateTime.now().minus(1, ChronoUnit.WEEKS);
 
     private static final Long UPDATED_PRIORITY = 2L;
     private static final String UPDATED_NAME = "BBBB";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBBBB";
-    private static final LocalDate UPDATED_CREATED = LocalDate.now().minus(2, ChronoUnit.WEEKS);
-    private static final LocalDate UPDATED_UPDATED = LocalDate.now();
+    private static final LocalDateTime UPDATED_CREATED = LocalDateTime.now().minus(2, ChronoUnit.WEEKS);
+    private static final LocalDateTime UPDATED_UPDATED = LocalDateTime.now();
 
     @Inject
     private UserStoryRepository userStoryRepository;

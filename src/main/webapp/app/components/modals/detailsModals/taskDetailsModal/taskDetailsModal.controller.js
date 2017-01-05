@@ -9,6 +9,8 @@
         $scope.addComment = addComment;
         $scope.changeTaskBoard = changeTaskBoard;
         $scope.assignTaskToCurrentUser = assignTaskToCurrentUser;
+        $scope.updateTitle = updateTitle;
+        $scope.updateDescription = updateDescription;
 
         fetchTaskById(task.id);
 
@@ -65,6 +67,20 @@
         function getBoards() {
             Board.byProject({projectId: task.projectId}).$promise.then(function (result) {
                 $scope.boards = result.content;
+            })
+        }
+
+        function updateTitle(task, newTitle) {
+            task.title = newTitle;
+            Task.update(task).$promise.then(function (result) {
+                $scope.task = result;
+            })
+        }
+
+        function updateDescription(task, newDescription) {
+            task.description = newDescription;
+            Task.update(task).$promise.then(function (result) {
+                $scope.task = result;
             })
         }
     }

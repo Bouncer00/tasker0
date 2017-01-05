@@ -5,8 +5,14 @@
     <div class="row margined-task-row">
         <div class="col-xs-4">
             <div class="text-row-body">
-                <label for="title">Title:</label>
-                <span id="title">{{task.title}}</span>
+                <div class="row">
+                    <label for="title">Title:</label>
+                    <span id="title">{{task.title}}</span>
+                </div>
+                <div class="row">
+                    <input type="text" ng-model="newTitle"/>
+                    <button ng-click="updateTitle(task, newTitle); newTitle=null" class="btn btn-primary">Update title</button>
+                </div>
             </div>
         </div>
         <div class="col-xs-4">
@@ -41,20 +47,26 @@
         <div class="col-xs-6">
             <div class="text-row-body">
                 <label for="created">Created:</label>
-                <span id="created">{{task.created}}</span>
+                <span id="created">{{task.created | date:'yyyy-MM-dd HH:mm'}}</span>
             </div>
         </div>
         <div class="col-xs-6">
             <div class="text-row-body">
                 <label for="updated">Updated:</label>
-                <span id="updated">{{task.updated}}</span>
+                <span id="updated">{{task.updated | date:'yyyy-MM-dd HH:mm'}}</span>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12" style="margin-left: 3%">
-            <label for="description">Description:</label>
-            <span id="description">{{task.description}}</span>
+            <div class="row">
+                <label for="description">Description:</label>
+                <span id="description">{{task.description}}</span>
+            </div>
+            <div class="row">
+                <input type="text" ng-model="newDescription"/>
+                <button ng-click="updateDescription(task, newDescription); newDescription=null" class="btn btn-primary">Update description</button>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -65,7 +77,7 @@
                     <ul class="commentList">
                         <li ng-repeat="comment in task.comments">
                             <div class="commenterImage">
-                                {{comment.authorFirstName}} {{comment.authorLastName}} <span class="date sub-text">{{comment.date}}</span>
+                                {{comment.authorFirstName}} {{comment.authorLastName}} <span class="date sub-text">{{comment.date | date:'yyyy-MM-dd HH:mm'}}</span>
                             </div>
                             <div class="commentText">
                                 <p class="">{{comment.text}}</p>

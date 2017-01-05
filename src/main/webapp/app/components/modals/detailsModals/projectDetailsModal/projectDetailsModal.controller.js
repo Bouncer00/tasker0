@@ -10,6 +10,10 @@
         $scope.addMember = addMember;
         $scope.addBoard = addBoard;
         $scope.deleteBoard = deleteBoard;
+        $scope.updateName = updateName;
+        $scope.updateShortName = updateShortName;
+        $scope.updateDescription = updateDescription;
+        $scope.deleteMember = deleteMember;
 
         console.log(project);
 
@@ -40,6 +44,34 @@
                 _.remove(project.boards, function (b) {
                     return b === board;
                 })
+            });
+        }
+
+        function updateName(project, newName) {
+            project.name = newName;
+            Project.update(project).$promise.then(function (result) {
+                $scope.project = result;
+            })
+        }
+
+        function updateShortName(project, newShortName) {
+            project.created = newCreated;
+            Project.update(project).$promise.then(function (result) {
+                $scope.project = result;
+            })
+        }
+
+        function updateDescription(project, newDescription) {
+            project.deadline = newDeadline;
+            Project.update(project).$promise.then(function (result) {
+                $scope.project = result;
+            })
+        }
+
+        function deleteMember(memberEmail) {
+            Project.deleteMember({projectId: $scope.project.id, email:memberEmail})
+                .$promise.then(function (result) {
+                getProjectMembers();
             });
         }
     }

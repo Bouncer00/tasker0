@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -166,8 +168,15 @@ public class TaskServiceImpl implements TaskService{
         final Task task = taskRepository.findOne(taskId);
         final User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
         task.setAssignee(user);
-        task.setUpdated(LocalDate.now());
+        task.setUpdated(LocalDateTime.now());
         taskRepository.save(task);
+    }
+
+    @Override
+    public List<TaskDTO> getAssignedToCurrentUser() {
+        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        final List<Task> tasks = taskRepository.findAllByAssigneeId(currentUser.getId());
+        return tasks.stream().map(taskMapper::taskToTaskDTO).collect(Collectors.toList());
     }
 
     private Task getNextTask(Task task) {

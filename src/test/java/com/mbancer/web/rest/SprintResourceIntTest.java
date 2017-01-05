@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
@@ -52,13 +52,13 @@ public class SprintResourceIntTest {
 
     private static final long DEFAULT_NUMBER = 1L;
     private static final String DEFAULT_NAME = "AAAA";
-    private static final LocalDate DEFAULT_START = LocalDate.now().minus(3, ChronoUnit.WEEKS);
-    private static final LocalDate DEFAULT_END = LocalDate.now().minus(1, ChronoUnit.WEEKS);
+    private static final LocalDateTime DEFAULT_START = LocalDateTime.now().minus(3, ChronoUnit.WEEKS);
+    private static final LocalDateTime DEFAULT_END = LocalDateTime.now().minus(1, ChronoUnit.WEEKS);
 
     private static final long UPDATED_NUMBER = 2L;
     private static final String UPDATED_NAME = "BBBB";
-    private static final LocalDate UPDATED_START = LocalDate.now().minus(2, ChronoUnit.WEEKS);
-    private static final LocalDate UPDATED_END = LocalDate.now();
+    private static final LocalDateTime UPDATED_START = LocalDateTime.now().minus(2, ChronoUnit.WEEKS);
+    private static final LocalDateTime UPDATED_END = LocalDateTime.now();
 
     @Inject
     private SprintRepository sprintRepository;

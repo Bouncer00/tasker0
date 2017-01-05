@@ -219,4 +219,13 @@ public class TaskResource {
         return ResponseEntity.ok().build();
     }
 
+    @RequestMapping(value = "tasks/assignedToCurrentUser",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TaskDTO>> getAssignedToCurrentUser(){
+        log.debug("REST request to get tasks assigned to current user");
+        List<TaskDTO> taskDTOs = taskService.getAssignedToCurrentUser();
+        return ResponseEntity.ok(taskDTOs);
+    }
+
 }

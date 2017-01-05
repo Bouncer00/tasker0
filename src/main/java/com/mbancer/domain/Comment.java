@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -28,7 +28,7 @@ public class Comment implements Serializable {
 
     @NotNull
     @Column(name = "date", nullable = false)
-    private LocalDate date;
+    private LocalDateTime date;
 
     @NotNull
     @Column(name = "text", nullable = false)
@@ -70,11 +70,11 @@ public class Comment implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -137,7 +137,7 @@ public class Comment implements Serializable {
 
     public static final class Builder {
         private Long id;
-        private LocalDate date;
+        private LocalDateTime date;
         private String text;
         private User author;
         private Task task;
@@ -154,7 +154,7 @@ public class Comment implements Serializable {
             return this;
         }
 
-        public Builder date(LocalDate date) {
+        public Builder date(LocalDateTime date) {
             this.date = date;
             return this;
         }

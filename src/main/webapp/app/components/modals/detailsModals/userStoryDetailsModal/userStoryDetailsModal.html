@@ -1,26 +1,44 @@
 <div class="modal-header">
     <h3 class="modal-title" id="modal-title">User story details</h3>
 </div>
-<div class="modal-body">
+<div class="modal-body" style="margin-left: 10%">
     <div class="row">
-        <label for="name">Name:</label>
-        <span id="name">{{::userStory.name}}</span>
-    </div>
-    <div class="row">
-        <label for="description">Description:</label>
-        <span id="description">{{::userStory.description}}</span>
-    </div>
-    <div class="row">
-        <label for="created">Created:</label>
-        <span id="created">{{::userStory.created}}</span>
-    </div>
-    <div class="row">
-        <label for="deadline">Updated:</label>
-        <span id="deadline">{{::userStory.updated}}</span>
-    </div>
-    <div class="row">
-        <label for="priority">Priority:</label>
-        <span id="priority">{{::userStory.priority}}</span>
+        <div class="col-xs-6">
+            <div class="row">
+                <div class="row">
+                    <label for="name">Name:</label>
+                    <span id="name">{{userStory.name}}</span>
+                </div>
+                <div class="row">
+                    <input type="text" ng-model="newName"/>
+                    <button ng-click="updateName(userStory, newName)" class="btn btn-primary">Update name</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <label for="description">Description:</label>
+                    <span id="description">{{userStory.description}}</span>
+                </div>
+                <div class="row">
+                    <input type="text" ng-model="newDescription"/>
+                    <button ng-click="updateDescription(userStory, newDescription)" class="btn btn-primary">Update description</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="row">
+                <label for="created">Created:</label>
+                <span id="created">{{userStory.created | date:'yyyy-MM-dd HH:mm'}}</span>
+            </div>
+            <div class="row">
+                <label for="deadline">Updated:</label>
+                <span id="deadline">{{userStory.updated | date:'yyyy-MM-dd HH:mm'}}</span>
+            </div>
+            <div class="row">
+                <label for="priority">Priority:</label>
+                <span id="priority">{{userStory.priority}}</span>
+            </div>
+        </div>
     </div>
     <div class="row">
         <label style="margin-left: 5%">Comments:</label>
@@ -30,7 +48,7 @@
                     <ul class="commentList">
                         <li ng-repeat="comment in userStory.comments">
                             <div class="commenterImage">
-                                {{comment.authorFirstName}} {{comment.authorLastName}} <span class="date sub-text">{{comment.date}}</span>
+                                {{comment.authorFirstName}} {{comment.authorLastName}} <span class="date sub-text">{{comment.date | date:'yyyy-MM-dd HH:mm'}}</span>
                             </div>
                             <div class="commentText">
                                 <p class="">{{comment.text}}</p>

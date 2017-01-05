@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.persistence.*;
@@ -38,7 +38,7 @@ public class PersistentToken implements Serializable {
 
     @JsonIgnore
     @Column(name = "token_date")
-    private LocalDate tokenDate;
+    private LocalDateTime tokenDate;
 
     //an IPV6 address max length is 39 characters
     @Size(min = 0, max = 39)
@@ -68,11 +68,11 @@ public class PersistentToken implements Serializable {
         this.tokenValue = tokenValue;
     }
 
-    public LocalDate getTokenDate() {
+    public LocalDateTime getTokenDate() {
         return tokenDate;
     }
 
-    public void setTokenDate(LocalDate tokenDate) {
+    public void setTokenDate(LocalDateTime tokenDate) {
         this.tokenDate = tokenDate;
     }
 

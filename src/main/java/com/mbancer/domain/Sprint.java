@@ -10,7 +10,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -35,10 +35,10 @@ public class Sprint implements Serializable{
 
     @NotNull
     @Column(name = "sprint_start", nullable = false)
-    private LocalDate start = LocalDate.now();
+    private LocalDateTime start = LocalDateTime.now();
 
     @Column(name = "sprint_end")
-    private LocalDate end;
+    private LocalDateTime end;
 
     @ManyToOne
     private Project project;
@@ -100,19 +100,19 @@ public class Sprint implements Serializable{
         this.userStories = userStories;
     }
 
-    public LocalDate getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public void setStart(LocalDate start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public LocalDate getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDate end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 
@@ -147,8 +147,8 @@ public class Sprint implements Serializable{
         private String name;
         private Project project;
         private Set<UserStory> userStories;
-        private LocalDate start;
-        private LocalDate end;
+        private LocalDateTime start;
+        private LocalDateTime end;
 
         private Builder() {
         }
@@ -182,12 +182,12 @@ public class Sprint implements Serializable{
             return this;
         }
 
-        public Builder start(LocalDate start){
+        public Builder start(LocalDateTime start){
             this.start = start;
             return this;
         }
 
-        public Builder end(LocalDate end){
+        public Builder end(LocalDateTime end){
             this.end = end;
             return this;
         }

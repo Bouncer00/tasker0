@@ -1,6 +1,6 @@
 package com.mbancer.web.rest.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ public class CommentDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private LocalDate date = LocalDate.now();
+    private LocalDateTime date = LocalDateTime.now();
 
     @NotNull
     private String text;
@@ -54,11 +54,11 @@ public class CommentDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
     public String getText() {

@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static java.util.Objects.nonNull;
@@ -123,7 +123,7 @@ public class BoardServiceImpl implements BoardService {
             }
             task.setBoard(targetBoard);
         }
-        task.setUpdated(LocalDate.now());
+        task.setUpdated(LocalDateTime.now());
         return taskMapper.taskToTaskDTO(taskRepository.save(task));
     }
 

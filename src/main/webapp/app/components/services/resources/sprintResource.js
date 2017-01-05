@@ -23,6 +23,9 @@
             },
             'delete': {
                 url: url + '/:sprintId', params: {sprintId: '@sprintId'}, method: 'DELETE'
+            },
+            'update': {
+                url: url, method: 'PUT'
             }
         });
     }

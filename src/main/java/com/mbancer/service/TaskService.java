@@ -64,4 +64,5 @@ public interface TaskService {
 
     void assignTaskToCurrentUser(final Long taskId);
 
+    List<TaskDTO> getAssignedToCurrentUser();
 }

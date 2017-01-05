@@ -38,7 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,11 +72,11 @@ public class ProjectResourceIntTest {
     private static final String DEFAULT_SHORTNAME = "CCCCC";
     private static final String UPDATED_SHORTNAME = "DDDDD";
 
-    private static final LocalDate DEFAULT_CREATED = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_CREATED = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDateTime DEFAULT_CREATED = LocalDateTime.of(1, Month.FEBRUARY, 1, 1, 1);
+    private static final LocalDateTime UPDATED_CREATED = LocalDateTime.now(ZoneId.systemDefault());
 
-    private static final LocalDate DEFAULT_DEAD_LINE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DEAD_LINE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDateTime DEFAULT_DEAD_LINE = LocalDateTime.of(1, Month.FEBRUARY, 1, 1, 1);
+    private static final LocalDateTime UPDATED_DEAD_LINE = LocalDateTime.now(ZoneId.systemDefault());
 
     @Inject
     private ProjectRepository projectRepository;

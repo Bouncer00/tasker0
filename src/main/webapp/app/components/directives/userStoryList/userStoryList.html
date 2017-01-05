@@ -13,7 +13,7 @@
         <tr ng-repeat="userStory in userStories" >
             <td ng-click="selectUserStory(userStory)">{{userStory.name}}</td>
             <td ng-click="selectUserStory(userStory)">{{userStory.priority}}</td>
-            <td ng-click="selectUserStory(userStory)">{{userStory.updated}}</td>
+            <td ng-click="selectUserStory(userStory)">{{userStory.updated | date:'yyyy-MM-dd HH:mm'}}</td>
             <td>
                 <span ng-click="openDetails(userStory)" class="glyphicon glyphicon-info-sign"></span>
                 <span ng-click="moveUp(userStory)" class="glyphicon glyphicon-arrow-up"></span>

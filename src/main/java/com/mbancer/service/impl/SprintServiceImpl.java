@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
@@ -51,7 +51,7 @@ public class SprintServiceImpl implements SprintService {
             sprintDTO.setNumber(getNextSprintNumber(sprintDTO.getProjectId()));
         }
         if(sprintDTO.getStart() == null){
-            sprintDTO.setStart(LocalDate.now());
+            sprintDTO.setStart(LocalDateTime.now());
         }
         Sprint sprint = sprintMapper.sprintDTOToSprint(sprintDTO);
         Project project = projectRepository.findOne(sprintDTO.getProjectId());

@@ -15,7 +15,7 @@
                 templateUrl: 'app/components/modals/detailsModals/projectDetailsModal/projectDetailsModal.html',
                 controller: 'ProjectDetailsModalCtrl',
                 controllerAs: 'vm',
-                size: "md",
+                size: "lg",
                 resolve: {
                     project: function () {
                         return project;

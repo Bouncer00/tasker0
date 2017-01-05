@@ -163,4 +163,16 @@ public class ProjectServiceImpl implements ProjectService{
         user.getProjects().add(project);
 
     }
+
+    @Override
+    public void deleteMemberFromProject(Long projectId, String email) throws NoSuchUserException {
+        final Project project = projectRepository.findOne(projectId);
+        final Optional<User> userOptional = userRepository.findOneByEmail(email);
+
+        if(!userOptional.isPresent()) throw new NoSuchUserException("User: " + email + " does not exist");
+
+        final User user = userOptional.get();
+        project.getUsers().remove(user);
+        user.getProjects().remove(project);
+    }
 }

@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import java.util.*;
@@ -115,6 +115,8 @@ public class UserService {
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         authorities.add(authority);
         newUser.setAuthorities(authorities);
+        newUser.setActivated(true);
+        newUser.setActivationKey(null);
         userRepository.save(newUser);
         userSearchRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
@@ -144,6 +146,7 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(ZonedDateTime.now());
         user.setActivated(true);
+        user.setActivationKey(null);
         userRepository.save(user);
         userSearchRepository.save(user);
         log.debug("Created Information for User: {}", user);
@@ -231,7 +234,7 @@ public class UserService {
      */
     @Scheduled(cron = "0 0 0 * * ?")
     public void removeOldPersistentTokens() {
-        LocalDate now = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
         persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).stream().forEach(token -> {
             log.debug("Deleting token {}", token.getSeries());
             User user = token.getUser();

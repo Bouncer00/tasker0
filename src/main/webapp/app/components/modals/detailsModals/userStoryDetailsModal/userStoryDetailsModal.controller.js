@@ -8,7 +8,8 @@
     function UserStoryDetailsModalCtrl($scope, userStory, Comment, UserStory) {
         $scope.userStory = userStory;
         $scope.addComment = addComment;
-        console.log(userStory);
+        $scope.updateName = updateName;
+        $scope.updateDescription = updateDescription;
 
         function addComment(text) {
             var comment = {
@@ -22,6 +23,20 @@
                     $scope.userStory = result;
                 });
 
+            })
+        }
+
+        function updateName(userStory, newName) {
+            userStory.name = newName;
+            UserStory.update(userStory).$promise.then(function (result) {
+                $scope.userStory = result;
+            })
+        }
+
+        function updateDescription(userStory, newDescription) {
+            userStory.description = newDescription;
+            UserStory.update(userStory).$promise.then(function (result) {
+                $scope.userStory = result;
             })
         }
     }

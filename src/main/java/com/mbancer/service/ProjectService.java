@@ -60,4 +60,6 @@ public interface ProjectService {
     Page<UserDTO> getMembers(Long projectId, Pageable pageable);
 
     void addMemberToProject(Long projectId, String email) throws NoSuchUserException;
+
+    void deleteMemberFromProject(Long projectId, String email) throws NoSuchUserException;
 }

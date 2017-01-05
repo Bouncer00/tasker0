@@ -8,7 +8,16 @@
         return {
             templateUrl: 'app/components/directives/taskList/taskList.html',
             controller: 'taskListCtrl',
-            controllerAs: 'vm'
+            controllerAs: 'vm',
+            scope: {
+                fetchTasks: '&',
+                moveDown: '&',
+                moveUp: '&',
+                remove: '&',
+                control: '=',
+                assigned: '='
+
+            }
         }
     }
 })();

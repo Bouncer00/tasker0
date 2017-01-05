@@ -24,19 +24,19 @@
             <column name="title" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            
+
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            
-            <column name="created" type="date">
+
+            <column name="created" type="timestamp">
                 <constraints nullable="true" />
             </column>
-            
-            <column name="updated" type="date">
+
+            <column name="updated" type="timestamp">
                 <constraints nullable="true" />
             </column>
-            
+
             <column name="user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -47,6 +47,6 @@
 
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>
-        
+
     </changeSet>
 </databaseChangeLog>
