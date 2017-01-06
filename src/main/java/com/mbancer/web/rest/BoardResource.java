@@ -104,17 +104,6 @@ public class BoardResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("board", id.toString())).build();
     }
 
-    @RequestMapping(value = "/_search/boards",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<BoardDTO>> searchBoards(@RequestParam String query, Pageable pageable) throws URISyntaxException {
-        log.debug("REST request to search for a page of Boards for query {}", query);
-        Page<Board> page = boardService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/boards");
-        return new ResponseEntity<>(boardMapper.boardsToBoardDTOs(page.getContent()), headers, HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/boards/moveTask",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)

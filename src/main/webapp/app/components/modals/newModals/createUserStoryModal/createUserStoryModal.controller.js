@@ -8,6 +8,7 @@
     function CreateUserStoryModalCtrl($scope, $uibModalInstance, sprint) {
         $scope.ok = ok;
         $scope.cancel = cancel;
+        $scope.sprint = sprint;
         $scope.userStory = {};
 
         function ok() {

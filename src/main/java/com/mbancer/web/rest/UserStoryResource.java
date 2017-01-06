@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,6 +61,7 @@ public class UserStoryResource {
         if(userStoryDTO.getId() == null){
             return createUserStory(userStoryDTO);
         }
+        userStoryDTO.setUpdated(LocalDateTime.now());
         UserStoryDTO result = userStoryService.save(userStoryDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("userStory", result.getId().toString()))
@@ -100,17 +102,6 @@ public class UserStoryResource {
         log.debug("REST request to delete Sprint : {}", id);
         userStoryService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("board", id.toString())).build();
-    }
-
-    @RequestMapping(value = "/_search/userStories",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<UserStoryDTO>> searchUserStories(@RequestParam String query, Pageable pageable) throws URISyntaxException {
-        log.debug("REST request to search for a page of Sprints for query {}", query);
-        Page<UserStory> page = userStoryService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/userStories");
-        return new ResponseEntity<>(userStoryMapper.userStoriesToUserStoryDTOs(page.getContent()), headers, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/userStories/bySprint/{sprintId}",

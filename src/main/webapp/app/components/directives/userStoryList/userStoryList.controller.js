@@ -13,7 +13,8 @@
         $scope.openDetails = openDetails;
         $scope.moveUp = moveUp;
         $scope.moveDown = moveDown;
-        $scope.remove = remove
+        $scope.remove = remove;
+        var currentSprintId;
 
         if($scope.control) {
             $scope.control.resetUserStories = resetUserStories;
@@ -25,20 +26,19 @@
         }
 
         function fetchUserStories(sprintId) {
+            currentSprintId = sprintId;
             UserStory.getBySprint({sprintId: sprintId}).$promise.then(function (result) {
                 $scope.userStories = result.content;
             });
         }
 
         function moveUp(userStory) {
-            console.log("moveUserStoryUp");
             UserStory.moveUp({userStoryId: userStory.id}).$promise.then(function (result) {
                 fetchUserStories(userStory.sprintId);
             })
         }
 
         function moveDown(userStory) {
-            console.log("moveUserStoryDown");
             UserStory.moveDown({userStoryId: userStory.id}).$promise.then(function (result) {
                 fetchUserStories(userStory.sprintId);
             });
@@ -50,8 +50,12 @@
 
         function remove(userStory) {
             UserStory.delete({userStoryId: userStory.id}).$promise.then(function (result) {
+                if($scope.control.currentUserStory && $scope.control.currentUserStory.id == userStory.id) {
+                    $scope.currentUserStory = null;
+                    $scope.control.resetTasks();
+                }
                 fetchUserStories(userStory.sprintId);
-            })
+            });
         }
     }
 })();

@@ -44,9 +44,6 @@ public class BoardServiceImpl implements BoardService {
     private ProjectRepository projectRepository;
 
     @Inject
-    private BoardSearchRepository boardSearchRepository;
-
-    @Inject
     private TaskRepository taskRepository;
 
     @Inject
@@ -63,7 +60,6 @@ public class BoardServiceImpl implements BoardService {
             project.getBoards().add(board);
         }
         BoardDTO result = boardMapper.boardToBoardDTO(board);
-        boardSearchRepository.save(board);
         return result;
     }
 
@@ -91,14 +87,10 @@ public class BoardServiceImpl implements BoardService {
             final Project project = projectRepository.findOne(board.getProject().getId());
             project.getBoards().remove(board);
         }
+        for(Task task: board.getTasks()){
+            task.setBoard(null);
+        }
         boardRepository.delete(id);
-        boardSearchRepository.delete(id);
-    }
-
-    @Override
-    public Page<Board> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of Boards for query {}", query);
-        return boardSearchRepository.search(queryStringQuery(query), pageable);
     }
 
     @Override

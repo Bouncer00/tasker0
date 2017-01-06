@@ -124,9 +124,6 @@ public class BoardResourceIntTest {
         assertThat(boards).hasSize(databaseSizeBeforeCreate + 1);
         Board testBoard = boards.get(boards.size() - 1);
         assertThat(testBoard.getName()).isEqualTo(DEFAULT_NAME);
-
-        Board boardES = boardSearchRepository.findOne(testBoard.getId());
-        assertThat(boardES).isEqualToComparingFieldByField(testBoard);
     }
 
     @Test
@@ -181,41 +178,20 @@ public class BoardResourceIntTest {
         assertThat(boards).hasSize(databaseSizeBeforeUpdate);
         Board testBoard = boards.get(boards.size() - 1);
         assertThat(testBoard.getName()).isEqualTo(UPDATED_NAME);
-
-        Board boardES = boardSearchRepository.findOne(testBoard.getId());
-        assertThat(boardES).isEqualToComparingFieldByField(testBoard);
     }
 
     @Test
     @Transactional
     public void deleteBoard() throws Exception {
         boardRepository.saveAndFlush(board0);
-        boardSearchRepository.save(board0);
         int databaseSizeBeforeDelete = boardRepository.findAll().size();
 
         restBoardMockMvc.perform(delete("/api/boards/{id}", board0.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
-        boolean boardExistsInEs = boardSearchRepository.exists(board0.getId());
-        assertThat(boardExistsInEs).isFalse();
-
         List<Board> boards = boardRepository.findAll();
         assertThat(boards).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchBoard() throws Exception {
-        boardRepository.saveAndFlush(board0);
-        boardSearchRepository.save(board0);
-
-        restBoardMockMvc.perform(get("/api/_search/boards?query=id:" + board0.getId()))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(board0.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
     }
 
     @Test

@@ -102,17 +102,6 @@ public class SprintResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("board", id.toString())).build();
     }
 
-    @RequestMapping(value = "/_search/sprints",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<SprintDTO>> searchSprints(@RequestParam String query, Pageable pageable) throws URISyntaxException {
-        log.debug("REST request to search for a page of Sprints for query {}", query);
-        Page<Sprint> page = sprintService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/sprints");
-        return new ResponseEntity<>(sprintMapper.sprintsToSprintDTOs(page.getContent()), headers, HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/sprints/byProject/{projectId}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)

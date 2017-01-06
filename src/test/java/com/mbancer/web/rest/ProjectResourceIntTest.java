@@ -147,10 +147,6 @@ public class ProjectResourceIntTest {
         assertThat(testProject.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testProject.getCreated()).isEqualTo(DEFAULT_CREATED);
         assertThat(testProject.getDeadLine()).isEqualTo(DEFAULT_DEAD_LINE);
-
-        // Validate the Project in ElasticSearch
-        Project projectEs = projectSearchRepository.findOne(testProject.getId());
-        assertThat(projectEs).isEqualToComparingFieldByField(testProject);
     }
 
     @Test
@@ -246,10 +242,6 @@ public class ProjectResourceIntTest {
         assertThat(testProject.getCreated()).isEqualTo(UPDATED_CREATED);
         assertThat(testProject.getDeadLine()).isEqualTo(UPDATED_DEAD_LINE);
         assertThat(testProject.getShortName()).isEqualTo(UPDATED_SHORTNAME);
-
-        // Validate the Project in ElasticSearch
-        Project projectEs = projectSearchRepository.findOne(testProject.getId());
-        assertThat(projectEs).isEqualToComparingFieldByField(testProject);
     }
 
     @Test
@@ -272,24 +264,6 @@ public class ProjectResourceIntTest {
         // Validate the database is empty
         List<Project> projects = projectRepository.findAll();
         assertThat(projects).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchProject() throws Exception {
-        // Initialize the database
-        projectRepository.saveAndFlush(project);
-        projectSearchRepository.save(project);
-
-        // Search the project
-        restProjectMockMvc.perform(get("/api/_search/projects?query=id:" + project.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(project.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].created").value(hasItem(DEFAULT_CREATED.toString())))
-            .andExpect(jsonPath("$.[*].deadLine").value(hasItem(DEFAULT_DEAD_LINE.toString())));
     }
 
     @Test

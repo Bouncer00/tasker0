@@ -4,6 +4,7 @@ import com.mbancer.Tasker0App;
 import com.mbancer.domain.*;
 import com.mbancer.repository.*;
 import com.mbancer.repository.search.CommentSearchRepository;
+import com.mbancer.security.SecurityUtils;
 import com.mbancer.service.CommentService;
 import com.mbancer.service.util.EntityGenerators;
 import com.mbancer.web.rest.dto.CommentDTO;
@@ -110,6 +111,7 @@ public class CommentResourceIntTest {
         comment = new Comment();
         comment.setDate(DEFAULT_DATE);
         comment.setText(DEFAULT_TEXT);
+        SecurityUtils.setCurrentUserLogin("admin");
     }
 
     @Test
@@ -131,29 +133,6 @@ public class CommentResourceIntTest {
         Comment testComment = comments.get(comments.size() - 1);
         assertThat(testComment.getDate()).isEqualTo(DEFAULT_DATE);
         assertThat(testComment.getText()).isEqualTo(DEFAULT_TEXT);
-
-        // Validate the Comment in ElasticSearch
-        Comment commentEs = commentSearchRepository.findOne(testComment.getId());
-        assertThat(commentEs).isEqualToComparingFieldByField(testComment);
-    }
-
-    @Test
-    @Transactional
-    public void checkDateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = commentRepository.findAll().size();
-        // set the field null
-        comment.setDate(null);
-
-        // Create the Comment, which fails.
-        CommentDTO commentDTO = commentMapper.commentToCommentDTO(comment);
-
-        restCommentMockMvc.perform(post("/api/comments")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(commentDTO)))
-                .andExpect(status().isBadRequest());
-
-        List<Comment> comments = commentRepository.findAll();
-        assertThat(comments).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -239,10 +218,6 @@ public class CommentResourceIntTest {
         Comment testComment = comments.get(comments.size() - 1);
         assertThat(testComment.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testComment.getText()).isEqualTo(UPDATED_TEXT);
-
-        // Validate the Comment in ElasticSearch
-        Comment commentEs = commentSearchRepository.findOne(testComment.getId());
-        assertThat(commentEs).isEqualToComparingFieldByField(testComment);
     }
 
     @Test
@@ -258,29 +233,9 @@ public class CommentResourceIntTest {
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
-        // Validate ElasticSearch is empty
-        boolean commentExistsInEs = commentSearchRepository.exists(comment.getId());
-        assertThat(commentExistsInEs).isFalse();
-
         // Validate the database is empty
         List<Comment> comments = commentRepository.findAll();
         assertThat(comments).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchComment() throws Exception {
-        // Initialize the database
-        commentRepository.saveAndFlush(comment);
-        commentSearchRepository.save(comment);
-
-        // Search the comment
-        restCommentMockMvc.perform(get("/api/_search/comments?query=id:" + comment.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(comment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT.toString())));
     }
 
     @Test

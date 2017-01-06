@@ -15,8 +15,6 @@ public interface SprintService {
 
     void delete(Long id);
 
-    Page<Sprint> search(String query, Pageable pageable);
-
     Page<SprintDTO> findByProjectId(Long projectId, Pageable pageable);
 
     Sprint getNextSprint(Sprint sprint);

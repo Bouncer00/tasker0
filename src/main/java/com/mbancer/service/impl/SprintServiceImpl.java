@@ -2,6 +2,8 @@ package com.mbancer.service.impl;
 
 import com.mbancer.domain.Project;
 import com.mbancer.domain.Sprint;
+import com.mbancer.domain.Task;
+import com.mbancer.domain.UserStory;
 import com.mbancer.repository.CommentRepository;
 import com.mbancer.repository.ProjectRepository;
 import com.mbancer.repository.SprintRepository;
@@ -20,6 +22,9 @@ import javax.inject.Inject;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
@@ -31,9 +36,6 @@ public class SprintServiceImpl implements SprintService {
 
     @Inject
     private SprintRepository sprintRepository;
-
-    @Inject
-    private SprintSearchRepository sprintSearchRepository;
 
     @Inject
     private SprintMapper sprintMapper;
@@ -81,16 +83,18 @@ public class SprintServiceImpl implements SprintService {
     public void delete(Long id) {
         log.debug("Request to delete Sprint : {}", id);
         Sprint sprint = sprintRepository.findOne(id);
+        Project project = sprint.getProject();
+        List<Sprint> sprints = project.getSprints().stream().sorted(Comparator.comparing(Sprint::getNumber)).collect(Collectors.toList());
+        int sprintToDeleteIndex = sprints.indexOf(sprint);
+        if(sprintToDeleteIndex != -1) {
+            for (int i = sprintToDeleteIndex; i < sprints.size(); i++) {
+                sprints.get(i).setNumber(sprints.get(i).getNumber() - 1);
+            }
+            sprintRepository.save(sprints);
+        }
         sprint.getProject().getSprints().remove(sprint);
         sprint.getComments().forEach(commentRepository::delete);
         sprintRepository.delete(id);
-        sprintSearchRepository.delete(id);
-    }
-
-    @Override
-    public Page<Sprint> search(String query, Pageable pageable) {
-        log.debug("Request for page of Sprints for query {}", query);
-        return sprintSearchRepository.search(queryStringQuery(query), pageable);
     }
 
     @Override

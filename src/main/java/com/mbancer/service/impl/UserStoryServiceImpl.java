@@ -21,6 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 @Service
@@ -34,9 +38,6 @@ public class UserStoryServiceImpl implements UserStoryService {
 
     @Inject
     private UserStoryRepository userStoryRepository;
-
-    @Inject
-    private UserStorySearchRepository userStorySearchRepository;
 
     @Inject
     private SprintRepository sprintRepository;
@@ -76,16 +77,18 @@ public class UserStoryServiceImpl implements UserStoryService {
     public void delete(Long id) {
         log.debug("Request to delete UserStory : {]", id);
         UserStory userStory = userStoryRepository.findOne(id);
+        Sprint sprint = userStory.getSprint();
+        List<UserStory> userStories = sprint.getUserStories().stream().sorted(Comparator.comparing(UserStory::getNumber)).collect(Collectors.toList());
+        int userStoryToDeleteIndex = userStories.indexOf(userStory);
+        if(userStoryToDeleteIndex != -1) {
+            for (int i = userStoryToDeleteIndex; i < userStories.size(); i++) {
+                userStories.get(i).setNumber(userStories.get(i).getNumber() - 1);
+            }
+            userStoryRepository.save(userStories);
+        }
         userStory.getSprint().getUserStories().remove(userStory);
         userStory.getComments().forEach(commentRepository::delete);
         userStoryRepository.delete(id);
-        userStorySearchRepository.delete(id);
-    }
-
-    @Override
-    public Page<UserStory> search(String query, Pageable pageable) {
-        log.debug("Request for page of UserStories for query : {]", query);
-        return userStorySearchRepository.search(queryStringQuery(query), pageable);
     }
 
     @Override
@@ -130,13 +133,15 @@ public class UserStoryServiceImpl implements UserStoryService {
         if(userStory.getNumber() == userStory.getSprint().getUserStories().size() - 1){
             Sprint sprint = sprintRepository.findOne(userStory.getSprint().getId());
             Sprint nextSprint = sprintService.getNextSprint(sprint);
-            sprint.getUserStories().remove(userStory);
-            for(UserStory usUserStory: nextSprint.getUserStories()){
-                usUserStory.setNumber(usUserStory.getNumber() + 1);
+            if(null != nextSprint && !sprint.equals(nextSprint)) {
+                sprint.getUserStories().remove(userStory);
+                for (UserStory usUserStory : nextSprint.getUserStories()) {
+                    usUserStory.setNumber(usUserStory.getNumber() + 1);
+                }
+                userStory.setSprint(nextSprint);
+                userStory.setNumber(0L);
+                nextSprint.getUserStories().add(userStory);
             }
-            userStory.setSprint(nextSprint);
-            userStory.setNumber(0L);
-            nextSprint.getUserStories().add(userStory);
             return userStory;
         }
         Sprint sprint = sprintRepository.findOne(userStory.getSprint().getId());
@@ -147,13 +152,15 @@ public class UserStoryServiceImpl implements UserStoryService {
         Sprint sprint = sprintRepository.findOne(userStory.getSprint().getId());
         if(userStory.getNumber() == 0){
             Sprint previousSprint = sprintService.getPreviousSprint(sprint);
-            userStory.setSprint(previousSprint);
-            userStory.setNumber((long)previousSprint.getUserStories().size());
-            sprint.getUserStories().remove(userStory);
-            for(UserStory usUserStory: sprint.getUserStories()){
-                usUserStory.setNumber(usUserStory.getNumber() - 1);
+            if(null != previousSprint) {
+                userStory.setSprint(previousSprint);
+                userStory.setNumber((long) previousSprint.getUserStories().size());
+                sprint.getUserStories().remove(userStory);
+                for (UserStory usUserStory : sprint.getUserStories()) {
+                    usUserStory.setNumber(usUserStory.getNumber() - 1);
+                }
+                previousSprint.getUserStories().add(userStory);
             }
-            previousSprint.getUserStories().add(userStory);
             return userStory;
         }
 

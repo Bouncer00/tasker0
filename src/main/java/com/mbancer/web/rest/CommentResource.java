@@ -107,18 +107,6 @@ public class CommentResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("comment", id.toString())).build();
     }
 
-    @RequestMapping(value = "/_search/comments",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<CommentDTO>> searchComments(@RequestParam String query, Pageable pageable)
-        throws URISyntaxException {
-        log.debug("REST request to search for a page of Comments for query {}", query);
-        Page<Comment> page = commentService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/comments");
-        return new ResponseEntity<>(commentMapper.commentsToCommentDTOs(page.getContent()), headers, HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/comments/byTask/{taskId}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)

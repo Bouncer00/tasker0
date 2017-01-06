@@ -142,25 +142,6 @@ public class ProjectResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("project", id.toString())).build();
     }
 
-    /**
-     * SEARCH  /_search/projects?query=:query : search for the project corresponding
-     * to the query.
-     *
-     * @param query the query of the project search
-     * @return the result of the search
-     */
-    @RequestMapping(value = "/_search/projects",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<ProjectDTO>> searchProjects(@RequestParam String query, Pageable pageable)
-        throws URISyntaxException {
-        log.debug("REST request to search for a page of Projects for query {}", query);
-        Page<Project> page = projectService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/projects");
-        return new ResponseEntity<>(projectMapper.projectsToProjectDTOs(page.getContent()), headers, HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/projects/{projectId}/addTask/{taskId}",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)

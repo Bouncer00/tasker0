@@ -33,11 +33,9 @@ public class JacksonConfiguration {
     @Autowired
     private Jackson2ObjectMapperBuilder builder;
 
-    //To be replaced by a Jackson2ObjectMapperBuilderCustomizer in Spring-boot 1.4
     @PostConstruct
     public void postConstruct() {
         this.builder.serializers(new ZonedDateTimeSerializer(ISO_FIXED_FORMAT));
-        //Will not be needed anymore with SB 1.4 (Jackson > 2.7.1)
         this.builder.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(ISO_DATE_OPTIONAL_TIME));
     }
 

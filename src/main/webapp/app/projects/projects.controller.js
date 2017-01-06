@@ -35,10 +35,14 @@
         $scope.currentProject;
         $scope.currentSprint;
         $scope.currentUserStory;
+        $scope.control.currentProject = null;;
+        $scope.control.currentSprint = null;
+        $scope.control.currentUserStory = null;
 
         function selectProject(project) {
             if ($scope.currentProject != project) {
                 $scope.currentProject = project;
+                $scope.control.currentProject = project;
                 $scope.control.resetSprints();
                 $scope.control.resetUserStories();
                 $scope.control.resetTasks();
@@ -52,6 +56,8 @@
         function selectSprint(sprint) {
             if($scope.currentSprint != sprint) {
                 $scope.currentSprint = sprint;
+                $scope.control.currentSprint = sprint;
+                console.log($scope.control);
                 $scope.control.resetUserStories();
                 $scope.control.resetTasks();
                 $scope.control.fetchUserStories(sprint.id);
@@ -63,6 +69,7 @@
         function selectUserStory(userStory) {
             if($scope.currentUserStory != userStory){
                 $scope.currentUserStory = userStory;
+                $scope.control.currentUserStory = userStory;
                 $scope.control.resetTasks();
                 $scope.control.fetchTasks(userStory.id);
                 $scope.currentTask = null;

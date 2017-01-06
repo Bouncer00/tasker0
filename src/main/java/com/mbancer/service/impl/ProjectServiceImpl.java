@@ -51,9 +51,6 @@ public class ProjectServiceImpl implements ProjectService{
     @Inject
     private UserMapper userMapper;
 
-    @Inject
-    private ProjectSearchRepository projectSearchRepository;
-
     /**
      * Save a project.
      *
@@ -67,7 +64,6 @@ public class ProjectServiceImpl implements ProjectService{
         project.getUsers().add(user);
         project = projectRepository.save(project);
         ProjectDTO result = projectMapper.projectToProjectDTO(project);
-        projectSearchRepository.save(project);
         return result;
     }
 
@@ -106,19 +102,6 @@ public class ProjectServiceImpl implements ProjectService{
     public void delete(Long id) {
         log.debug("Request to delete Project : {}", id);
         projectRepository.delete(id);
-        projectSearchRepository.delete(id);
-    }
-
-    /**
-     * Search for the project corresponding to the query.
-     *
-     *  @param query the query of the search
-     *  @return the list of entities
-     */
-    @Transactional(readOnly = true)
-    public Page<Project> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of Projects for query {}", query);
-        return projectSearchRepository.search(queryStringQuery(query), pageable);
     }
 
     @Transactional

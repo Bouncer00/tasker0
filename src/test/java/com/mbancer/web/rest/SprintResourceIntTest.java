@@ -139,10 +139,6 @@ public class SprintResourceIntTest {
         assertThat(testSprint.getEnd()).isEqualTo(DEFAULT_END);
         assertThat(testSprint.getNumber()).isEqualTo(DEFAULT_NUMBER);
         assertThat(testSprint.getEnd()).isEqualTo(DEFAULT_END);
-
-        // Validate the Sprint in ElasticSearch
-        Sprint sprintEs = sprintSearchRepository.findOne(testSprint.getId());
-        assertThat(sprintEs).isEqualToComparingFieldByField(testSprint);
     }
 
     @Test
@@ -191,7 +187,6 @@ public class SprintResourceIntTest {
     public void updateSprint() throws Exception {
         // Initialize the database
         sprintRepository.saveAndFlush(sprint);
-        sprintSearchRepository.save(sprint);
         int databaseSizeBeforeUpdate = sprintRepository.findAll().size();
 
         // Update the sprint
@@ -218,10 +213,6 @@ public class SprintResourceIntTest {
         assertThat(testSprint.getEnd()).isEqualTo(UPDATED_END);
         assertThat(testSprint.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testSprint.getNumber()).isEqualTo(UPDATED_NUMBER);
-
-        // Validate the Sprint in ElasticSearch
-        Sprint sprintEs = sprintSearchRepository.findOne(testSprint.getId());
-        assertThat(sprintEs).isEqualToComparingFieldByField(testSprint);
     }
 
     @Test
@@ -229,7 +220,6 @@ public class SprintResourceIntTest {
     public void deleteSprint() throws Exception {
         // Initialize the database
         sprintRepository.saveAndFlush(sprint);
-        sprintSearchRepository.save(sprint);
         int databaseSizeBeforeDelete = sprintRepository.findAll().size();
 
         // Get the sprint
@@ -237,31 +227,9 @@ public class SprintResourceIntTest {
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
-        // Validate ElasticSearch is empty
-        boolean sprintExistsInEs = sprintSearchRepository.exists(sprint.getId());
-        assertThat(sprintExistsInEs).isFalse();
-
         // Validate the database is empty
         List<Sprint> sprints = sprintRepository.findAll();
         assertThat(sprints).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchSprint() throws Exception {
-        // Initialize the database
-        sprintRepository.saveAndFlush(sprint);
-        sprintSearchRepository.save(sprint);
-
-        // Search the sprint
-        restSprintMockMvc.perform(get("/api/_search/sprints?query=id:" + sprint.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(jsonPath("$.[*].id").value(hasItem(sprint.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(sprint.getName())))
-            .andExpect(jsonPath("$.[*].start").value(hasItem(DEFAULT_START.toString())))
-            .andExpect(jsonPath("$.[*].end").value(hasItem(DEFAULT_END.toString())));
     }
 
     @Test

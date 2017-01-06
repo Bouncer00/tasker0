@@ -44,13 +44,5 @@ public interface CommentService {
      */
     void delete(Long id);
 
-    /**
-     * Search for the comment corresponding to the query.
-     *
-     *  @param query the query of the search
-     *  @return the list of entities
-     */
-    Page<Comment> search(String query, Pageable pageable);
-
     Page<CommentDTO> getByTaskId(Long taskId, Pageable pageable);
 }

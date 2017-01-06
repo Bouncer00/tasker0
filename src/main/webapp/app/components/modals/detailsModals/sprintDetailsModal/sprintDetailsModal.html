@@ -26,7 +26,7 @@
                     <span id="created">{{sprint.start | date:'yyyy-MM-dd HH:mm'}}</span>
                 </div>
                 <div class="row">
-                    <input type="date" ng-model="newCreated"/>
+                    <input type="date" ng-model="newCreated" placeholder="YYYY-MM-DD"/>
                     <button ng-click="updateCreated(sprint, newCreated); newCreated=null" class="btn btn-primary">Update start</button>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                     <span id="deadline">{{sprint.end | date:'yyyy-MM-dd HH:mm'}}</span>
                 </div>
                 <div class="row">
-                    <input type="date" ng-model="newDeadline"/>
+                    <input type="date" ng-model="newDeadline" placeholder="YYYY-MM-DD"/>
                     <button ng-click="updateDeadline(sprint, newDeadline); newDeadline=null" class="btn btn-primary">Update end</button>
                 </div>
             </div>
@@ -72,5 +72,5 @@
 </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default">Close</button>
+    <button class="btn btn-default" ng-click="cancel()">Close</button>
 </div>

@@ -9,8 +9,8 @@
 
     function CreateProjectModalCtrl($scope, $uibModalInstance) {
         var vm = this;
-        vm.ok = ok;
-        vm.cancel = cancel;
+        $scope.ok = ok;
+        $scope.cancel = cancel;
 
 
         function ok() {

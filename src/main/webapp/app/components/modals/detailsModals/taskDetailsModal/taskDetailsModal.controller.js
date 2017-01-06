@@ -3,27 +3,36 @@
         .module('tasker0App')
         .controller('TaskDetailsModalCtrl', TaskDetailsModalCtrl);
 
-    TaskDetailsModalCtrl.$inject = ['$scope', 'task', 'Comment', 'Board', 'Task'];
+    TaskDetailsModalCtrl.$inject = ['$scope', 'task', 'Comment', 'Board', 'Task', '$uibModalInstance'];
 
-    function TaskDetailsModalCtrl($scope, task, Comment, Board, Task) {
+    function TaskDetailsModalCtrl($scope, task, Comment, Board, Task, $uibModalInstance) {
         $scope.addComment = addComment;
         $scope.changeTaskBoard = changeTaskBoard;
         $scope.assignTaskToCurrentUser = assignTaskToCurrentUser;
         $scope.updateTitle = updateTitle;
         $scope.updateDescription = updateDescription;
+        $scope.ok = ok;
+        $scope.cancel = cancel;
 
         fetchTaskById(task.id);
+
+        function ok() {
+            $uibModalInstance.close();
+        }
+
+        function cancel() {
+            $uibModalInstance.dismiss('cancel');
+        }
 
         function fetchTaskById(id) {
             Task.getById({taskId: task.id}).$promise.then(function (result) {
                 $scope.task = result;
-                console.log($scope.task);
                 getBoards();
             });
         }
 
         function assignTaskToCurrentUser() {
-            Task.assignToCurrentUser({taskId: $scope.task.id}).$promise.then(function (result) {
+            Task.assignTaskToCurrentUser({taskId: $scope.task.id}).$promise.then(function (result) {
                 fetchTaskById($scope.task.id);
             });
         }

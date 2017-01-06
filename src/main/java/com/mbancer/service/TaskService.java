@@ -44,14 +44,6 @@ public interface TaskService {
      */
     void delete(Long id);
 
-    /**
-     * Search for the task corresponding to the query.
-     *
-     *  @param query the query of the search
-     *  @return the list of entities
-     */
-    Page<Task> search(String query, Pageable pageable);
-
     void addCommentToTask(long taskId, long commentId);
 
     Page<TaskDTO> getByUser(Long userId, Pageable pageable);

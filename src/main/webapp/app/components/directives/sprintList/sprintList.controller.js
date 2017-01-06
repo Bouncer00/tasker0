@@ -33,11 +33,17 @@
 
         function remove(sprint) {
             var projectId = sprint.projectId;
-            console.log(sprint);
-            console.log(projectId);
             Sprint.delete({sprintId: sprint.id}).$promise.then(function (result) {
+                if($scope.control.currentSprint && $scope.control.currentSprint.id == sprint.id) {
+                    console.log($scope.control);
+                    console.log(sprint);
+                    $scope.control.resetUserStories();
+                    $scope.control.resetTasks();
+                    $scope.currentUserStory = null;
+                    $scope.currentTask = null;
+                }
                 fetchSprints(projectId);
-            })
+            });
         }
     }
 })();

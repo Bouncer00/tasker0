@@ -9,11 +9,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="project in projects" ng-click="selectProject(project)">
-            <td>{{project.name}}</td>
-            <td>{{project.shortName}}</td>
+        <tr ng-repeat="project in projects" >
+            <td ng-click="selectProject(project)">{{project.name}}</td>
+            <td ng-click="selectProject(project)">{{project.shortName}}</td>
             <td><span ng-click="openDetails(project)" class="glyphicon glyphicon-info-sign"></span></td>
-            <!--<td><span ng-really-message="Are you sure ?" ng-really-click="deleteProject(project)" class="glyphicon glyphicon glyphicon-remove"></span></td>-->
             <td><span ng-click="deleteProject(project)" class="glyphicon glyphicon glyphicon-remove"></span></td>
         </tr>
         </tbody>

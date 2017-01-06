@@ -3,9 +3,9 @@
         .module('tasker0App')
         .controller('ProjectDetailsModalCtrl', ProjectDetailsModalCtrl);
 
-    ProjectDetailsModalCtrl.$inject = ['$scope', 'Project', 'Board', 'project'];
+    ProjectDetailsModalCtrl.$inject = ['$scope', 'Project', 'Board', 'project', '$uibModalInstance'];
 
-    function ProjectDetailsModalCtrl($scope, Project, Board, project) {
+    function ProjectDetailsModalCtrl($scope, Project, Board, project, $uibModalInstance) {
         $scope.project = project;
         $scope.addMember = addMember;
         $scope.addBoard = addBoard;
@@ -14,10 +14,18 @@
         $scope.updateShortName = updateShortName;
         $scope.updateDescription = updateDescription;
         $scope.deleteMember = deleteMember;
-
-        console.log(project);
+        $scope.ok = ok;
+        $scope.cancel = cancel;
 
         getProjectMembers();
+
+        function ok() {
+            $uibModalInstance.close();
+        }
+
+        function cancel() {
+            $uibModalInstance.dismiss('cancel');
+        }
 
         function getProjectMembers() {
             Project.getMembers({projectId: project.id}).$promise.then(function (result) {
@@ -55,13 +63,13 @@
         }
 
         function updateShortName(project, newShortName) {
-            project.created = newCreated;
+            project.created = newShortName;
             Project.update(project).$promise.then(function (result) {
                 $scope.project = result;
             })
         }
 
-        function updateDescription(project, newDescription) {
+        function updateDescription(project, newDeadline) {
             project.deadline = newDeadline;
             Project.update(project).$promise.then(function (result) {
                 $scope.project = result;

@@ -17,8 +17,6 @@ public interface BoardService {
 
     void delete(Long id);
 
-    Page<Board> search(String query, Pageable pageable);
-
     TaskDTO moveTaskFromSourceBoardToTarget(Long sourceBoardId, Long targetBoard, Long taskId);
 
     Page<BoardDTO> getByProject(Long projectId, Pageable pageable);

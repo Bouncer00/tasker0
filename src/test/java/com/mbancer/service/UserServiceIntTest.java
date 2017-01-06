@@ -85,14 +85,6 @@ public class UserServiceIntTest {
     }
 
     @Test
-    public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
-        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
-        Optional<User> maybeUser = userService.requestPasswordReset("john.doe@localhost");
-        assertThat(maybeUser.isPresent()).isFalse();
-        userRepository.delete(user);
-    }
-
-    @Test
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
         User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
 

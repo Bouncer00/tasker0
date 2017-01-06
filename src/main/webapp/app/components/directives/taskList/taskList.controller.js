@@ -24,11 +24,12 @@
             });
         }
 
-        function resetTasks() {
+        function resetTasks(userStoryId) {
             $scope.tasks = [];
         }
 
         function fetchTasks(userStoryId) {
+            currentUserStoryId = userStoryId;
                 Task.getByUserStory({userStoryId: userStoryId}).$promise.then(function (result) {
                     $scope.tasks = result.content;
                 });

@@ -11,11 +11,11 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="sprint in sprints" ng-click="selectSprint(sprint)">
-            <td>{{sprint.number}}</td>
-            <td>{{sprint.name}}</td>
-            <td>{{sprint.start | date:'yyyy-MM-dd HH:mm'}}</td>
-            <td>{{sprint.end | date:'yyyy-MM-dd HH:mm'}}</td>
+        <tr ng-repeat="sprint in sprints" >
+            <td ng-click="selectSprint(sprint)">{{sprint.number}}</td>
+            <td ng-click="selectSprint(sprint)">{{sprint.name}}</td>
+            <td ng-click="selectSprint(sprint)">{{sprint.start | date:'yyyy-MM-dd HH:mm'}}</td>
+            <td ng-click="selectSprint(sprint)">{{sprint.end | date:'yyyy-MM-dd HH:mm'}}</td>
             <td><span ng-click="openDetails(sprint)" class="glyphicon glyphicon-info-sign"></span></td>
             <td><span ng-click="remove(sprint)" class="glyphicon glyphicon-remove"></span></td>
         </tr>

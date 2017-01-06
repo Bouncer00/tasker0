@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,9 +47,6 @@ public class TaskServiceImpl implements TaskService{
 
     @Inject
     private UserRepository userRepository;
-
-    @Inject
-    private TaskSearchRepository taskSearchRepository;
 
     @Inject
     private UserStoryService userStoryService;
@@ -107,20 +105,18 @@ public class TaskServiceImpl implements TaskService{
      */
     public void delete(Long id) {
         log.debug("Request to delete Task : {}", id);
+        Task task = taskRepository.findOne(id);
+        UserStory userStory = task.getUserStory();
+        List<Task> tasks = userStory.getTasks().stream().sorted(Comparator.comparing(Task::getNumber)).collect(Collectors.toList());
+        int taskToDeleteIndex = tasks.indexOf(task);
+        if(taskToDeleteIndex != -1) {
+            for (int i = taskToDeleteIndex; i < tasks.size(); i++) {
+                tasks.get(i).setNumber(tasks.get(i).getNumber() - 1);
+            }
+            taskRepository.save(tasks);
+        }
+        userStory.getTasks().remove(task);
         taskRepository.delete(id);
-        taskSearchRepository.delete(id);
-    }
-
-    /**
-     * Search for the task corresponding to the query.
-     *
-     *  @param query the query of the search
-     *  @return the list of entities
-     */
-    @Transactional(readOnly = true)
-    public Page<Task> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of Tasks for query {}", query);
-        return taskSearchRepository.search(queryStringQuery(query), pageable);
     }
 
     @Override
@@ -183,13 +179,15 @@ public class TaskServiceImpl implements TaskService{
         if(task.getNumber() == task.getUserStory().getTasks().size() - 1){
             UserStory userStory = userStoryRepository.findOne(task.getUserStory().getId());
             UserStory nextUserStory = userStoryService.getNextUserStory(userStory);
-            userStory.getTasks().remove(task);
-            for(Task usTask: nextUserStory.getTasks()){
-                usTask.setNumber(usTask.getNumber() + 1);
+            if(null != nextUserStory && !userStory.equals(nextUserStory)) {
+                userStory.getTasks().remove(task);
+                for (Task usTask : nextUserStory.getTasks()) {
+                    usTask.setNumber(usTask.getNumber() + 1);
+                }
+                task.setUserStory(nextUserStory);
+                task.setNumber(0L);
+                nextUserStory.getTasks().add(task);
             }
-            task.setUserStory(nextUserStory);
-            task.setNumber(0L);
-            nextUserStory.getTasks().add(task);
             return task;
         }
         UserStory userStory = userStoryRepository.findOne(task.getUserStory().getId());
@@ -200,13 +198,15 @@ public class TaskServiceImpl implements TaskService{
         UserStory userStory = userStoryRepository.findOne(task.getUserStory().getId());
         if(task.getNumber() == 0){
             UserStory previousUserStory = userStoryService.getPreviousUserStory(userStory);
-            task.setUserStory(previousUserStory);
-            task.setNumber((long)previousUserStory.getTasks().size());
-            userStory.getTasks().remove(task);
-            for(Task usTask: userStory.getTasks()){
-                usTask.setNumber(usTask.getNumber() - 1);
+            if(null != previousUserStory) {
+                task.setUserStory(previousUserStory);
+                task.setNumber((long) previousUserStory.getTasks().size());
+                userStory.getTasks().remove(task);
+                for (Task usTask : userStory.getTasks()) {
+                    usTask.setNumber(usTask.getNumber() - 1);
+                }
+                previousUserStory.getTasks().add(task);
             }
-            previousUserStory.getTasks().add(task);
             return task;
         }
 

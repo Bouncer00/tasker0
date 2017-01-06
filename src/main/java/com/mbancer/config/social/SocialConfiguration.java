@@ -40,11 +40,12 @@ public class SocialConfiguration implements SocialConfigurer {
     @Inject
     private SocialUserConnectionRepository socialUserConnectionRepository;
 
+    String googleClientId = "988480029417-e4cfhafaiq3vhshslgbdd2gtdf9m3soe.apps.googleusercontent.com";
+    String googleClientSecret = "J4PtW3w8Zl76qZ-RqXL-wtKP";
+
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
         // Google configuration
-        String googleClientId = environment.getProperty("spring.social.google.clientId");
-        String googleClientSecret = environment.getProperty("spring.social.google.clientSecret");
         if (googleClientId != null && googleClientSecret != null) {
             log.debug("Configuring GoogleConnectionFactory");
             connectionFactoryConfigurer.addConnectionFactory(

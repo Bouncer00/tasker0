@@ -43,14 +43,6 @@ public interface ProjectService {
      */
     void delete(Long id);
 
-    /**
-     * Search for the project corresponding to the query.
-     *
-     *  @param query the query of the search
-     *  @return the list of entities
-     */
-    Page<Project> search(String query, Pageable pageable);
-
     void addTaskToProject(final long projectId, final long taskId);
 
     Page<ProjectDTO> getByUser(Long userId, Pageable pageable);

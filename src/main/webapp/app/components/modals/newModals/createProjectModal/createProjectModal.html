@@ -30,7 +30,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="deadline">Deadline</label>
                 <div class="col-md-4">
-                    <input id="deadline" type="date" ng-model="vm.project.deadLine">
+                    <input id="deadline" placeholder="YYYY-MM-DD" type="date" ng-model="vm.project.deadLine">
                 </div>
             </div>
 
@@ -38,6 +38,6 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="vm.ok()">OK</button>
-    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
 </div>

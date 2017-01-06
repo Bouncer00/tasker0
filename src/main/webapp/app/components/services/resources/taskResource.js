@@ -38,6 +38,9 @@
             'assignToCurrentUser': {
                 url: url + "/assignedToCurrentUser/:taskId", params: {taskId: '@taskId', method: 'GET'}, isArray: true
             },
+            'assignTaskToCurrentUser': {
+                url: url + "/assignToCurrentUser/:taskId", params: {taskId: '@taskId', method: 'GET'}
+            },
             'moveUp': {
                 url: url + "/moveUp/:taskId", param: {taskId: "@taskId"}, method: 'GET'
             },

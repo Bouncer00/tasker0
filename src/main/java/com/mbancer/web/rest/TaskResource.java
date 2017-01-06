@@ -147,25 +147,6 @@ public class TaskResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("task", id.toString())).build();
     }
 
-    /**
-     * SEARCH  /_search/tasks?query=:query : search for the task corresponding
-     * to the query.
-     *
-     * @param query the query of the task search
-     * @return the result of the search
-     */
-    @RequestMapping(value = "/_search/tasks",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<TaskDTO>> searchTasks(@RequestParam String query, Pageable pageable)
-        throws URISyntaxException {
-        log.debug("REST request to search for a page of Tasks for query {}", query);
-        Page<Task> page = taskService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/tasks");
-        return new ResponseEntity<>(taskMapper.tasksToTaskDTOs(page.getContent()), headers, HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/tasks/{taskId}/addComment/{commentId}",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE
