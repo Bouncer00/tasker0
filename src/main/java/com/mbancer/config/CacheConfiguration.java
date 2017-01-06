@@ -22,7 +22,7 @@ import java.util.SortedSet;
 @SuppressWarnings("unused")
 @Configuration
 @EnableCaching
-@AutoConfigureAfter(value = { MetricsConfiguration.class, DatabaseConfiguration.class })
+@AutoConfigureAfter(value = {DatabaseConfiguration.class })
 public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
