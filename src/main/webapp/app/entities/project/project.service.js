@@ -63,6 +63,9 @@
             },
             'delete': {
                 url: resourceUrl + '/:projectId', params: {projectId: '@projectId'}, method: 'DELETE'
+            },
+            'update': {
+                url: resourceUrl, method: 'PUT'
             }
         });
     }

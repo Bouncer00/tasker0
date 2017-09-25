@@ -249,7 +249,6 @@ public class ProjectResourceIntTest {
     public void deleteProject() throws Exception {
         // Initialize the database
         projectRepository.saveAndFlush(project);
-        projectSearchRepository.save(project);
         int databaseSizeBeforeDelete = projectRepository.findAll().size();
 
         // Get the project
@@ -257,9 +256,6 @@ public class ProjectResourceIntTest {
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
-        // Validate ElasticSearch is empty
-        boolean projectExistsInEs = projectSearchRepository.exists(project.getId());
-        assertThat(projectExistsInEs).isFalse();
 
         // Validate the database is empty
         List<Project> projects = projectRepository.findAll();

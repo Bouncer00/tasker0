@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="mariusz (generated)" id="1475697743310-1">
+        <addColumn tableName="task">
+            <column name="assignee_id" type="int8"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-2">
+        <addForeignKeyConstraint baseColumnNames="user_story_id" baseTableName="task" constraintName="FK_df75dy2itto9rfxkjtmm4obwn" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="user_story"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-3">
+        <addForeignKeyConstraint baseColumnNames="assignee_id" baseTableName="task" constraintName="FK_rb8jsuwoimkias723h7dtdaa3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-4">
+        <dropUniqueConstraint constraintName="jhi_social_user_connection_user_id_provider_id_provider_use_key" tableName="jhi_social_user_connection"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-5">
+        <dropUniqueConstraint constraintName="jhi_social_user_connection_user_id_provider_id_rank_key" tableName="jhi_social_user_connection"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-6">
+        <dropSequence sequenceName="board_id_seq"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-7">
+        <dropSequence sequenceName="comment_id_seq"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-8">
+        <dropSequence sequenceName="jhi_persistent_audit_event_event_id_seq"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-9">
+        <dropSequence sequenceName="jhi_social_user_connection_id_seq"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-10">
+        <dropSequence sequenceName="jhi_user_id_seq"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-11">
+        <dropSequence sequenceName="project_id_seq"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-12">
+        <dropSequence sequenceName="sprint_id_seq"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-13">
+        <dropSequence sequenceName="task_id_seq"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-14">
+        <dropSequence sequenceName="user_story_id_seq"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-15">
+        <dropDefaultValue columnDataType="timestamp" columnName="last_modified_date" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-16">
+        <dropNotNullConstraint columnDataType="bigint" columnName="number" tableName="task"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-17">
+        <dropNotNullConstraint columnDataType="bigint" columnName="priority" tableName="user_story"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-18">
+        <dropNotNullConstraint columnDataType="bigint" columnName="project_id" tableName="sprint"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-19">
+        <addNotNullConstraint columnDataType="varchar(255)" columnName="short_name" tableName="project"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-20">
+        <dropNotNullConstraint columnDataType="bigint" columnName="sprint_id" tableName="user_story"/>
+    </changeSet>
+    <changeSet author="mariusz (generated)" id="1475697743310-21">
+        <dropNotNullConstraint columnDataType="bigint" columnName="user_story_id" tableName="task"/>
+    </changeSet>
+</databaseChangeLog>
